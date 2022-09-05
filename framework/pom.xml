@@ -36,6 +36,14 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
@@ -79,7 +87,6 @@
                             <artifactId>querydsl-apt</artifactId>
                             <version>${querydsl-jpa.version}</version>
                             <classifier>jpa</classifier>
-                            <sourceVersion>1.8</sourceVersion>
                         </path>
                         <path>
                             <groupId>jakarta.annotation</groupId>

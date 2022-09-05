@@ -12,6 +12,3 @@ spring:
             hibernate:
                 format_sql: true
                 dialect: com.future.framework.jpa.CustomDialect
-    datasource:
-        druid:
-            url: 
