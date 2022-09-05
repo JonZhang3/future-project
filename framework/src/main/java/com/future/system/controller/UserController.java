@@ -1,7 +1,7 @@
 package com.future.system.controller;
 
 import com.future.common.core.domain.R;
-import com.future.system.domain.dto.UserDTO;
+import com.future.system.domain.query.UserQuery;
 import com.future.system.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,15 +21,15 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/list")
-    public R pageList(UserDTO dto) {
-        return R.ok(userService.pageFindUsers(dto));
+    public R pageList(UserQuery dto) {
+        return R.ok(userService.pageListUsers(dto));
     }
 
     /**
      * 修改用户信息
      */
     @PutMapping
-    public R updateUser(@RequestBody UserDTO dto) {
+    public R updateUser(@RequestBody UserQuery dto) {
         
         return R.ok();
     }

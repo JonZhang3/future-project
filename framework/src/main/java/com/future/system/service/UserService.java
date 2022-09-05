@@ -1,7 +1,7 @@
 package com.future.system.service;
 
 import com.future.common.core.domain.entity.User;
-import com.future.system.domain.dto.UserDTO;
+import com.future.system.domain.query.UserQuery;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public interface UserService {
     /**
      * 根据条件分页查询用户列表
      */
-    Page<User> pageFindUsers(UserDTO dto);
+    Page<User> pageListUsers(UserQuery query);
 
     /**
      * 根据条件分页查询已分配用户角色列表

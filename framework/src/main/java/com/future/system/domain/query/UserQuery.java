@@ -1,7 +1,7 @@
-package com.future.system.domain.dto;
+package com.future.system.domain.query;
 
 import com.future.common.constant.enums.UserState;
-import com.future.common.core.domain.BaseDTO;
+import com.future.common.core.domain.BaseQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -9,7 +9,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class UserDTO extends BaseDTO {
+public class UserQuery extends BaseQuery {
     
     private Long id;
     private String username;

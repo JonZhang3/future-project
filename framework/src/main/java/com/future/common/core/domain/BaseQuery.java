@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import java.time.LocalDateTime;
 
 @Data
-public class BaseDTO {
+public class BaseQuery {
 
     private static final String SORT_TYPE_DESC = "desc";
     private static final String SORT_TYPE_DESCENDING = "descending";

@@ -27,6 +27,8 @@ public class CommonController {
             String realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf("_") + 1);
             String filePath = FrameworkConfig.getDownloadPath() + fileName;
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+            FileUtils.setAttachmentResponseHeader(response, realFileName);
+            
         } catch(Exception e) {
 
         }

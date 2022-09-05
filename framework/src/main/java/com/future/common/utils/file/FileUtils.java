@@ -1,32 +1,29 @@
 package com.future.common.utils.file;
 
-import java.io.File;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.future.common.utils.StringUtils;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.future.common.utils.StringUtils;
-
-import lombok.experimental.UtilityClass;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 
 @UtilityClass
-public class FileUtils {
-    
+public final class FileUtils extends org.apache.commons.io.FileUtils {
+
     /**
      * 检查文件是否可下载
-     * 
+     *
      * @param resource 要下载的资源
      * @return true 可以下载
      */
     public static boolean checkAllowDownload(String resource) {
         // 禁止目录上跳级别
-        if(StringUtils.contains(resource, "..")) {
+        if (StringUtils.contains(resource, "..")) {
             return false;
         }
         // 检查允许下载的文件规则
-        if(ArrayUtils.contains(MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION, getFileExtension(resource))) {
+        if (ArrayUtils.contains(MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION, getFileExtension(resource))) {
             return true;
         }
         // 不在允许下载的文件规则
@@ -34,7 +31,7 @@ public class FileUtils {
     }
 
     public static String getFileExtension(File file) {
-        if(file == null) {
+        if (file == null) {
             return "";
         }
         return FilenameUtils.getExtension(file.getName());

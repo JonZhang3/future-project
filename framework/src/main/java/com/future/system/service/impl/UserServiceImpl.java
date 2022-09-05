@@ -6,7 +6,7 @@ import com.future.common.core.domain.entity.User;
 import com.future.common.core.service.BaseService;
 import com.future.common.utils.StringUtils;
 import com.future.system.dao.UserRepo;
-import com.future.system.domain.dto.UserDTO;
+import com.future.system.domain.query.UserQuery;
 import com.future.system.service.UserService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -27,26 +27,26 @@ public class UserServiceImpl implements BaseService, UserService {
     private UserRepo userRepo;
 
     @Override
-    public Page<User> pageFindUsers(UserDTO dto) {
+    public Page<User> pageListUsers(UserQuery query) {
         QUser quser = QUser.user;
         BooleanBuilder queryBuilder = new BooleanBuilder();
-        queryBuilder.and(quser.state.eq(dto.getUserState() == null ? UserState.VALID : dto.getUserState()));
-        if (StringUtils.isNotEmpty(dto.getUsername())) {
-            queryBuilder.and(quser.username.eq(dto.getUsername()));
+        queryBuilder.and(quser.state.eq(query.getUserState() == null ? UserState.VALID : query.getUserState()));
+        if (StringUtils.isNotEmpty(query.getUsername())) {
+            queryBuilder.and(quser.username.eq(query.getUsername()));
         }
-        if (StringUtils.isNotEmpty(dto.getPhone())) {
-            queryBuilder.and(quser.phone.eq(dto.getPhone()));
+        if (StringUtils.isNotEmpty(query.getPhone())) {
+            queryBuilder.and(quser.phone.eq(query.getPhone()));
         }
-        if (dto.getBegintTime() != null) {
-            queryBuilder.and(quser.createTime.goe(dto.getBegintTime()));
+        if (query.getBegintTime() != null) {
+            queryBuilder.and(quser.createTime.goe(query.getBegintTime()));
         }
-        if (dto.getEndTime() != null) {
-            queryBuilder.and(quser.createTime.loe(dto.getEndTime()));
+        if (query.getEndTime() != null) {
+            queryBuilder.and(quser.createTime.loe(query.getEndTime()));
         }
-        if (dto.getDeptId() != null) {
-            queryBuilder.and(quser.deptId.eq(dto.getDeptId()));
+        if (query.getDeptId() != null) {
+            queryBuilder.and(quser.deptId.eq(query.getDeptId()));
         }
-        return userRepo.findAll(queryBuilder, createPageable(dto.getPageNum(), dto.getPageSize()));
+        return userRepo.findAll(queryBuilder, createPageable(query.getPageNum(), query.getPageSize()));
     }
 
     @Override
