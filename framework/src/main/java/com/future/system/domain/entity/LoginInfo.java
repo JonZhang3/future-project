@@ -1,5 +1,6 @@
 package com.future.system.domain.entity;
 
+import com.future.common.constant.enums.OperatingState;
 import com.future.common.core.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,7 +41,7 @@ public class LoginInfo extends BaseEntity {
 
     @Comment("登录状态 1成功 0失败")
     @Column(columnDefinition = "tinyint(1) NOT NULL DEFAULT 1")
-    private Integer status = 1;
+    private OperatingState state = OperatingState.SUCCESS;
 
     @Comment("提示消息")
     private String message;

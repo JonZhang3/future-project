@@ -10,6 +10,7 @@ import com.future.common.utils.spring.SpringUtils;
 import com.future.framework.config.datasource.DruidProperties;
 import com.future.framework.config.datasource.DynamicDataSource;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -39,10 +41,15 @@ import javax.sql.DataSource;
 @Configuration
 public class DatasourceConfig {
 
+    @Bean
+    public JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
+        return new JPAQueryFactory(entityManager);
+    }
+    
     // 主数据源
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.druid.master")
-    @ConditionalOnProperty(prefix = "spring.datasource.druid.master")
+    @ConditionalOnProperty(prefix = "spring.datasource.druid", name = "master")
     public DataSource masterDataSource(DruidProperties properties) {
         DruidDataSource datasource = DruidDataSourceBuilder.create().build();
         return properties.dataSource(datasource);

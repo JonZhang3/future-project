@@ -37,8 +37,8 @@ public class UserServiceImpl implements BaseService, UserService {
         if (StringUtils.isNotEmpty(query.getPhone())) {
             queryBuilder.and(quser.phone.eq(query.getPhone()));
         }
-        if (query.getBegintTime() != null) {
-            queryBuilder.and(quser.createTime.goe(query.getBegintTime()));
+        if (query.getBeginTime() != null) {
+            queryBuilder.and(quser.createTime.goe(query.getBeginTime()));
         }
         if (query.getEndTime() != null) {
             queryBuilder.and(quser.createTime.loe(query.getEndTime()));

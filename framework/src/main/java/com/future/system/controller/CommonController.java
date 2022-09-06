@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.future.common.utils.file.FileUtils;
 import com.future.framework.config.FrameworkConfig;
-import com.future.framework.exception.BusinessException;
+import com.future.common.exception.BusinessException;
 
 @RestController
 @RequestMapping("/api/common")

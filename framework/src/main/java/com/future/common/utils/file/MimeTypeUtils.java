@@ -1,15 +1,16 @@
 package com.future.common.utils.file;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * 媒体类型工具类
  * 
  * @author JonZhang
  */
-@UtilityClass
-public class MimeTypeUtils {
+public final class MimeTypeUtils {
 
+    private MimeTypeUtils() {
+        
+    }
+    
     public static final String IMAGE_PNG = "image/png";
 
     public static final String IMAGE_JPG = "image/jpg";

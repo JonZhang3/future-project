@@ -1,6 +1,7 @@
 package com.future.common.core.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.future.common.constant.enums.UserType;
 import com.future.common.core.domain.entity.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,6 +38,8 @@ public class LoginUser implements UserDetails {
     // 登录 IP 地址
     private String ip;
 
+    private UserType userType;
+    
     private Set<String> permissions;
 
     private User user;

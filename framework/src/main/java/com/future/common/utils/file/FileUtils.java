@@ -1,16 +1,18 @@
 package com.future.common.utils.file;
 
 import com.future.common.utils.StringUtils;
-import lombok.experimental.UtilityClass;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 
-@UtilityClass
 public final class FileUtils extends org.apache.commons.io.FileUtils {
 
+    private FileUtils() {
+        super();
+    }
+    
     /**
      * 检查文件是否可下载
      *

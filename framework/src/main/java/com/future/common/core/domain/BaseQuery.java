@@ -23,7 +23,7 @@ public class BaseQuery {
 
     private LocalDateTime createTime;
     
-    private LocalDateTime begintTime;
+    private LocalDateTime beginTime;
     
     private LocalDateTime endTime;
     

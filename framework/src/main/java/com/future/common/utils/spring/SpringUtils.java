@@ -11,6 +11,12 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Spring 相关工具类
@@ -122,6 +128,19 @@ public class SpringUtils implements BeanFactoryPostProcessor, ApplicationContext
 
     public static String getApplicationName() {
         return getProperty("spring.application.name");
+    }
+
+    public static HttpServletRequest getRequest() {
+        return getRequestAttributes().getRequest();
+    }
+
+    public static HttpServletResponse getResponse() {
+        return getRequestAttributes().getResponse();
+    }
+
+    public static ServletRequestAttributes getRequestAttributes() {
+        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+        return (ServletRequestAttributes) attributes;
     }
 
     @Override

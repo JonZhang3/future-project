@@ -1,4 +1,4 @@
-package com.future.framework.exception;
+package com.future.common.exception;
 
 /**
  * 工具类异常
@@ -7,7 +7,7 @@ package com.future.framework.exception;
  */
 public class UtilException extends RuntimeException {
 
-    private static final long serialVersionUID = 8247610319171014183L;
+    private static final long serialVersionUID = 1L;
 
     public UtilException(Throwable e) {
         super(e.getMessage(), e);

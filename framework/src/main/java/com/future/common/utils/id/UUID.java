@@ -1,6 +1,6 @@
 package com.future.common.utils.id;
 
-import com.future.framework.exception.UtilException;
+import com.future.common.exception.UtilException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.future.common.constant.enums.Sex;
 import com.future.common.constant.enums.UserState;
+import com.future.common.constant.enums.UserType;
 import com.future.common.core.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -69,5 +70,9 @@ public class User extends BaseEntity {
     @Comment("用户状态, 1-正常 0-删除 -1-锁定")
     @Column(columnDefinition = "int(2) NOT NULL DEFAULT 1")
     private UserState state = UserState.VALID;
+    
+    @Comment("用户类型")
+    @Column(columnDefinition = "tinyint(1) NOT NULL DEFAULT 1")
+    private UserType userType = UserType.NORMAL;
     
 }
