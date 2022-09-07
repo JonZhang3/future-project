@@ -5,6 +5,7 @@ import com.future.common.constant.enums.UserState;
 import com.future.common.core.domain.TreeSelect;
 import com.future.common.core.domain.entity.Department;
 import com.future.common.core.domain.entity.QDepartment;
+import com.future.common.exception.BusinessException;
 import com.future.common.utils.StringUtils;
 import com.future.system.dao.DepartmentRepo;
 import com.future.system.dao.UserRepo;
@@ -42,8 +43,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (query.getParentId() != null) {
             dbquery.where(department.parentId.eq(query.getParentId()));
         }
-        if (StringUtils.isNotEmpty(query.getDeptName())) {
-            dbquery.where(department.name.like("%" + query.getDeptName() + "%"));
+        if (StringUtils.isNotEmpty(query.getName())) {
+            dbquery.where(department.name.like("%" + query.getName() + "%"));
         }
         if (query.getState() != null) {
             dbquery.where(department.state.eq(query.getState()));
@@ -88,16 +89,44 @@ public class DepartmentServiceImpl implements DepartmentService {
     
     @Override
     public boolean hasChildrenById(Long id) {
-        return deptRepo.countByParentIdAndStateIsNot(id, State.DELETED) > 0;
+        return deptRepo.countByParentIdAndStateNot(id, State.DELETED) > 0;
     }
     
     public boolean checkExistsUser(Long deptId) {
         return userRepo.countByDeptIdAndStateIsNot(deptId, UserState.DELETED) > 0;
     }
-    
+
+    /**
+     * 检查部门名称是否唯一
+     */
+    @Override
     public boolean checkDepartmentNameUnique(DepartmentQuery query) {
-        
-        return true;
+        Department department = deptRepo.findByParentIdAndNameAndStateNot(query.getParentId(), query.getName(), State.DELETED);
+        return department == null || Objects.equals(department.getId(), query.getId());
+    }
+
+    /**
+     * 新增部门
+     */
+    @Override
+    public void addDepartment(Department dept) {
+        Department parentDept = deptRepo.findById(dept.getParentId()).orElse(null);
+        if(parentDept == null) {
+            throw new BusinessException("上级部门不存在");
+        }
+        if(!State.VALID.equals(parentDept.getState())) {
+            throw new BusinessException("上级部门停用，不允许新增子部门");
+        }
+        dept.setAncestors(parentDept.getAncestors() + "," + dept.getParentId());
+        dept.setState(State.VALID);
+        deptRepo.saveAndFlush(dept);
+    }
+    
+    public void updateDepartment(Department dept) {
+        Department newParentDept = deptRepo.findById(dept.getParentId()).orElse(null);
+        if(newParentDept != null) {
+            
+        }
     }
     
     /**
@@ -105,7 +134,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public void deleteById(Long id) {
-        deptRepo.deleteById(id);
+        deptRepo.updateState(id, State.DELETED);
     }
 
     private void recursionFn(List<Department> list, Department t) {

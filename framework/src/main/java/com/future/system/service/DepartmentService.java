@@ -19,6 +19,12 @@ public interface DepartmentService {
     boolean hasChildrenById(Long id);
 
     boolean checkExistsUser(Long deptId);
+
+    boolean checkDepartmentNameUnique(DepartmentQuery query);
+
+    void updateDepartment(Department dept);
+    
+    void addDepartment(Department dept);
     
     void deleteById(Long id);
     

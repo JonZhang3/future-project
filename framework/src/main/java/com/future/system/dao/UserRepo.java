@@ -17,4 +17,6 @@ public interface UserRepo extends BaseJpaRepository<User, Long>, QuerydslPredica
 
     int countByDeptIdAndStateIsNot(Long deptId, UserState state);
     
+    
+    
 }

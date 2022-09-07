@@ -5,6 +5,7 @@ import com.future.common.constant.enums.UserState;
 import com.future.framework.jpa.BaseJpaRepositoryFactoryBean;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;

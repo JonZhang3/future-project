@@ -49,11 +49,11 @@ public class Department extends BaseEntity {
 
     @Comment("状态 1-正常 0-停用 -1-删除")
     @Column(columnDefinition = "tinyint(1) NOT NULL DEFAULT 1")
-    private State state;
+    private State state = State.VALID;
 
     @Comment("排序")
     @Column(columnDefinition = "int(4) NOT NULL DEFAULT 1")
-    private Integer sortNum;
+    private Integer sortNum = 1;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @Transient

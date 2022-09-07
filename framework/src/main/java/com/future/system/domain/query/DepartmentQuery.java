@@ -15,7 +15,7 @@ public class DepartmentQuery extends BaseQuery {
     
     private Long parentId;// 父ID
     
-    private String deptName;// 部门名称
+    private String name;// 部门名称
     
     private State state;// 状态
     

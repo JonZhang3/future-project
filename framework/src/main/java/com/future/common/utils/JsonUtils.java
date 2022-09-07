@@ -2,10 +2,12 @@ package com.future.common.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
 
 /**
  * JSON 工具类
@@ -22,7 +24,15 @@ public final class JsonUtils {
     public static @NotNull ObjectMapper getObjectMapper() {
         return objectMapper;
     }
-    
+
+    public static JsonNode readTree(String content) {
+        try {
+            return objectMapper.readTree(content);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Serialize any Java value as a String
      *

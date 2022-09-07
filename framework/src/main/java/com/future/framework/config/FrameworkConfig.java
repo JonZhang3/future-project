@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+
 /**
  * 全局配置类
  * 
@@ -30,6 +32,10 @@ public class FrameworkConfig {
     @Data
     public static class Jwt {
         private String secret = "future";
+        // 请求头名称
+        private String headerName = "";
+        // 持续时间
+        private Duration duration;
     }
 
     public static String getProfile() {
