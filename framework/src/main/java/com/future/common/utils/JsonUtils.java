@@ -7,8 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-
 /**
  * JSON 工具类
  *
@@ -39,7 +37,7 @@ public final class JsonUtils {
      * @param obj the object to serialize
      * @return json string
      */
-    public static @Nullable String toJsonString(Object obj) {
+    public static @NotNull String toJsonString(Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {

@@ -4,10 +4,11 @@ import com.future.common.utils.StringUtils;
 import lombok.Data;
 import org.springframework.data.domain.Sort;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-public class BaseQuery {
+public class BaseQuery implements Serializable {
 
     private static final String SORT_TYPE_DESC = "desc";
     private static final String SORT_TYPE_DESCENDING = "descending";

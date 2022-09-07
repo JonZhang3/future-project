@@ -29,7 +29,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Resource(type = DepartmentRepo.class)
     private DepartmentRepo deptRepo;
-    
+
     @Resource(type = UserRepo.class)
     private UserRepo userRepo;
 
@@ -86,12 +86,12 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Department getDepartmentById(Long id) {
         return deptRepo.findById(id).orElse(null);
     }
-    
+
     @Override
     public boolean hasChildrenById(Long id) {
         return deptRepo.countByParentIdAndStateNot(id, State.DELETED) > 0;
     }
-    
+
     public boolean checkExistsUser(Long deptId) {
         return userRepo.countByDeptIdAndStateIsNot(deptId, UserState.DELETED) > 0;
     }
@@ -102,7 +102,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public boolean checkDepartmentNameUnique(DepartmentQuery query) {
         Department department = deptRepo.findByParentIdAndNameAndStateNot(query.getParentId(), query.getName(), State.DELETED);
-        return department == null || Objects.equals(department.getId(), query.getId());
+        return department == null || department.getId().equals(query.getId());
     }
 
     /**
@@ -111,24 +111,24 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void addDepartment(Department dept) {
         Department parentDept = deptRepo.findById(dept.getParentId()).orElse(null);
-        if(parentDept == null) {
+        if (parentDept == null) {
             throw new BusinessException("上级部门不存在");
         }
-        if(!State.VALID.equals(parentDept.getState())) {
+        if (!State.VALID.equals(parentDept.getState())) {
             throw new BusinessException("上级部门停用，不允许新增子部门");
         }
         dept.setAncestors(parentDept.getAncestors() + "," + dept.getParentId());
         dept.setState(State.VALID);
         deptRepo.saveAndFlush(dept);
     }
-    
+
     public void updateDepartment(Department dept) {
         Department newParentDept = deptRepo.findById(dept.getParentId()).orElse(null);
-        if(newParentDept != null) {
-            
+        if (newParentDept != null) {
+
         }
     }
-    
+
     /**
      * 删除部门信息
      */

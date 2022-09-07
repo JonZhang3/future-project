@@ -67,7 +67,7 @@ public class Resource extends BaseEntity {
 
     @Comment("排序")
     @Column(columnDefinition = "int(4) NOT NULL DEFAULT 1")
-    private Integer sortNum;
+    private Integer sortNum = 1;
 
     @Transient
     private List<Resource> children;

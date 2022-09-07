@@ -31,9 +31,9 @@ public class FrameworkConfig {
 
     @Data
     public static class Jwt {
-        private String secret = "future";
+        private String issuer = "future";
         // 请求头名称
-        private String headerName = "";
+        private String headerName = "X-Access-Token";
         // 持续时间
         private Duration duration;
     }
