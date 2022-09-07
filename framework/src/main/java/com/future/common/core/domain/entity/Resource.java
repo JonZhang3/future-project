@@ -11,6 +11,8 @@ import org.hibernate.annotations.Comment;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.util.List;
 
 @Data
 @ToString(callSuper = true)
@@ -66,5 +68,8 @@ public class Resource extends BaseEntity {
     @Comment("排序")
     @Column(columnDefinition = "int(4) NOT NULL DEFAULT 1")
     private Integer sortNum;
+
+    @Transient
+    private List<Resource> children;
 
 }

@@ -15,4 +15,6 @@ public interface UserRepo extends BaseJpaRepository<User, Long>, QuerydslPredica
     @Query("update User set state=?1 where id in (?2)")
     void updateStateByIds(UserState state, List<Long> ids);
 
+    int countByDeptIdAndStateIsNot(Long deptId, UserState state);
+    
 }

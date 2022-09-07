@@ -1,5 +1,6 @@
 package com.future.common.core.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.future.common.constant.enums.State;
 import com.future.common.core.domain.BaseEntity;
 import lombok.Data;
@@ -10,6 +11,8 @@ import org.hibernate.annotations.Comment;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.util.List;
 
 @Data
 @ToString(callSuper = true)
@@ -52,4 +55,8 @@ public class Department extends BaseEntity {
     @Column(columnDefinition = "int(4) NOT NULL DEFAULT 1")
     private Integer sortNum;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @Transient
+    private List<Department> children;
+    
 }
