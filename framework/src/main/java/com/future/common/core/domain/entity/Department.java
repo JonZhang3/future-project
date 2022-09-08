@@ -3,15 +3,14 @@ package com.future.common.core.domain.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.future.common.constant.enums.State;
 import com.future.common.core.domain.BaseEntity;
+import com.future.framework.jpa.SnowflakeIdGenerator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.List;
 
 @Data
@@ -24,6 +23,11 @@ public class Department extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(generator = SnowflakeIdGenerator.GENERATOR_NAME)
+    @GenericGenerator(name = SnowflakeIdGenerator.GENERATOR_NAME, strategy = GENERATOR_STRATEGY)
+    private Long id;
+    
     @Comment("父部门ID")
     private Long parentId;
 

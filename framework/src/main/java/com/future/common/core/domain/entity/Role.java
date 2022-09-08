@@ -2,14 +2,14 @@ package com.future.common.core.domain.entity;
 
 import com.future.common.constant.enums.State;
 import com.future.common.core.domain.BaseEntity;
+import com.future.framework.jpa.SnowflakeIdGenerator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 角色信息
@@ -25,6 +25,11 @@ import javax.persistence.Table;
 public class Role extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(generator = SnowflakeIdGenerator.GENERATOR_NAME)
+    @GenericGenerator(name = SnowflakeIdGenerator.GENERATOR_NAME, strategy = GENERATOR_STRATEGY)
+    private Long id;
     
     @Comment("角色名称")
     @Column(nullable = false, length = 30, unique = true)

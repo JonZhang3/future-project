@@ -1,14 +1,11 @@
 package com.future.common.core.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.future.framework.jpa.SnowflakeIdGenerator;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -17,8 +14,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -39,11 +34,8 @@ public class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(generator = SnowflakeIdGenerator.GENERATOR_NAME)
-    @GenericGenerator(name = SnowflakeIdGenerator.GENERATOR_NAME, strategy = "com.future.framework.jpa.SnowflakeIdGenerator")
-    private Long id;
-
+    protected static final String GENERATOR_STRATEGY = "com.future.framework.jpa.SnowflakeIdGenerator";
+    
     @CreatedBy
     private String createBy;
 

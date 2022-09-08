@@ -6,10 +6,12 @@ import com.future.common.constant.enums.Sex;
 import com.future.common.constant.enums.UserState;
 import com.future.common.constant.enums.UserType;
 import com.future.common.core.domain.BaseEntity;
+import com.future.framework.jpa.SnowflakeIdGenerator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -29,6 +31,11 @@ public class User extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(generator = SnowflakeIdGenerator.GENERATOR_NAME)
+    @GenericGenerator(name = SnowflakeIdGenerator.GENERATOR_NAME, strategy = GENERATOR_STRATEGY)
+    private Long id;
+    
     @Comment("用户名")
     @Column(unique = true, nullable = false, length = 64)
     private String username;

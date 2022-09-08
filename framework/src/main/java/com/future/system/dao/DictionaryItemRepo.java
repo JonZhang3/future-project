@@ -12,4 +12,6 @@ public interface DictionaryItemRepo extends JpaRepository<DictionaryItem, Long> 
     
     List<DictionaryItem> findAllByDictAndStateOrderBySortNumAsc(String dictCode, State state);
     
+    DictionaryItem findByDictAndValue(String dict, String value);
+    
 }

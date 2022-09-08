@@ -48,7 +48,7 @@ public class DictionaryItem extends BaseEntity {
     
     @Comment("排序")
     @Column(columnDefinition = "int(4) NOT NULL DEFAULT 1")
-    private Integer sortNum;
+    private Integer sortNum = 1;
 
     @Comment("状态 1-正常 0-停用 -1-删除")
     @Column(columnDefinition = "tinyint(1) NOT NULL DEFAULT 1")
