@@ -21,7 +21,7 @@ public class TokenService {
     }
 
     private String createToken(LoginUser loginUser) {
-        
+        return "";
     }
     
     private String getToken(HttpServletRequest request) {

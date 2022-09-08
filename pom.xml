@@ -29,6 +29,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
         <oshi.version>6.1.6</oshi.version>
         <bitwalker.version>1.21</bitwalker.version>
         <jwt.version>4.0.0</jwt.version>
+        <caffeine.version>2.9.2</caffeine.version>
     </properties>
 
     <dependencyManagement>
@@ -108,6 +109,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                 <groupId>org.jetbrains</groupId>
                 <artifactId>annotations</artifactId>
                 <version>${annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>${caffeine.version}</version>
             </dependency>
 
             <dependency>

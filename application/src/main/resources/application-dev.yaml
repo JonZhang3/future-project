@@ -10,6 +10,10 @@ spring:
         hibernate:
             ddl-auto: update
 framework:
+    caches:
+        - type: simple
+          primary: true
+          enable: true
     cors: true
     jwt:
         duration: 30m

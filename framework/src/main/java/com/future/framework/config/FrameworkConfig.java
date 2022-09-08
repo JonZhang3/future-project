@@ -1,14 +1,16 @@
 package com.future.framework.config;
 
+import com.future.framework.config.cache.CacheProperties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.List;
 
 /**
  * 全局配置类
- * 
+ *
  * @author JonZhang
  */
 @Data
@@ -28,6 +30,8 @@ public class FrameworkConfig {
      * JWT 配置
      */
     private Jwt jwt = new Jwt();
+    
+    private List<CacheProperties> caches;
 
     @Data
     public static class Jwt {
