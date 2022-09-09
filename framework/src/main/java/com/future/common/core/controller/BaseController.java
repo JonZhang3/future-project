@@ -1,5 +1,6 @@
 package com.future.common.core.controller;
 
+import com.future.common.core.domain.model.LoginUser;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
@@ -22,8 +23,10 @@ public class BaseController {
         });
     }
     
-    public void getCurrentUser() {
-        
+    public LoginUser getCurrentUser() {
+        return null;
     }
+    
+    
     
 }

@@ -13,9 +13,8 @@ import com.future.system.domain.query.DictionaryQuery;
 import com.future.system.service.DictionaryService;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,17 +34,21 @@ public class DictionaryServiceImpl implements DictionaryService, BaseService {
     @Resource(type = JPAQueryFactory.class)
     private JPAQueryFactory queryFactory;
 
-    @Resource(type = CacheManager.class)
-    private CacheManager cacheManager;
-
     @PostConstruct
     public void init() {
         loadingDictionaryCache();
     }
 
-    public void pageListDictionaries(DictionaryQuery dict) {
+    @Override
+    public Page<Dictionary> pageListDictionaries(DictionaryQuery dict) {
+        QDictionary qdictionary = QDictionary.dictionary;
+        return null;
+    }
+
+    public List<Dictionary> listDictionaries(DictionaryQuery dictQuery) {
         QDictionary qdictionary = QDictionary.dictionary;
 
+        return null;
     }
 
     /**
@@ -84,18 +87,18 @@ public class DictionaryServiceImpl implements DictionaryService, BaseService {
 
     @Override
     public void loadingDictionaryCache() {
-        Cache cache = cacheManager.getCache(Constants.CACHE_NAME_DICTIONARY);
-        if(cache == null) {
-            
-        }
+//        Cache cache = cacheManager.getCache(Constants.CACHE_NAME_DICTIONARY);
+//        if(cache == null) {
+//            
+//        }
     }
 
     @Override
     public void clearDictionaryCache() {
-        Cache cache = cacheManager.getCache(Constants.CACHE_NAME_DICTIONARY);
-        if (cache != null) {
-            cache.clear();
-        }
+//        Cache cache = cacheManager.getCache(Constants.CACHE_NAME_DICTIONARY);
+//        if (cache != null) {
+//            cache.clear();
+//        }
     }
 
     @Override
