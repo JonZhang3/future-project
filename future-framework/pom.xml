@@ -23,6 +23,7 @@
         <module>future-common</module>
         <module>future-mybatis</module>
         <module>future-web</module>
+        <module>future-security</module>
     </modules>
     
 </project>

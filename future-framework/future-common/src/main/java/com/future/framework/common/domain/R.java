@@ -1,5 +1,7 @@
 package com.future.framework.common.domain;
 
+import com.future.framework.common.exception.CommonErrorCode;
+
 import java.util.HashMap;
 
 public class R extends HashMap<String, Object> {
@@ -29,9 +31,13 @@ public class R extends HashMap<String, Object> {
     public static R fail(int code, String message) {
         return new R().code(code).message(message);
     }
-    
+
     public static R fail(String message) {
         return new R().code(CODE_FAIL).message(message);
+    }
+
+    public static R fail(CommonErrorCode errorCode) {
+        return new R().code(errorCode.getCode()).message(errorCode.getMessage());
     }
 
     private R() {

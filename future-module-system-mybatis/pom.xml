@@ -18,4 +18,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     
+    <dependencies>
+        <dependency>
+            <groupId>com.future</groupId>
+            <artifactId>future-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.future</groupId>
+            <artifactId>future-mybatis</artifactId>
+        </dependency>
+    </dependencies>
+    
 </project>

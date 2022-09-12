@@ -10,4 +10,16 @@ public final class StringUtils extends org.apache.commons.lang3.StringUtils {
     private StringUtils() {
     }
 
+    public static final String COMMA = ",";
+
+    public static String maxLength(CharSequence string, int length) {
+        if (null == string) {
+            return null;
+        }
+        if (string.length() <= length) {
+            return string.toString();
+        }
+        return string.subSequence(0, length) + "...";
+    }
+    
 }

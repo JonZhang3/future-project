@@ -2,12 +2,16 @@ package com.future.framework.common.exception;
 
 /**
  * 业务逻辑异常
- * 
+ *
  * @author JonZhang
  */
 public final class ServiceException extends RuntimeException {
 
     private Integer code;
+
+    public ServiceException(ErrorCode errorCode) {
+        this(errorCode.getMessage(), errorCode.getCode());
+    }
 
     public ServiceException(String message) {
         super(message, null, false, false);
