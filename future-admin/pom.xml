@@ -21,11 +21,11 @@
     <dependencies>
         <dependency>
             <groupId>com.future</groupId>
-            <artifactId>future-module-system-mybatis</artifactId>
+            <artifactId>future-security</artifactId>
         </dependency>
         <dependency>
             <groupId>com.future</groupId>
-            <artifactId>future-security</artifactId>
+            <artifactId>future-module-system-mybatis</artifactId>
         </dependency>
     </dependencies>
     

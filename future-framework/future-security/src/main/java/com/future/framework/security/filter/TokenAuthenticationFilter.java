@@ -4,19 +4,20 @@ import com.future.framework.common.domain.R;
 import com.future.framework.common.exception.ServiceException;
 import com.future.framework.common.utils.ServletUtils;
 import com.future.framework.common.utils.StringUtils;
-import com.future.framework.security.LoginUser;
-import com.future.framework.security.service.OAuth2TokenService;
+import com.future.framework.security.domain.LoginUser;
+import com.future.framework.security.service.TokenService;
 import com.future.framework.security.config.SecurityProperties;
-import com.future.framework.security.domain.OAuth2AccessTokenCheckRespDTO;
+import com.future.framework.security.domain.AccessTokenCheckResult;
 import com.future.framework.security.util.SecurityUtils;
 import com.future.framework.web.handler.GlobalExceptionHandler;
 import com.future.framework.web.util.WebUtils;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,19 +30,23 @@ import java.io.IOException;
  *
  * @author JonZhang
  */
-@RequiredArgsConstructor
+@Component
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-    private final SecurityProperties securityProperties;
+    @Resource(type = SecurityProperties.class)
+    private SecurityProperties securityProperties;
 
-    private final GlobalExceptionHandler globalExceptionHandler;
+    @Resource(type = GlobalExceptionHandler.class)
+    private GlobalExceptionHandler globalExceptionHandler;
 
-    private final OAuth2TokenService oauth2TokenApi;
+    @Resource(type = TokenService.class)
+    private TokenService tokenService;
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
                                     @NotNull HttpServletResponse response,
                                     @NotNull FilterChain chain) throws ServletException, IOException {
+        // 从请求头中取得 Token
         String token = SecurityUtils.obtainAuthorization(request, securityProperties.getTokenHeader());
         if (StringUtils.isNotEmpty(token)) {
             Integer userType = WebUtils.getLoginUserType(request);
@@ -68,7 +73,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private LoginUser buildLoginUserByToken(String token, Integer userType) {
         try {
-            OAuth2AccessTokenCheckRespDTO accessToken = oauth2TokenApi.checkAccessToken(token);
+            AccessTokenCheckResult accessToken = tokenService.checkAccessToken(token);
             if (accessToken == null) {
                 return null;
             }

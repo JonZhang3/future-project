@@ -7,6 +7,7 @@ import com.future.framework.security.util.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,10 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 import static com.future.framework.common.exception.CommonErrorCode.FORBIDDEN;
 
 /**
+ * 权限不够处理器
  * 访问一个需要认证的 URL 资源，已经认证（登录）但是没有权限的情况下，返回 {@link CommonErrorCode#FORBIDDEN} 错误码。
  *
  * @author JonZhang
  */
+@Component
 @Slf4j
 public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     @Override

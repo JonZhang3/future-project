@@ -27,6 +27,11 @@
             <groupId>com.future</groupId>
             <artifactId>future-mybatis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.future</groupId>
+            <artifactId>future-security</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     
 </project>

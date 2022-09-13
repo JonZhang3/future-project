@@ -1,6 +1,6 @@
 package com.future.framework.security.util;
 
-import com.future.framework.security.LoginUser;
+import com.future.framework.security.domain.LoginUser;
 import com.future.framework.web.util.WebUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

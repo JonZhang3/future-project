@@ -1,4 +1,4 @@
-package com.future.framework.security;
+package com.future.framework.security.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

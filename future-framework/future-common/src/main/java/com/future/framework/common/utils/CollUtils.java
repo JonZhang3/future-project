@@ -40,14 +40,14 @@ public final class CollUtils {
         }
         return from.stream().collect(Collectors.groupingBy(keyFunc, Collectors.mapping(valueFunc, Collectors.toSet())));
     }
-    
+
     public static <T, U> List<U> convertList(Collection<T> from, Function<T, U> func) {
         if (CollectionUtils.isEmpty(from)) {
             return new ArrayList<>();
         }
         return from.stream().map(func).filter(Objects::nonNull).collect(Collectors.toList());
     }
-    
+
     public static boolean isAnyEmpty(Collection<?>... collections) {
         return Arrays.stream(collections).anyMatch(CollectionUtils::isEmpty);
     }
@@ -58,5 +58,32 @@ public final class CollUtils {
         }
         coll.add(item);
     }
-    
+
+    /**
+     * 其中一个集合在另一个集合中是否至少包含一个元素，即是两个集合是否至少有一个共同的元素
+     *
+     * @param coll1 集合1
+     * @param coll2 集合2
+     * @return 其中一个集合在另一个集合中是否至少包含一个元素
+     */
+    public static boolean containsAny(Collection<?> coll1, Collection<?> coll2) {
+        if (CollectionUtils.isEmpty(coll1) || CollectionUtils.isEmpty(coll2)) {
+            return false;
+        }
+        if (coll1.size() < coll2.size()) {
+            for (Object object : coll1) {
+                if (coll2.contains(object)) {
+                    return true;
+                }
+            }
+        } else {
+            for (Object object : coll2) {
+                if (coll1.contains(object)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

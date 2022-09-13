@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 @ApiModel("管理后台 - 访问令牌分页 Request VO")
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class OAuth2AccessTokenPageQuery extends BaseQuery {
+public class AccessTokenPageQuery extends BaseQuery {
 
     @ApiModelProperty(value = "用户编号", required = true, example = "666")
     private Long userId;

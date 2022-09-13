@@ -1,5 +1,7 @@
 package com.future.framework.common.utils;
 
+import java.util.Date;
+
 /**
  * 时间工具类
  *
@@ -21,5 +23,9 @@ public final class DateUtils {
     public static final long SECOND_MILLIS = 1000;
 
     public static final String FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND = "yyyy-MM-dd HH:mm:ss";
+
+    public static boolean isExpired(Date time) {
+        return System.currentTimeMillis() > time.getTime();
+    }
     
 }

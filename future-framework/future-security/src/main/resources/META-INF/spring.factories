@@ -1,3 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.future.framework.security.config.SecurityAutoConfiguration,\
   com.future.framework.security.config.WebSecurityConfigurerAdapter

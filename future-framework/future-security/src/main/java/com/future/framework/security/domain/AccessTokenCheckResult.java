@@ -10,7 +10,7 @@ import java.util.List;
  * @author JonZhang
  */
 @Data
-public class OAuth2AccessTokenCheckRespDTO {
+public class AccessTokenCheckResult {
 
     /**
      * 用户编号

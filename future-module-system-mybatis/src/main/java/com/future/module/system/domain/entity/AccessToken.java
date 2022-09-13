@@ -19,10 +19,10 @@ import java.util.List;
  *
  * @author JonZhang
  */
-@TableName(value = "system_oauth2_access_token", autoResultMap = true)
+@TableName(value = "system_access_token", autoResultMap = true)
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class OAuth2AccessToken extends BaseEntity {
+public class AccessToken extends BaseEntity {
 
     /**
      * 编号，数据库递增
@@ -49,8 +49,6 @@ public class OAuth2AccessToken extends BaseEntity {
     private Integer userType;
     /**
      * 客户端编号
-     * <p>
-     * 关联 {@link OAuth2ClientDO#getId()}
      */
     private String clientId;
     /**
