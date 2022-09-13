@@ -1,0 +1,81 @@
+package com.future.module.admin.controller;
+
+import com.future.framework.common.annotations.OperateLog;
+import com.future.framework.common.domain.PageResult;
+import com.future.framework.common.domain.R;
+import com.future.framework.common.utils.CollUtils;
+import com.future.framework.common.utils.ExcelUtils;
+import com.future.framework.common.utils.MapUtils;
+import com.future.module.system.domain.entity.AdminUser;
+import com.future.module.system.domain.entity.OperationLog;
+import com.future.module.system.domain.query.logger.OperateLogExportQuery;
+import com.future.module.system.domain.query.logger.OperateLogPageQuery;
+import com.future.module.system.service.AdminUserService;
+import com.future.module.system.service.OperateLogService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import static com.future.framework.common.constant.enums.OperateType.EXPORT;
+
+@Api(tags = "管理后台 - 操作日志")
+@RestController
+@RequestMapping("/system/operate-log")
+@Validated
+public class OperateLogController {
+
+    @Resource
+    private OperateLogService operateLogService;
+    @Resource
+    private AdminUserService userService;
+
+    @GetMapping("/page")
+    @ApiOperation("查看操作日志分页列表")
+    @PreAuthorize("@ss.hasPermission('system:operate-log:query')")
+    public R pageOperateLog(@Valid OperateLogPageQuery query) {
+        PageResult<OperationLog> pageResult = operateLogService.getOperateLogPage(query);
+
+        // 获得拼接需要的数据
+        Collection<Long> userIds = CollUtils.convertList(pageResult.getList(), OperationLog::getUserId);
+        Map<Long, AdminUser> userMap = userService.getUserMap(userIds);
+        // 拼接数据
+        List<OperateLogRespVO> list = new ArrayList<>(pageResult.getList().size());
+        pageResult.getList().forEach(operationLog -> {
+            OperateLogRespVO respVO = OperateLogConvert.INSTANCE.convert(operationLog);
+            list.add(respVO);
+            // 拼接用户信息
+            MapUtils.findAndThen(userMap, operationLog.getUserId(), user -> respVO.setUserNickname(user.getNickname()));
+        });
+        return R.ok(new PageResult<>(list, pageResult.getTotal()));
+    }
+
+    @ApiOperation("导出操作日志")
+    @GetMapping("/export")
+    @PreAuthorize("@ss.hasPermission('system:operate-log:export')")
+    @OperateLog(type = EXPORT)
+    public void exportOperateLog(HttpServletResponse response, @Valid OperateLogExportQuery query) throws IOException {
+        List<OperationLog> list = operateLogService.getOperateLogs(query);
+
+        // 获得拼接需要的数据
+        Collection<Long> userIds = CollUtils.convertList(list, OperationLog::getUserId);
+        Map<Long, AdminUser> userMap = userService.getUserMap(userIds);
+        // 拼接数据
+        List<OperateLogExcelVO> excelDataList = OperateLogConvert.INSTANCE.convertList(list, userMap);
+        // 输出
+        ExcelUtils.write(response, "操作日志.xls", "数据列表", OperateLogExcelVO.class, excelDataList);
+    }
+
+}

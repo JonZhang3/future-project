@@ -8,9 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
@@ -27,7 +25,7 @@ import static springfox.documentation.builders.RequestHandlerSelectors.basePacka
 @EnableKnife4j
 @ConditionalOnClass({Docket.class, ApiInfoBuilder.class})
 // 允许使用 swagger.enable=false 禁用 Swagger
-@ConditionalOnProperty(prefix = "yudao.swagger", value = "enable", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "future.swagger", value = "enable", matchIfMissing = true)
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerAutoConfiguration {
 
@@ -50,9 +48,9 @@ public class SwaggerAutoConfiguration {
             .build()
             // ③ 安全上下文（认证）
             .securitySchemes(securitySchemes())
-            .securityContexts(securityContexts())
-            // ④ 全局参数（多租户 header）
-            .globalRequestParameters(globalRequestParameters());
+            .securityContexts(securityContexts());
+        // ④ 全局参数（多租户 header）
+//            .globalRequestParameters(globalRequestParameters());
     }
 
     // ========== apiInfo ==========
@@ -102,11 +100,11 @@ public class SwaggerAutoConfiguration {
 
     // ========== globalRequestParameters ==========
 
-    private static List<RequestParameter> globalRequestParameters() {
-        RequestParameterBuilder tenantParameter = new RequestParameterBuilder()
-            .name(HEADER_TENANT_ID).description("租户编号")
-            .in(ParameterType.HEADER).example(new ExampleBuilder().value(1L).build());
-        return Collections.singletonList(tenantParameter.build());
-    }
-    
+//    private static List<RequestParameter> globalRequestParameters() {
+//        RequestParameterBuilder tenantParameter = new RequestParameterBuilder()
+//            .name(HEADER_TENANT_ID).description("租户编号")
+//            .in(ParameterType.HEADER).example(new ExampleBuilder().value(1L).build());
+//        return Collections.singletonList(tenantParameter.build());
+//    }
+
 }

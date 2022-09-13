@@ -25,5 +25,5 @@ public class CaptchaController {
     public R getCaptchaImage() {
         return R.ok(captchaService.getCaptchaImage());
     }
-    
+
 }

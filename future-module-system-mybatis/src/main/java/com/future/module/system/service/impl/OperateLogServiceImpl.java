@@ -5,7 +5,7 @@ import com.future.framework.common.utils.CollUtils;
 import com.future.framework.common.utils.StringUtils;
 import com.future.module.system.dao.OperateLogMapper;
 import com.future.module.system.domain.entity.AdminUser;
-import com.future.module.system.domain.entity.OperateLog;
+import com.future.module.system.domain.entity.OperationLog;
 import com.future.module.system.domain.query.logger.OperateLogExportQuery;
 import com.future.module.system.domain.query.logger.OperateLogPageQuery;
 import com.future.module.system.service.AdminUserService;
@@ -18,8 +18,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static com.future.module.system.domain.entity.OperateLog.JAVA_METHOD_ARGS_MAX_LENGTH;
-import static com.future.module.system.domain.entity.OperateLog.RESULT_MAX_LENGTH;
+import static com.future.module.system.domain.entity.OperationLog.JAVA_METHOD_ARGS_MAX_LENGTH;
+import static com.future.module.system.domain.entity.OperationLog.RESULT_MAX_LENGTH;
 
 @Service
 public class OperateLogServiceImpl implements OperateLogService {
@@ -31,14 +31,14 @@ public class OperateLogServiceImpl implements OperateLogService {
     private AdminUserService userService;
 
     @Override
-    public void createOperateLog(OperateLog log) {
+    public void createOperateLog(OperationLog log) {
         log.setJavaMethodArgs(StringUtils.maxLength(log.getJavaMethodArgs(), JAVA_METHOD_ARGS_MAX_LENGTH));
         log.setResultData(StringUtils.maxLength(log.getResultData(), RESULT_MAX_LENGTH));
         operateLogMapper.insert(log);
     }
 
     @Override
-    public PageResult<OperateLog> getOperateLogPage(OperateLogPageQuery query) {
+    public PageResult<OperationLog> getOperateLogPage(OperateLogPageQuery query) {
         // 处理基于用户昵称的查询
         Collection<Long> userIds = null;
         if (StringUtils.isNotEmpty(query.getUserNickname())) {
@@ -52,7 +52,7 @@ public class OperateLogServiceImpl implements OperateLogService {
     }
 
     @Override
-    public List<OperateLog> getOperateLogs(OperateLogExportQuery query) {
+    public List<OperationLog> getOperateLogs(OperateLogExportQuery query) {
         // 处理基于用户昵称的查询
         Collection<Long> userIds = null;
         if (StringUtils.isNotEmpty(query.getUserNickname())) {

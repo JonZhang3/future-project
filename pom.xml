@@ -3,7 +3,7 @@
 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.future</groupId>
-    <artifactId>backend-jpa</artifactId>
+    <artifactId>future-backend</artifactId>
     <packaging>pom</packaging>
     <version>${revision}</version>
     <modules>
@@ -11,10 +11,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
         <module>application</module>
         <module>future-framework</module>
         <module>future-module-system-mybatis</module>
-        <module>future-module-admin</module>
         <module>future-admin</module>
     </modules>
-    <name>backend-jpa</name>
+    <name>future-project</name>
     <description>Backend project</description>
 
     <properties>
@@ -42,6 +41,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
         <knife4j.version>3.0.3</knife4j.version>
         <resilience4j.version>1.7.1</resilience4j.version>
         <guava.version>30.1.1-jre</guava.version>
+        <easyexcel.verion>3.1.1</easyexcel.verion>
     </properties>
 
     <dependencyManagement>
@@ -93,6 +93,15 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
             </dependency>
+
+            <!-- easyexcel -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>3.1.1</version>
+            </dependency>
+            
+            <!-- querydsl -->
             <dependency>
                 <groupId>com.querydsl</groupId>
                 <artifactId>querydsl-apt</artifactId>
@@ -216,11 +225,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
             <dependency>
                 <groupId>com.future</groupId>
                 <artifactId>future-module-system-mybatis</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.future</groupId>
-                <artifactId>future-module-admin</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

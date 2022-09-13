@@ -19,7 +19,7 @@ import java.util.Map;
 @TableName(value = "system_operate_log", autoResultMap = true)
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class OperateLog extends BaseEntity {
+public class OperationLog extends BaseEntity {
 
     /**
      * {@link #javaMethodArgs} 的最大长度
