@@ -41,7 +41,7 @@ public final class SecurityUtils {
         if (index == -1) { // 未找到
             return null;
         }
-        return authorization.substring(index + 7).trim();
+        return authorization.substring(index + AUTHORIZATION_BEARER.length() + 1).trim();
     }
 
     /**

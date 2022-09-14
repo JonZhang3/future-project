@@ -24,6 +24,7 @@
         <module>future-mybatis</module>
         <module>future-web</module>
         <module>future-security</module>
+        <module>future-cache</module>
     </modules>
     
 </project>
