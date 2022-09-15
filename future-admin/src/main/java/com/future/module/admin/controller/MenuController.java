@@ -67,7 +67,7 @@ public class MenuController {
     @GetMapping("/list-all-simple")
     public R getSimpleMenus() {
         // 获得菜单列表，只要开启状态的
-        MenuListReqVO reqVO = new MenuListReqVO();
+        MenuListQuery reqVO = new MenuListQuery();
         reqVO.setStatus(CommonStatus.VALID.getValue());
         List<Menu> list = menuService.getTenantMenus(reqVO);
         // 排序后，返回给前端

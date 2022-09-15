@@ -4,6 +4,8 @@ import com.future.framework.common.domain.PageResult;
 import com.future.module.system.domain.entity.DictData;
 import com.future.module.system.domain.query.dict.DictDataCreateQuery;
 import com.future.module.system.domain.query.dict.DictDataUpdateQuery;
+import com.future.module.system.domain.vo.dict.DictDataExcelVO;
+import com.future.module.system.domain.vo.dict.DictDataRespVO;
 import com.future.module.system.domain.vo.dict.DictDataSimpleVO;
 import com.future.module.system.domain.vo.dict.DictDataVO;
 
@@ -25,4 +27,8 @@ public interface DictDataConvert {
 
     PageResult<DictDataVO> convertPage(PageResult<DictData> page);
 
+    DictDataRespVO convert(DictData bean);
+
+    List<DictDataExcelVO> convertToExcelList(List<DictData> bean);
+    
 }

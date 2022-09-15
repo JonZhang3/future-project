@@ -9,6 +9,7 @@ import com.future.module.system.domain.query.dict.DictDataCreateQuery;
 import com.future.module.system.domain.query.dict.DictDataExportQuery;
 import com.future.module.system.domain.query.dict.DictDataPageQuery;
 import com.future.module.system.domain.query.dict.DictDataUpdateQuery;
+import com.future.module.system.domain.vo.dict.DictDataExcelVO;
 import com.future.module.system.service.DictDataService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -88,7 +89,7 @@ public class DictDataController {
     @OperateLog(type = EXPORT)
     public void export(HttpServletResponse response, @Valid DictDataExportQuery query) throws IOException {
         List<DictData> list = dictDataService.getDictDatas(query);
-        List<DictDataExcelVO> data = DictDataConvert.INSTANCE.convertList02(list);
+        List<DictDataExcelVO> data = DictDataConvert.INSTANCE.convertToExcelList(list);
         // 输出
         ExcelUtils.write(response, "字典数据.xls", "数据列表", DictDataExcelVO.class, data);
     }

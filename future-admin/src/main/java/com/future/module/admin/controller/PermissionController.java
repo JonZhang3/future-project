@@ -1,6 +1,9 @@
 package com.future.module.admin.controller;
 
 import com.future.framework.common.domain.R;
+import com.future.module.system.domain.vo.permission.PermissionAssignRoleDataScopeReqVO;
+import com.future.module.system.domain.vo.permission.PermissionAssignRoleMenuReqVO;
+import com.future.module.system.domain.vo.permission.PermissionAssignUserRoleReqVO;
 import com.future.module.system.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -11,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.Set;
 
 @Api(tags = "管理后台 - 权限")
 @RestController
@@ -61,5 +63,5 @@ public class PermissionController {
         permissionService.assignUserRole(reqVO.getUserId(), reqVO.getRoleIds());
         return R.ok(true);
     }
-    
+
 }

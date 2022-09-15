@@ -2,6 +2,7 @@ package com.future.module.admin.controller;
 
 import com.future.framework.common.constant.enums.CommonStatus;
 import com.future.framework.common.domain.R;
+import com.future.module.system.domain.convert.DeptConvert;
 import com.future.module.system.domain.entity.Department;
 import com.future.module.system.domain.query.dept.DeptCreateQuery;
 import com.future.module.system.domain.query.dept.DeptListQuery;
@@ -71,7 +72,7 @@ public class DeptController {
         List<Department> list = deptService.getSimpleDepts(query);
         // 排序后，返回给前端
         list.sort(Comparator.comparing(Department::getSort));
-        return R.ok(list);
+        return R.ok(DeptConvert.INSTANCE.convertToSimpleList(list));
     }
 
     @GetMapping("/get")

@@ -10,6 +10,7 @@ import com.future.module.system.domain.query.dept.PostCreateQuery;
 import com.future.module.system.domain.query.dept.PostExportQuery;
 import com.future.module.system.domain.query.dept.PostPageQuery;
 import com.future.module.system.domain.query.dept.PostUpdateQuery;
+import com.future.module.system.domain.vo.dept.PostExcelVO;
 import com.future.module.system.service.PostService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -64,24 +65,24 @@ public class PostController {
     @ApiOperation("获得岗位信息")
     @ApiImplicitParam(name = "id", value = "岗位编号", required = true, example = "1024", dataTypeClass = Long.class)
     @PreAuthorize("@ss.hasPermission('system:post:query')")
-    public CommonResult<PostRespVO> getPost(@RequestParam("id") Long id) {
+    public R getPost(@RequestParam("id") Long id) {
         return R.ok(PostConvert.INSTANCE.convert(postService.getPost(id)));
     }
 
     @GetMapping("/list-all-simple")
     @ApiOperation(value = "获取岗位精简信息列表", notes = "只包含被开启的岗位，主要用于前端的下拉选项")
-    public CommonResult<List<PostSimpleRespVO>> getSimplePosts() {
+    public R getSimplePosts() {
         // 获得岗位列表，只要开启状态的
         List<Post> list = postService.getPosts(null, Collections.singleton(CommonStatus.VALID.getValue()));
         // 排序后，返回给前端
         list.sort(Comparator.comparing(Post::getSort));
-        return R.ok(PostConvert.INSTANCE.convertList02(list));
+        return R.ok(PostConvert.INSTANCE.convertToSimpleList(list));
     }
 
     @GetMapping("/page")
     @ApiOperation("获得岗位分页列表")
     @PreAuthorize("@ss.hasPermission('system:post:query')")
-    public CommonResult<PageResult<PostRespVO>> getPostPage(@Validated PostPageQuery query) {
+    public R getPostPage(@Validated PostPageQuery query) {
         return R.ok(PostConvert.INSTANCE.convertPage(postService.getPostPage(query)));
     }
 
@@ -91,9 +92,9 @@ public class PostController {
     @OperateLog(type = EXPORT)
     public void export(HttpServletResponse response, @Validated PostExportQuery query) throws IOException {
         List<Post> posts = postService.getPosts(query);
-        List<PostExcelVO> data = PostConvert.INSTANCE.convertList03(posts);
+        List<PostExcelVO> data = PostConvert.INSTANCE.convertToPostExcelList(posts);
         // 输出
         ExcelUtils.write(response, "岗位数据.xls", "岗位列表", PostExcelVO.class, data);
     }
-    
+
 }

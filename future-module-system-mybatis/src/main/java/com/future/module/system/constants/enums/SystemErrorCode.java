@@ -140,7 +140,11 @@ public enum SystemErrorCode implements ErrorCode {
     // ========== OAuth2 授权 1002022000 =========
     OAUTH2_CODE_NOT_EXISTS(1002022000, "code 不存在"),
     OAUTH2_CODE_EXPIRE(1002022000, "code 已过期"),
-    ;
+
+    // ========= 文件相关 1001003000=================
+    FILE_PATH_EXISTS(1001003000, "文件路径已存在"),
+    FILE_NOT_EXISTS(1001003001, "文件不存在"),
+    FILE_IS_EMPTY(1001003002, "文件为空");
 
     private final int code;
     private final String message;

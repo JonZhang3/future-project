@@ -1,16 +1,20 @@
 package com.future.module.admin.controller;
 
+import com.future.framework.common.annotations.OperateLog;
 import com.future.framework.common.constant.enums.CommonStatus;
+import com.future.framework.common.constant.enums.Sex;
 import com.future.framework.common.domain.PageResult;
 import com.future.framework.common.domain.R;
 import com.future.framework.common.utils.CollUtils;
+import com.future.framework.common.utils.ExcelUtils;
+import com.future.framework.common.utils.MapUtils;
+import com.future.module.system.domain.convert.UserConvert;
 import com.future.module.system.domain.entity.AdminUser;
 import com.future.module.system.domain.entity.Department;
-import com.future.module.system.domain.query.user.UserCreateQuery;
-import com.future.module.system.domain.query.user.UserPageQuery;
-import com.future.module.system.domain.query.user.UserUpdateQuery;
-import com.future.module.system.service.UserService;
+import com.future.module.system.domain.query.user.*;
+import com.future.module.system.domain.vo.user.*;
 import com.future.module.system.service.DeptService;
+import com.future.module.system.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -26,6 +30,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.*;
+
+import static com.future.framework.common.constant.enums.OperateType.EXPORT;
 
 @Api(tags = "管理后台 - 用户")
 @RestController
@@ -95,8 +101,8 @@ public class UserController {
         // 拼接结果返回
         List<UserPageItemRespVO> userList = new ArrayList<>(pageResult.getList().size());
         pageResult.getList().forEach(user -> {
-            UserPageItemRespVO respVO = UserConvert.INSTANCE.convert(user);
-            respVO.setDept(UserConvert.INSTANCE.convert(deptMap.get(user.getDeptId())));
+            UserPageItemRespVO respVO = UserConvert.INSTANCE.convertToUserPageItem(user);
+            respVO.setDept(UserConvert.INSTANCE.convertToUserPageItemDept(deptMap.get(user.getDeptId())));
             userList.add(respVO);
         });
         return R.ok(new PageResult<>(userList, pageResult.getTotal()));
@@ -108,35 +114,35 @@ public class UserController {
         // 获用户门列表，只要开启状态的
         List<AdminUser> list = userService.getUsersByStatus(CommonStatus.VALID.getValue());
         // 排序后，返回给前端
-        return R.ok(UserConvert.INSTANCE.convertList04(list));
+        return R.ok(UserConvert.INSTANCE.convertToSimpleUserList(list));
     }
 
     @GetMapping("/get")
     @ApiOperation("获得用户详情")
     @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024", dataTypeClass = Long.class)
     @PreAuthorize("@ss.hasPermission('system:user:query')")
-    public CommonResult<UserRespVO> getInfo(@RequestParam("id") Long id) {
-        return success(UserConvert.INSTANCE.convert(userService.getUser(id)));
+    public R getInfo(@RequestParam("id") Long id) {
+        return R.ok(UserConvert.INSTANCE.convertToUserProfile(userService.getUser(id)));
     }
 
     @GetMapping("/export")
     @ApiOperation("导出用户")
     @PreAuthorize("@ss.hasPermission('system:user:export')")
     @OperateLog(type = EXPORT)
-    public void exportUsers(@Validated UserExportReqVO reqVO,
+    public void exportUsers(@Validated UserExportQuery query,
                             HttpServletResponse response) throws IOException {
         // 获得用户列表
-        List<AdminUserDO> users = userService.getUsers(reqVO);
+        List<AdminUser> users = userService.getUsers(query);
 
         // 获得拼接需要的数据
-        Collection<Long> deptIds = convertList(users, AdminUserDO::getDeptId);
-        Map<Long, DeptDO> deptMap = deptService.getDeptMap(deptIds);
-        Map<Long, AdminUserDO> deptLeaderUserMap = userService.getUserMap(
-            convertSet(deptMap.values(), DeptDO::getLeaderUserId));
+        Collection<Long> deptIds = CollUtils.convertList(users, AdminUser::getDeptId);
+        Map<Long, Department> deptMap = deptService.getDeptMap(deptIds);
+        Map<Long, AdminUser> deptLeaderUserMap = userService.getUserMap(
+            CollUtils.convertSet(deptMap.values(), Department::getLeaderUserId));
         // 拼接数据
         List<UserExcelVO> excelUsers = new ArrayList<>(users.size());
         users.forEach(user -> {
-            UserExcelVO excelVO = UserConvert.INSTANCE.convert02(user);
+            UserExcelVO excelVO = UserConvert.INSTANCE.convertToUserExcel(user);
             // 设置部门
             MapUtils.findAndThen(deptMap, user.getDeptId(), dept -> {
                 excelVO.setDeptName(dept.getName());
@@ -156,10 +162,10 @@ public class UserController {
     public void importTemplate(HttpServletResponse response) throws IOException {
         // 手动创建导出 demo
         List<UserImportExcelVO> list = Arrays.asList(
-            UserImportExcelVO.builder().username("yunai").deptId(1L).email("yunai@iocoder.cn").mobile("15601691300")
-                .nickname("芋道").status(CommonStatusEnum.ENABLE.getStatus()).sex(SexEnum.MALE.getSex()).build(),
+            UserImportExcelVO.builder().username("Jon").deptId(1L).email("test@xxx.cn").mobile("15601691300")
+                .nickname("芋道").status(CommonStatus.VALID.getValue()).sex(Sex.MALE.getValue()).build(),
             UserImportExcelVO.builder().username("yuanma").deptId(2L).email("yuanma@iocoder.cn").mobile("15601701300")
-                .nickname("源码").status(CommonStatusEnum.DISABLE.getStatus()).sex(SexEnum.FEMALE.getSex()).build()
+                .nickname("源码").status(CommonStatus.INVALID.getValue()).sex(Sex.FEMALE.getValue()).build()
         );
 
         // 输出
@@ -173,10 +179,10 @@ public class UserController {
         @ApiImplicitParam(name = "updateSupport", value = "是否支持更新，默认为 false", example = "true", dataTypeClass = Boolean.class)
     })
     @PreAuthorize("@ss.hasPermission('system:user:import')")
-    public CommonResult<UserImportRespVO> importExcel(@RequestParam("file") MultipartFile file,
-                                                      @RequestParam(value = "updateSupport", required = false, defaultValue = "false") Boolean updateSupport) throws Exception {
-        List<UserImportExcelVO> list = ExcelUtils.read(file, UserImportExcelVO.class);
-        return success(userService.importUsers(list, updateSupport));
+    public R importExcel(@RequestParam("file") MultipartFile file,
+                         @RequestParam(value = "updateSupport", required = false, defaultValue = "false") Boolean updateSupport) throws Exception {
+        List<UserImportExcelQuery> list = ExcelUtils.read(file, UserImportExcelQuery.class);
+        return R.ok(userService.importUsers(list, updateSupport));
     }
-    
+
 }

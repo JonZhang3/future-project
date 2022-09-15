@@ -6,12 +6,15 @@ import com.future.framework.common.domain.R;
 import com.future.framework.common.utils.CollUtils;
 import com.future.framework.common.utils.ExcelUtils;
 import com.future.framework.common.utils.MapUtils;
+import com.future.module.system.domain.convert.OperateLogConvert;
 import com.future.module.system.domain.entity.AdminUser;
 import com.future.module.system.domain.entity.OperationLog;
 import com.future.module.system.domain.query.logger.OperateLogExportQuery;
 import com.future.module.system.domain.query.logger.OperateLogPageQuery;
-import com.future.module.system.service.UserService;
+import com.future.module.system.domain.vo.logger.OperateLogExcelVO;
+import com.future.module.system.domain.vo.logger.OperateLogRespVO;
 import com.future.module.system.service.OperateLogService;
+import com.future.module.system.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -73,7 +76,7 @@ public class OperateLogController {
         Collection<Long> userIds = CollUtils.convertList(list, OperationLog::getUserId);
         Map<Long, AdminUser> userMap = userService.getUserMap(userIds);
         // 拼接数据
-        List<OperateLogExcelVO> excelDataList = OperateLogConvert.INSTANCE.convertList(list, userMap);
+        List<OperateLogExcelVO> excelDataList = OperateLogConvert.INSTANCE.convertToExcelList(list, userMap);
         // 输出
         ExcelUtils.write(response, "操作日志.xls", "数据列表", OperateLogExcelVO.class, excelDataList);
     }

@@ -10,6 +10,8 @@ import com.future.module.system.domain.query.permission.RoleCreateQuery;
 import com.future.module.system.domain.query.permission.RoleExportQuery;
 import com.future.module.system.domain.query.permission.RolePageQuery;
 import com.future.module.system.domain.query.permission.RoleUpdateQuery;
+import com.future.module.system.domain.vo.permission.RoleExcelVO;
+import com.future.module.system.domain.vo.permission.RoleUpdateStatusReqVO;
 import com.future.module.system.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -91,7 +93,7 @@ public class RoleController {
         List<Role> list = roleService.getRoles(Collections.singleton(CommonStatus.VALID.getValue()));
         // 排序后，返回给前端
         list.sort(Comparator.comparing(Role::getSort));
-        return R.ok(RoleConvert.INSTANCE.convertList02(list));
+        return R.ok(RoleConvert.INSTANCE.convertToSimpleRoleList(list));
     }
 
     @GetMapping("/export")
@@ -99,7 +101,7 @@ public class RoleController {
     @PreAuthorize("@ss.hasPermission('system:role:export')")
     public void export(HttpServletResponse response, @Validated RoleExportQuery query) throws IOException {
         List<Role> list = roleService.getRoleList(query);
-        List<RoleExcelVO> data = RoleConvert.INSTANCE.convertList03(list);
+        List<RoleExcelVO> data = RoleConvert.INSTANCE.convertToRoleExcelList(list);
         // 输出
         ExcelUtils.write(response, "角色数据.xls", "角色列表", RoleExcelVO.class, data);
     }

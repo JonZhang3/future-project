@@ -9,6 +9,7 @@ import com.future.module.system.domain.query.dict.DictTypeCreateQuery;
 import com.future.module.system.domain.query.dict.DictTypeExportQuery;
 import com.future.module.system.domain.query.dict.DictTypePageQuery;
 import com.future.module.system.domain.query.dict.DictTypeUpdateQuery;
+import com.future.module.system.domain.vo.dict.DictTypeExcelVO;
 import com.future.module.system.service.DictTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -59,14 +60,14 @@ public class DictTypeController {
         return R.ok(true);
     }
 
-    @ApiOperation("/获得字典类型的分页列表")
+    @ApiOperation("获得字典类型的分页列表")
     @GetMapping("/page")
     @PreAuthorize("@ss.hasPermission('system:dict:query')")
     public R pageDictTypes(@Valid DictTypePageQuery query) {
         return R.ok(DictTypeConvert.INSTANCE.convertPage(dictTypeService.getDictTypePage(query)));
     }
 
-    @ApiOperation("/查询字典类型详细")
+    @ApiOperation("查询字典类型详细")
     @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024", dataTypeClass = Long.class)
     @GetMapping(value = "/get")
     @PreAuthorize("@ss.hasPermission('system:dict:query')")
@@ -88,7 +89,7 @@ public class DictTypeController {
     @OperateLog(type = EXPORT)
     public void export(HttpServletResponse response, @Valid DictTypeExportQuery query) throws IOException {
         List<DictType> list = dictTypeService.getDictTypeList(query);
-        List<DictTypeExcelVO> data = DictTypeConvert.INSTANCE.convertList02(list);
+        List<DictTypeExcelVO> data = DictTypeConvert.INSTANCE.convertToExcelList(list);
         // 输出
         ExcelUtils.write(response, "字典类型.xls", "类型列表", DictTypeExcelVO.class, data);
     }
