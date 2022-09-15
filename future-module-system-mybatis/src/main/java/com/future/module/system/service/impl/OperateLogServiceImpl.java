@@ -8,7 +8,7 @@ import com.future.module.system.domain.entity.AdminUser;
 import com.future.module.system.domain.entity.OperationLog;
 import com.future.module.system.domain.query.logger.OperateLogExportQuery;
 import com.future.module.system.domain.query.logger.OperateLogPageQuery;
-import com.future.module.system.service.AdminUserService;
+import com.future.module.system.service.UserService;
 import com.future.module.system.service.OperateLogService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class OperateLogServiceImpl implements OperateLogService {
     private OperateLogMapper operateLogMapper;
 
     @Resource
-    private AdminUserService userService;
+    private UserService userService;
 
     @Override
     public void createOperateLog(OperationLog log) {

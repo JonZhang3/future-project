@@ -4,6 +4,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class CollUtils {
@@ -34,7 +35,8 @@ public final class CollUtils {
         return from.stream().collect(Collectors.toMap(keyFunc, i -> i));
     }
 
-    public static <T, K, V> Map<K, Set<V>> convertMultiMap(Collection<T> from, Function<T, K> keyFunc, Function<T, V> valueFunc) {
+    public static <T, K, V> Map<K, Set<V>> convertMultiMap(Collection<T> from, Function<T, K> keyFunc,
+            Function<T, V> valueFunc) {
         if (CollectionUtils.isEmpty(from)) {
             return new HashMap<>();
         }
@@ -84,6 +86,13 @@ public final class CollUtils {
             }
         }
         return false;
+    }
+
+    public static <T> List<T> filterList(Collection<T> from, Predicate<T> predicate) {
+        if (CollectionUtils.isEmpty(from)) {
+            return new ArrayList<>();
+        }
+        return from.stream().filter(predicate).collect(Collectors.toList());
     }
 
 }

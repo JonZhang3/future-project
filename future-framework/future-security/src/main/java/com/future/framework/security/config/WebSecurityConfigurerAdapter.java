@@ -1,9 +1,12 @@
 package com.future.framework.security.config;
 
-import com.future.framework.security.filter.TokenAuthenticationFilter;
-import com.future.framework.web.config.WebProperties;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -22,19 +25,15 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import javax.annotation.Resource;
-import javax.annotation.security.PermitAll;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.future.framework.security.filter.TokenAuthenticationFilter;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 @Configuration
 @EnableConfigurationProperties(SecurityProperties.class)
 public class WebSecurityConfigurerAdapter
     extends org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter {
 
-    @Resource
-    private WebProperties webProperties;
     @Resource
     private SecurityProperties securityProperties;
 
@@ -120,7 +119,7 @@ public class WebSecurityConfigurerAdapter
             // 一堆自定义的 Spring Security 处理器
             .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
             .accessDeniedHandler(accessDeniedHandler);
-        // 登录、登录暂时不使用 Spring Security 的拓展点，主要考虑一方面拓展多用户、多种登录方式相对复杂，一方面用户的学习成本较高
+        // 登录暂时不使用 Spring Security 的拓展点，主要考虑一方面拓展多用户、多种登录方式相对复杂，一方面用户的学习成本较高
 
         // 获得 @PermitAll 带来的 URL 列表，免登录
         Multimap<HttpMethod, String> permitAllUrls = getPermitAllUrlsFromAnnotations();
@@ -137,22 +136,15 @@ public class WebSecurityConfigurerAdapter
             .antMatchers(HttpMethod.DELETE, permitAllUrls.get(HttpMethod.DELETE).toArray(new String[0])).permitAll()
             // 1.3 基于 future.security.permit-all-urls 无需认证
             .antMatchers(securityProperties.getPermitUrls().toArray(new String[0])).permitAll()
-            // 1.4 设置 App API 无需认证
-            .antMatchers(buildAppApi("/**")).permitAll()
             // ②：每个项目的自定义规则
             .and().authorizeRequests(registry -> // 下面，循环设置自定义规则
                 authorizeRequestsCustomizers.forEach(customizer -> customizer.customize(registry)))
             // ③：兜底规则，必须认证
-            .authorizeRequests()
-            .anyRequest().authenticated()
+            .authorizeRequests().anyRequest().authenticated()
         ;
 
         // 添加 Token Filter
         httpSecurity.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
-    }
-
-    private String buildAppApi(String url) {
-        return webProperties.getAppApi().getPrefix() + url;
     }
 
     private Multimap<HttpMethod, String> getPermitAllUrlsFromAnnotations() {

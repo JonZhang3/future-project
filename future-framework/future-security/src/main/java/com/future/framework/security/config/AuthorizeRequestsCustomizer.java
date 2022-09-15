@@ -17,17 +17,6 @@ import javax.annotation.Resource;
 public abstract class AuthorizeRequestsCustomizer
     implements Customizer<ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry>, Ordered {
 
-    @Resource
-    private WebProperties webProperties;
-
-    protected String buildAdminApi(String url) {
-        return webProperties.getAdminApi().getPrefix() + url;
-    }
-
-    protected String buildAppApi(String url) {
-        return webProperties.getAppApi().getPrefix() + url;
-    }
-
     @Override
     public int getOrder() {
         return 0;

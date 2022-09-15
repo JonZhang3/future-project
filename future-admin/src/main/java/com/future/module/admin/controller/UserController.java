@@ -9,7 +9,7 @@ import com.future.module.system.domain.entity.Department;
 import com.future.module.system.domain.query.user.UserCreateQuery;
 import com.future.module.system.domain.query.user.UserPageQuery;
 import com.future.module.system.domain.query.user.UserUpdateQuery;
-import com.future.module.system.service.AdminUserService;
+import com.future.module.system.service.UserService;
 import com.future.module.system.service.DeptService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -34,7 +34,7 @@ import java.util.*;
 public class UserController {
 
     @Resource
-    private AdminUserService userService;
+    private UserService userService;
     @Resource
     private DeptService deptService;
 

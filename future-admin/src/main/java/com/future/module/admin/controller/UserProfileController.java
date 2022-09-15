@@ -20,7 +20,7 @@ import java.util.List;
 public class UserProfileController {
 
     @Resource
-    private AdminUserService userService;
+    private UserService userService;
     @Resource
     private DeptService deptService;
     @Resource

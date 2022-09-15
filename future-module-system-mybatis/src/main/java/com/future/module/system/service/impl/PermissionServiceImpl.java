@@ -95,7 +95,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Resource
     private DeptService deptService;
     @Resource
-    private AdminUserService userService;
+    private UserService userService;
 
     @Resource
     @Lazy // 注入自己，所以延迟加载

@@ -13,6 +13,9 @@ public class CaptchaServiceImpl implements CaptchaService {
     
     @Override
     public CaptchaImageVO getCaptchaImage() {
+        if(!captchaProperties.getEnable()) {
+
+        }
         return null;
     }
 

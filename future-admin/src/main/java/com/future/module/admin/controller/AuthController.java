@@ -8,12 +8,13 @@ import com.future.framework.common.domain.R;
 import com.future.framework.common.utils.StringUtils;
 import com.future.framework.security.config.SecurityProperties;
 import com.future.framework.security.util.SecurityUtils;
+import com.future.module.system.domain.convert.AuthConvert;
 import com.future.module.system.domain.entity.AdminUser;
 import com.future.module.system.domain.entity.Menu;
 import com.future.module.system.domain.entity.Role;
 import com.future.module.system.domain.query.auth.AuthLoginQuery;
 import com.future.module.system.service.AdminAuthService;
-import com.future.module.system.service.AdminUserService;
+import com.future.module.system.service.UserService;
 import com.future.module.system.service.PermissionService;
 import com.future.module.system.service.RoleService;
 import io.swagger.annotations.Api;
@@ -38,13 +39,12 @@ import static java.util.Collections.singleton;
 @RestController
 @RequestMapping("/system/auth")
 @Validated
-@Slf4j
 public class AuthController {
 
     @Resource
     private AdminAuthService authService;
     @Resource
-    private AdminUserService userService;
+    private UserService userService;
     @Resource
     private RoleService roleService;
     @Resource
@@ -57,8 +57,8 @@ public class AuthController {
     @PermitAll
     @ApiOperation("使用账号密码登录")
     @OperateLog(enable = false) // 避免 Post 请求被记录操作日志
-    public R login(@RequestBody @Valid AuthLoginQuery reqVO) {
-        return R.ok(authService.login(reqVO));
+    public R login(@RequestBody @Valid AuthLoginQuery query) {
+        return R.ok(authService.login(query));
     }
 
     @PostMapping("/logout")

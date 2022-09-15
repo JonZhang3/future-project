@@ -6,7 +6,7 @@ import com.future.module.system.dao.UserPostMapper;
 import com.future.module.system.domain.entity.AdminUser;
 import com.future.module.system.domain.query.user.*;
 import com.future.module.system.domain.vo.user.UserImportVO;
-import com.future.module.system.service.AdminUserService;
+import com.future.module.system.service.UserService;
 import com.future.module.system.service.DeptService;
 import com.future.module.system.service.PermissionService;
 import com.future.module.system.service.PostService;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class AdminUserServiceImpl implements AdminUserService {
+public class UserServiceImpl implements UserService {
     
     @Resource
     private AdminUserMapper userMapper;

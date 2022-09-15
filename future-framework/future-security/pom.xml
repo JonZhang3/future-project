@@ -43,6 +43,10 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+        </dependency>
         <!-- spring boot 配置所需依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

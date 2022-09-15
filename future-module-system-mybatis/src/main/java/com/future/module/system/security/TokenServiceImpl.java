@@ -1,19 +1,28 @@
 package com.future.module.system.security;
 
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.future.framework.common.exception.CommonErrorCode;
 import com.future.framework.common.exception.ServiceException;
 import com.future.framework.common.utils.DateUtils;
+import com.future.framework.common.utils.StringUtils;
+import com.future.framework.security.config.SecurityProperties;
 import com.future.framework.security.domain.AccessTokenCheckResult;
+import com.future.framework.security.domain.LoginUser;
+import com.future.framework.security.domain.TokenResult;
 import com.future.framework.security.service.TokenService;
+import com.future.framework.security.token.TokenStorage;
+import com.future.framework.security.token.TokenType;
+import com.future.framework.security.util.TokenUtils;
 import com.future.module.system.dao.AccessTokenMapper;
 import com.future.module.system.dao.RefreshTokenMapper;
 import com.future.module.system.domain.convert.AccessTokenConvert;
 import com.future.module.system.domain.entity.AccessToken;
-import com.future.module.system.domain.entity.RefreshToken;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.List;
 
 @Service
 public class TokenServiceImpl implements TokenService {
@@ -22,16 +31,29 @@ public class TokenServiceImpl implements TokenService {
     private AccessTokenMapper accessTokenMapper;
     @Resource
     private RefreshTokenMapper refreshTokenMapper;
+    @Resource
+    private SecurityProperties securityProperties;
 
-    public AccessToken createAccessToken(Long userId, Integer userType, String clientId, List<String> scopes) {
-        // 创建刷新令牌
-        // 创建访问令牌
-        return null;
+    @Autowired(required = false)
+    private TokenStorage tokenStorage;
+
+    @Override
+    public TokenResult createAccessToken(Long userId, Integer userType, List<String> scopes) {
+        LoginUser loginUser = new LoginUser().setId(userId)
+                .setUserType(userType).setScopes(scopes);
+        String accessToken = TokenUtils.generate(loginUser, securityProperties.getAccessTokenDuration());
+        String refreshToken = TokenUtils.generate(loginUser, securityProperties.getRefreshTokenDuration());
+        // 存储 Token
+        if (tokenStorage != null) {
+            tokenStorage.saveToken(TokenType.ACCESS_TOKEN, userId + "", accessToken);
+            tokenStorage.saveToken(TokenType.REFRESH_TOKEN, userId + "", refreshToken);
+        }
+        return new TokenResult(accessToken, refreshToken);
     }
-    
+
     @Override
     public AccessTokenCheckResult checkAccessToken(String token) {
-        AccessToken accessToken = null;
+        AccessToken accessToken = getAccessToken(token);
         if (accessToken == null) {
             throw new ServiceException("访问令牌不存在", CommonErrorCode.UNAUTHORIZED.getCode());
         }
@@ -42,11 +64,31 @@ public class TokenServiceImpl implements TokenService {
     }
 
     public AccessToken getAccessToken(String accessToken) {
-        
+        if(StringUtils.isBlank(accessToken)) {
+            return null;
+        }
+        LoginUser loginUser = TokenUtils.validateAndGetPayload(accessToken);
+        if(loginUser == null) {// token 无效
+            return null;
+        }
+        if(tokenStorage != null) {
+            
+        }
+        return null;
     }
-    
+
     @Override
     public void removeAccessToken(String accessToken) {
-
+        if (tokenStorage != null) {
+            tokenStorage.removeToken(TokenType.ACCESS_TOKEN, "");
+            tokenStorage.removeToken(TokenType.REFRESH_TOKEN, "");
+        }
     }
+
+    @Override
+    public TokenResult refreshAccessToken(String refreshToken) {
+
+        return null;
+    }
+
 }

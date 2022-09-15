@@ -10,7 +10,7 @@ import com.future.module.system.domain.entity.AdminUser;
 import com.future.module.system.domain.entity.OperationLog;
 import com.future.module.system.domain.query.logger.OperateLogExportQuery;
 import com.future.module.system.domain.query.logger.OperateLogPageQuery;
-import com.future.module.system.service.AdminUserService;
+import com.future.module.system.service.UserService;
 import com.future.module.system.service.OperateLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,7 +40,7 @@ public class OperateLogController {
     @Resource
     private OperateLogService operateLogService;
     @Resource
-    private AdminUserService userService;
+    private UserService userService;
 
     @GetMapping("/page")
     @ApiOperation("查看操作日志分页列表")

@@ -20,7 +20,7 @@ public class SecurityProperties {
      * redis、mysql、none
      * 如果使用 redis 存储，需要指定 spring data redis
      */
-    private String tokenStorage = "mysql";
+    private String tokenStorage = "none";
 
     /**
      * 访问Token的持续时间，默认 2 小时

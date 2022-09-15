@@ -1,38 +1,47 @@
 package com.future.module.system.service.impl;
 
+import static com.future.module.system.constants.enums.SystemErrorCode.AUTH_LOGIN_BAD_CREDENTIALS;
+import static com.future.module.system.constants.enums.SystemErrorCode.AUTH_LOGIN_CAPTCHA_CODE_ERROR;
+import static com.future.module.system.constants.enums.SystemErrorCode.AUTH_LOGIN_CAPTCHA_NOT_FOUND;
+import static com.future.module.system.constants.enums.SystemErrorCode.AUTH_LOGIN_USER_DISABLED;
+
+import java.util.Objects;
+
+import javax.annotation.Resource;
+import javax.validation.Validator;
+
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.stereotype.Service;
+
 import com.future.framework.common.constant.enums.CommonStatus;
 import com.future.framework.common.constant.enums.LoginLogType;
 import com.future.framework.common.constant.enums.LoginResult;
-import com.future.framework.common.constant.enums.UserType;
 import com.future.framework.common.exception.ServiceException;
 import com.future.framework.common.utils.ServletUtils;
 import com.future.framework.common.utils.ValidationUtils;
+import com.future.framework.security.domain.TokenResult;
+import com.future.framework.security.service.TokenService;
+import com.future.framework.security.util.SecurityUtils;
 import com.future.module.system.domain.entity.AdminUser;
 import com.future.module.system.domain.entity.LoginLog;
 import com.future.module.system.domain.query.auth.AuthLoginQuery;
 import com.future.module.system.domain.vo.auth.AuthLoginVO;
 import com.future.module.system.service.AdminAuthService;
-import com.future.module.system.service.AdminUserService;
 import com.future.module.system.service.CaptchaService;
 import com.future.module.system.service.LoginLogService;
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import javax.validation.Validator;
-import java.util.Objects;
-
-import static com.future.module.system.constants.enums.SystemErrorCode.*;
+import com.future.module.system.service.UserService;
 
 @Service
 public class AdminAuthServiceImpl implements AdminAuthService {
 
     @Resource
-    private AdminUserService userService;
+    private UserService userService;
     @Resource
     private LoginLogService loginLogService;
     @Resource
     private CaptchaService captchaService;
+    @Resource
+    private TokenService tokenService;
 
     @Resource
     private Validator validator;
@@ -40,6 +49,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     @Override
     public AdminUser authenticate(String username, String password) {
         final LoginLogType logTypeEnum = LoginLogType.LOGIN_USERNAME;
+        // 如果需要同时支持邮箱、手机号登录，可在此修改
         AdminUser user = userService.getUserByUsername(username);
         if (user == null) {
             createLoginLog(null, username, logTypeEnum, LoginResult.BAD_CREDENTIALS);
@@ -64,36 +74,36 @@ public class AdminAuthServiceImpl implements AdminAuthService {
 
         // 使用账号密码，进行登录
         AdminUser user = authenticate(query.getUsername(), query.getPassword());
-
         // 创建 Token 令牌，记录登录日志
-        return createTokenAfterLoginSuccess(user.getId(), query.getUsername(), LoginLogType.LOGIN_USERNAME);
+        TokenResult tokens = tokenService.createAccessToken(user.getId(), user.getUserType(), null);
+        // 插入登陆日志
+        createLoginLog(user.getId(), user.getUsername(), LoginLogType.LOGIN_USERNAME, LoginResult.SUCCESS);
+        AuthLoginVO vo = new AuthLoginVO();
+        vo.setUserId(user.getId());
+        vo.setAccessToken(tokens.getAccessToken());
+        vo.setRefreshToken(tokens.getRefreshToken());
+        return vo;
     }
 
     @Override
     public void logout(String token, Integer logType) {
         // 删除访问令牌
-        OAuth2AccessTokenDO accessTokenDO = oauth2TokenService.removeAccessToken(token);
-        if (accessTokenDO == null) {
-            return;
-        }
+        tokenService.removeAccessToken(token);
         // 删除成功，则记录登出日志
-        createLogoutLog(accessTokenDO.getUserId(), accessTokenDO.getUserType(), logType);
+        Long userId = SecurityUtils.getLoginUserId();
+        if (userId != null) {
+            createLogoutLog(SecurityUtils.getLoginUserId(), logType);
+        }
     }
 
     @Override
     public AuthLoginVO refreshToken(String refreshToken) {
-        OAuth2AccessTokenDO accessTokenDO = oauth2TokenService.refreshAccessToken(refreshToken, OAuth2ClientConstants.CLIENT_ID_DEFAULT);
-        return AuthConvert.INSTANCE.convert(accessTokenDO);
-    }
-
-    private AuthLoginVO createTokenAfterLoginSuccess(Long userId, String username, LoginLogType logType) {
-        // 插入登陆日志
-        createLoginLog(userId, username, logType, LoginResult.SUCCESS);
-        // 创建访问令牌
-        OAuth2AccessTokenDO accessTokenDO = oauth2TokenService.createAccessToken(userId, getUserType().getValue(),
-            OAuth2ClientConstants.CLIENT_ID_DEFAULT, null);
-        // 构建返回结果
-        return AuthConvert.INSTANCE.convert(accessTokenDO);
+        TokenResult tokens = tokenService.refreshAccessToken(refreshToken);
+        AuthLoginVO vo = new AuthLoginVO();
+        vo.setUserId(1L);// TODO
+        vo.setAccessToken(tokens.getAccessToken());
+        vo.setRefreshToken(tokens.getRefreshToken());
+        return vo;
     }
 
     void verifyCaptcha(AuthLoginQuery query) {
@@ -122,12 +132,11 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     }
 
     private void createLoginLog(Long userId, String username,
-                                LoginLogType logType, LoginResult loginResult) {
+            LoginLogType logType, LoginResult loginResult) {
         // 插入登录日志
         LoginLog log = new LoginLog();
         log.setLogType(logType.getType());
         log.setUserId(userId);
-        log.setUserType(getUserType().getValue());
         log.setUsername(username);
         log.setUserAgent(ServletUtils.getUserAgent());
         log.setUserIp(ServletUtils.getClientIP());
@@ -139,11 +148,10 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         }
     }
 
-    private void createLogoutLog(Long userId, Integer userType, Integer logType) {
+    private void createLogoutLog(Long userId, Integer logType) {
         LoginLog log = new LoginLog();
         log.setLogType(logType);
         log.setUserId(userId);
-        log.setUserType(userType);
         log.setUsername(getUsername(userId));
         log.setUserAgent(ServletUtils.getUserAgent());
         log.setUserIp(ServletUtils.getClientIP());
@@ -157,10 +165,6 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         }
         AdminUser user = userService.getUser(userId);
         return user != null ? user.getUsername() : null;
-    }
-
-    private UserType getUserType() {
-        return UserType.ADMIN;
     }
 
 }

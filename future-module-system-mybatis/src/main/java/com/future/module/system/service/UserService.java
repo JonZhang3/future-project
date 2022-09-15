@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  *
  * @author JonZhang
  */
-public interface AdminUserService {
+public interface UserService {
 
     /**
      * 创建用户

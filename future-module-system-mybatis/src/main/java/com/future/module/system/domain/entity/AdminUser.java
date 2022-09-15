@@ -89,4 +89,11 @@ public class AdminUser extends BaseEntity {
      */
     private Date loginDate;
 
+    /**
+     * 用户类型
+     * 
+     * {@link com.future.framework.common.constant.enums.UserType}
+     */
+    private Integer userType;
+
 }
