@@ -1,12 +1,5 @@
 package com.future.framework.security.util;
 
-import java.time.Duration;
-import java.util.Date;
-
-import javax.validation.constraints.NotNull;
-
-import org.jetbrains.annotations.Nullable;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -15,6 +8,11 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.future.framework.common.utils.StringUtils;
 import com.future.framework.security.domain.LoginUser;
+import org.jetbrains.annotations.Nullable;
+
+import javax.validation.constraints.NotNull;
+import java.time.Duration;
+import java.util.Date;
 
 public final class TokenUtils {
 

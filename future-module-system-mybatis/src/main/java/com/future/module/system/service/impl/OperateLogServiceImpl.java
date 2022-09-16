@@ -4,12 +4,12 @@ import com.future.framework.common.domain.PageResult;
 import com.future.framework.common.utils.CollUtils;
 import com.future.framework.common.utils.StringUtils;
 import com.future.module.system.dao.OperateLogMapper;
-import com.future.module.system.domain.entity.AdminUser;
 import com.future.module.system.domain.entity.OperationLog;
+import com.future.module.system.domain.entity.User;
 import com.future.module.system.domain.query.logger.OperateLogExportQuery;
 import com.future.module.system.domain.query.logger.OperateLogPageQuery;
-import com.future.module.system.service.UserService;
 import com.future.module.system.service.OperateLogService;
+import com.future.module.system.service.UserService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +42,7 @@ public class OperateLogServiceImpl implements OperateLogService {
         // 处理基于用户昵称的查询
         Collection<Long> userIds = null;
         if (StringUtils.isNotEmpty(query.getUserNickname())) {
-            userIds = CollUtils.convertSet(userService.getUsersByNickname(query.getUserNickname()), AdminUser::getId);
+            userIds = CollUtils.convertSet(userService.getUsersByNickname(query.getUserNickname()), User::getId);
             if (CollectionUtils.isEmpty(userIds)) {
                 return PageResult.empty();
             }
@@ -56,7 +56,7 @@ public class OperateLogServiceImpl implements OperateLogService {
         // 处理基于用户昵称的查询
         Collection<Long> userIds = null;
         if (StringUtils.isNotEmpty(query.getUserNickname())) {
-            userIds = CollUtils.convertSet(userService.getUsersByNickname(query.getUserNickname()), AdminUser::getId);
+            userIds = CollUtils.convertSet(userService.getUsersByNickname(query.getUserNickname()), User::getId);
             if (CollectionUtils.isEmpty(userIds)) {
                 return Collections.emptyList();
             }

@@ -1,8 +1,8 @@
 package com.future.module.system.domain.convert;
 
 import com.future.framework.common.utils.MapUtils;
-import com.future.module.system.domain.entity.AdminUser;
 import com.future.module.system.domain.entity.OperationLog;
+import com.future.module.system.domain.entity.User;
 import com.future.module.system.domain.vo.logger.OperateLogExcelVO;
 import com.future.module.system.domain.vo.logger.OperateLogRespVO;
 import org.mapstruct.Mapper;
@@ -23,7 +23,7 @@ public interface OperateLogConvert {
 
     OperateLogExcelVO convertToExcel(OperationLog bean);
 
-    default List<OperateLogExcelVO> convertToExcelList(List<OperationLog> list, Map<Long, AdminUser> userMap) {
+    default List<OperateLogExcelVO> convertToExcelList(List<OperationLog> list, Map<Long, User> userMap) {
         return list.stream().map(operateLog -> {
             OperateLogExcelVO excelVO = convertToExcel(operateLog);
             MapUtils.findAndThen(userMap, operateLog.getUserId(), user -> excelVO.setUserNickname(user.getNickname()));

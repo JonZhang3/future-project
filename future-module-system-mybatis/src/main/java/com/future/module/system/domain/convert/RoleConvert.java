@@ -22,8 +22,12 @@ public interface RoleConvert {
 
     RoleRespVO convert(Role bean);
 
+    RoleSimpleRespVO convertToSimpleRoleList(Role role);
+    
     List<RoleSimpleRespVO> convertToSimpleRoleList(List<Role> list);
 
+    RoleExcelVO convertToRoleExcel(Role role);
+    
     List<RoleExcelVO> convertToRoleExcelList(List<Role> list);
     
 }

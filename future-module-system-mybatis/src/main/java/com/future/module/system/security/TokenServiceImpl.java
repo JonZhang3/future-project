@@ -1,12 +1,5 @@
 package com.future.module.system.security;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.future.framework.common.exception.CommonErrorCode;
 import com.future.framework.common.exception.ServiceException;
 import com.future.framework.common.utils.DateUtils;
@@ -19,18 +12,17 @@ import com.future.framework.security.service.TokenService;
 import com.future.framework.security.token.TokenStorage;
 import com.future.framework.security.token.TokenType;
 import com.future.framework.security.util.TokenUtils;
-import com.future.module.system.dao.AccessTokenMapper;
-import com.future.module.system.dao.RefreshTokenMapper;
 import com.future.module.system.domain.convert.AccessTokenConvert;
 import com.future.module.system.domain.entity.AccessToken;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class TokenServiceImpl implements TokenService {
 
-    @Resource
-    private AccessTokenMapper accessTokenMapper;
-    @Resource
-    private RefreshTokenMapper refreshTokenMapper;
     @Resource
     private SecurityProperties securityProperties;
 
@@ -72,6 +64,10 @@ public class TokenServiceImpl implements TokenService {
             return null;
         }
         if(tokenStorage != null) {
+            String storageToken = tokenStorage.getToken(TokenType.ACCESS_TOKEN, loginUser.getId().toString());
+            if(StringUtils.isEmpty(storageToken)) {
+                return null;
+            }
             
         }
         return null;
@@ -79,16 +75,21 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public void removeAccessToken(String accessToken) {
-        if (tokenStorage != null) {
-            tokenStorage.removeToken(TokenType.ACCESS_TOKEN, "");
-            tokenStorage.removeToken(TokenType.REFRESH_TOKEN, "");
+        LoginUser user = TokenUtils.parse(accessToken);
+        if(user != null && tokenStorage != null) {
+            tokenStorage.removeToken(TokenType.ACCESS_TOKEN, user.getId().toString());
+            tokenStorage.removeToken(TokenType.REFRESH_TOKEN, user.getId().toString());
         }
     }
 
     @Override
     public TokenResult refreshAccessToken(String refreshToken) {
-
-        return null;
+        LoginUser loginUser = TokenUtils.validateAndGetPayload(refreshToken);
+        if(loginUser == null) {
+            return null;
+        }
+        String accessToken = TokenUtils.generate(loginUser, securityProperties.getAccessTokenDuration());
+        return new TokenResult(accessToken, refreshToken, loginUser.getId());
     }
 
 }

@@ -18,6 +18,8 @@ public interface DeptConvert {
 
     Department convert(DeptUpdateQuery query);
 
+    DeptSimpleRespVO convertToSimple(Department bean);
+    
     List<DeptSimpleRespVO> convertToSimpleList(List<Department> list);
     
 }

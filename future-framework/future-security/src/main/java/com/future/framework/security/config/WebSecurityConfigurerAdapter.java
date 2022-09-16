@@ -1,12 +1,8 @@
 package com.future.framework.security.config;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Resource;
-import javax.annotation.security.PermitAll;
-
+import com.future.framework.security.filter.TokenAuthenticationFilter;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -25,9 +21,10 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import com.future.framework.security.filter.TokenAuthenticationFilter;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
+import java.util.Map;
+import java.util.Set;
 
 @Configuration
 @EnableConfigurationProperties(SecurityProperties.class)
@@ -60,8 +57,8 @@ public class WebSecurityConfigurerAdapter
      *
      * @see #configure(HttpSecurity)
      */
-    @Resource
-    private List<AuthorizeRequestsCustomizer> authorizeRequestsCustomizers;
+//    @Resource
+//    private List<AuthorizeRequestsCustomizer> authorizeRequestsCustomizers;
 
     @Resource
     private ApplicationContext applicationContext;
@@ -137,10 +134,7 @@ public class WebSecurityConfigurerAdapter
             // 1.3 基于 future.security.permit-all-urls 无需认证
             .antMatchers(securityProperties.getPermitUrls().toArray(new String[0])).permitAll()
             // ②：每个项目的自定义规则
-            .and().authorizeRequests(registry -> // 下面，循环设置自定义规则
-                authorizeRequestsCustomizers.forEach(customizer -> customizer.customize(registry)))
-            // ③：兜底规则，必须认证
-            .authorizeRequests().anyRequest().authenticated()
+            .and().authorizeRequests().anyRequest().authenticated()
         ;
 
         // 添加 Token Filter
@@ -159,10 +153,7 @@ public class WebSecurityConfigurerAdapter
             if (!handlerMethod.hasMethodAnnotation(PermitAll.class)) {
                 continue;
             }
-            if (entry.getKey().getPatternsCondition() == null) {
-                continue;
-            }
-            Set<String> urls = entry.getKey().getPatternsCondition().getPatterns();
+            Set<String> urls = entry.getKey().getPatternValues();
             // 根据请求方法，添加到 result 结果
             entry.getKey().getMethodsCondition().getMethods().forEach(requestMethod -> {
                 switch (requestMethod) {

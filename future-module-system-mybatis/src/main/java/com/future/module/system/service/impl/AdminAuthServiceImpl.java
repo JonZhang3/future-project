@@ -1,18 +1,5 @@
 package com.future.module.system.service.impl;
 
-import static com.future.module.system.constants.enums.SystemErrorCode.AUTH_LOGIN_BAD_CREDENTIALS;
-import static com.future.module.system.constants.enums.SystemErrorCode.AUTH_LOGIN_CAPTCHA_CODE_ERROR;
-import static com.future.module.system.constants.enums.SystemErrorCode.AUTH_LOGIN_CAPTCHA_NOT_FOUND;
-import static com.future.module.system.constants.enums.SystemErrorCode.AUTH_LOGIN_USER_DISABLED;
-
-import java.util.Objects;
-
-import javax.annotation.Resource;
-import javax.validation.Validator;
-
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.stereotype.Service;
-
 import com.future.framework.common.constant.enums.CommonStatus;
 import com.future.framework.common.constant.enums.LoginLogType;
 import com.future.framework.common.constant.enums.LoginResult;
@@ -22,14 +9,23 @@ import com.future.framework.common.utils.ValidationUtils;
 import com.future.framework.security.domain.TokenResult;
 import com.future.framework.security.service.TokenService;
 import com.future.framework.security.util.SecurityUtils;
-import com.future.module.system.domain.entity.AdminUser;
+import com.future.module.system.constants.enums.SystemErrorCode;
 import com.future.module.system.domain.entity.LoginLog;
+import com.future.module.system.domain.entity.User;
 import com.future.module.system.domain.query.auth.AuthLoginQuery;
 import com.future.module.system.domain.vo.auth.AuthLoginVO;
 import com.future.module.system.service.AdminAuthService;
 import com.future.module.system.service.CaptchaService;
 import com.future.module.system.service.LoginLogService;
 import com.future.module.system.service.UserService;
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.validation.Validator;
+import java.util.Objects;
+
+import static com.future.module.system.constants.enums.SystemErrorCode.*;
 
 @Service
 public class AdminAuthServiceImpl implements AdminAuthService {
@@ -47,10 +43,10 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     private Validator validator;
 
     @Override
-    public AdminUser authenticate(String username, String password) {
+    public User authenticate(String username, String password) {
         final LoginLogType logTypeEnum = LoginLogType.LOGIN_USERNAME;
         // 如果需要同时支持邮箱、手机号登录，可在此修改
-        AdminUser user = userService.getUserByUsername(username);
+        User user = userService.getUserByUsername(username);
         if (user == null) {
             createLoginLog(null, username, logTypeEnum, LoginResult.BAD_CREDENTIALS);
             throw new ServiceException(AUTH_LOGIN_BAD_CREDENTIALS);
@@ -73,7 +69,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         verifyCaptcha(query);
 
         // 使用账号密码，进行登录
-        AdminUser user = authenticate(query.getUsername(), query.getPassword());
+        User user = authenticate(query.getUsername(), query.getPassword());
         // 创建 Token 令牌，记录登录日志
         TokenResult tokens = tokenService.createAccessToken(user.getId(), user.getUserType(), null);
         // 插入登陆日志
@@ -99,8 +95,11 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     @Override
     public AuthLoginVO refreshToken(String refreshToken) {
         TokenResult tokens = tokenService.refreshAccessToken(refreshToken);
+        if(tokens == null) {
+            throw new ServiceException(SystemErrorCode.AUTH_TOKEN_EXPIRED);
+        }
         AuthLoginVO vo = new AuthLoginVO();
-        vo.setUserId(1L);// TODO
+        vo.setUserId(tokens.getUserId());
         vo.setAccessToken(tokens.getAccessToken());
         vo.setRefreshToken(tokens.getRefreshToken());
         return vo;
@@ -163,7 +162,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         if (userId == null) {
             return null;
         }
-        AdminUser user = userService.getUser(userId);
+        User user = userService.getUser(userId);
         return user != null ? user.getUsername() : null;
     }
 

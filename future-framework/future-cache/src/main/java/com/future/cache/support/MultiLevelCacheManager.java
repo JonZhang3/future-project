@@ -1,9 +1,9 @@
 package com.future.cache.support;
 
-import java.util.Collection;
-
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+
+import java.util.Collection;
 
 public class MultiLevelCacheManager implements CacheManager {
 

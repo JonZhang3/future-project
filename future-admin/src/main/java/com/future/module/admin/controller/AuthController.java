@@ -9,18 +9,17 @@ import com.future.framework.common.utils.StringUtils;
 import com.future.framework.security.config.SecurityProperties;
 import com.future.framework.security.util.SecurityUtils;
 import com.future.module.system.domain.convert.AuthConvert;
-import com.future.module.system.domain.entity.AdminUser;
 import com.future.module.system.domain.entity.Menu;
 import com.future.module.system.domain.entity.Role;
+import com.future.module.system.domain.entity.User;
 import com.future.module.system.domain.query.auth.AuthLoginQuery;
+import com.future.module.system.domain.vo.auth.AuthLoginVO;
+import com.future.module.system.domain.vo.auth.AuthMenuVO;
+import com.future.module.system.domain.vo.auth.AuthPermissionInfoVO;
 import com.future.module.system.service.AdminAuthService;
-import com.future.module.system.service.UserService;
 import com.future.module.system.service.PermissionService;
 import com.future.module.system.service.RoleService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
+import com.future.module.system.service.UserService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +34,8 @@ import java.util.Set;
 import static com.future.framework.web.util.WebUtils.getLoginUserId;
 import static java.util.Collections.singleton;
 
-@Api(tags = "管理后台 - 认证")
 @RestController
-@RequestMapping("/system/auth")
+@RequestMapping("/admin-api/system/auth")
 @Validated
 public class AuthController {
 
@@ -55,17 +53,15 @@ public class AuthController {
 
     @PostMapping("/login")
     @PermitAll
-    @ApiOperation("使用账号密码登录")
     @OperateLog(enable = false) // 避免 Post 请求被记录操作日志
-    public R login(@RequestBody @Valid AuthLoginQuery query) {
+    public R<AuthLoginVO> login(@RequestBody @Valid AuthLoginQuery query) {
         return R.ok(authService.login(query));
     }
 
     @PostMapping("/logout")
     @PermitAll
-    @ApiOperation("登出系统")
     @OperateLog(enable = false) // 避免 Post 请求被记录操作日志
-    public R logout(HttpServletRequest request) {
+    public R<Boolean> logout(HttpServletRequest request) {
         String token = SecurityUtils.obtainAuthorization(request, securityProperties.getTokenHeader());
         if (StringUtils.isNotBlank(token)) {
             authService.logout(token, LoginLogType.LOGOUT_SELF.getType());
@@ -75,18 +71,16 @@ public class AuthController {
 
     @PostMapping("/refresh-token")
     @PermitAll
-    @ApiOperation("刷新令牌")
-    @ApiImplicitParam(name = "refreshToken", value = "刷新令牌", required = true, dataTypeClass = String.class)
     @OperateLog(enable = false) // 避免 Post 请求被记录操作日志
-    public R refreshToken(@RequestParam("refreshToken") String refreshToken) {
+    public R<AuthLoginVO> refreshToken(@RequestParam("refreshToken") String refreshToken) {
         return R.ok(authService.refreshToken(refreshToken));
     }
 
     @GetMapping("/get-permission-info")
-    @ApiOperation("获取登录用户的权限信息")
-    public R getPermissionInfo() {
+//    @ApiOperation("获取登录用户的权限信息")
+    public R<AuthPermissionInfoVO> getPermissionInfo() {
         // 获得用户信息
-        AdminUser user = userService.getUser(getLoginUserId());
+        User user = userService.getUser(getLoginUserId());
         if (user == null) {
             return null;
         }
@@ -102,8 +96,8 @@ public class AuthController {
     }
 
     @GetMapping("/list-menus")
-    @ApiOperation("获得登录用户的菜单列表")
-    public R getMenus() {
+//    @ApiOperation("获得登录用户的菜单列表")
+    public R<List<AuthMenuVO>> getMenus() {
         // 获得角色列表
         Set<Long> roleIds = permissionService.getUserRoleIdsFromCache(getLoginUserId(), singleton(CommonStatus.VALID.getValue()));
         // 获得用户拥有的菜单列表

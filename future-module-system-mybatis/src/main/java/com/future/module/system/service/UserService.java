@@ -1,7 +1,7 @@
 package com.future.module.system.service;
 
 import com.future.framework.common.domain.PageResult;
-import com.future.module.system.domain.entity.AdminUser;
+import com.future.module.system.domain.entity.User;
 import com.future.module.system.domain.query.user.*;
 import com.future.module.system.domain.vo.user.UserImportVO;
 import org.apache.commons.collections4.CollectionUtils;
@@ -94,7 +94,7 @@ public interface UserService {
      * @param username 用户名
      * @return 用户对象信息
      */
-    AdminUser getUserByUsername(String username);
+    User getUserByUsername(String username);
 
     /**
      * 通过手机号获取用户
@@ -102,7 +102,7 @@ public interface UserService {
      * @param mobile 手机号
      * @return 用户对象信息
      */
-    AdminUser getUserByMobile(String mobile);
+    User getUserByMobile(String mobile);
 
     /**
      * 获得用户分页列表
@@ -110,7 +110,7 @@ public interface UserService {
      * @param query 分页条件
      * @return 分页列表
      */
-    PageResult<AdminUser> getUserPage(UserPageQuery query);
+    PageResult<User> getUserPage(UserPageQuery query);
 
     /**
      * 通过用户 ID 查询用户
@@ -118,7 +118,7 @@ public interface UserService {
      * @param id 用户ID
      * @return 用户对象信息
      */
-    AdminUser getUser(Long id);
+    User getUser(Long id);
 
     /**
      * 获得指定部门的用户数组
@@ -126,7 +126,7 @@ public interface UserService {
      * @param deptIds 部门数组
      * @return 用户数组
      */
-    List<AdminUser> getUsersByDeptIds(Collection<Long> deptIds);
+    List<User> getUsersByDeptIds(Collection<Long> deptIds);
 
     /**
      * 获得指定岗位的用户数组
@@ -134,7 +134,7 @@ public interface UserService {
      * @param postIds 岗位数组
      * @return 用户数组
      */
-    List<AdminUser> getUsersByPostIds(Collection<Long> postIds);
+    List<User> getUsersByPostIds(Collection<Long> postIds);
 
     /**
      * 获得用户列表
@@ -142,7 +142,7 @@ public interface UserService {
      * @param ids 用户编号数组
      * @return 用户列表
      */
-    List<AdminUser> getUsers(Collection<Long> ids);
+    List<User> getUsers(Collection<Long> ids);
 
     /**
      * 校验用户们是否有效。如下情况，视为无效：
@@ -159,12 +159,12 @@ public interface UserService {
      * @param ids 用户编号数组
      * @return 用户 Map
      */
-    default Map<Long, AdminUser> getUserMap(Collection<Long> ids) {
+    default Map<Long, User> getUserMap(Collection<Long> ids) {
         if (CollectionUtils.isEmpty(ids)) {
             return Collections.emptyMap();
         }
-        List<AdminUser> users = getUsers(ids);
-        return users.stream().collect(Collectors.toMap(AdminUser::getId, v -> v));
+        List<User> users = getUsers(ids);
+        return users.stream().collect(Collectors.toMap(User::getId, v -> v));
     }
 
     /**
@@ -173,7 +173,7 @@ public interface UserService {
      * @param query 列表请求
      * @return 用户列表
      */
-    List<AdminUser> getUsers(UserExportQuery query);
+    List<User> getUsers(UserExportQuery query);
 
     /**
      * 获得用户列表，基于昵称模糊匹配
@@ -181,7 +181,7 @@ public interface UserService {
      * @param nickname 昵称
      * @return 用户列表
      */
-    List<AdminUser> getUsersByNickname(String nickname);
+    List<User> getUsersByNickname(String nickname);
 
     /**
      * 获得用户列表，基于用户账号模糊匹配
@@ -189,7 +189,7 @@ public interface UserService {
      * @param username 用户账号
      * @return 用户列表
      */
-    List<AdminUser> getUsersByUsername(String username);
+    List<User> getUsersByUsername(String username);
 
     /**
      * 批量导入用户
@@ -206,7 +206,7 @@ public interface UserService {
      * @param status 状态
      * @return 用户们
      */
-    List<AdminUser> getUsersByStatus(Integer status);
+    List<User> getUsersByStatus(Integer status);
 
     /**
      * 判断密码是否匹配

@@ -1,8 +1,6 @@
 package com.future.framework.common.annotations;
 
 import com.future.framework.common.constant.enums.OperateType;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

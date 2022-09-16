@@ -1,9 +1,6 @@
 package com.future.framework.web.util;
 
-import com.future.framework.common.constant.enums.UserType;
 import com.future.framework.common.utils.ServletUtils;
-import com.future.framework.common.utils.StringUtils;
-import com.future.framework.web.config.WebProperties;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -22,26 +19,6 @@ public final class WebUtils extends org.springframework.web.util.WebUtils {
     private static final String REQUEST_ATTRIBUTE_LOGIN_USER_TYPE = "login_user_type";
 
     private static final String REQUEST_ATTRIBUTE_COMMON_RESULT = "common_result";
-
-    public static final String HEADER_TENANT_ID = "tenant-id";
-
-    private static WebProperties properties;
-
-    public WebUtils(WebProperties webProperties) {
-        WebUtils.properties = webProperties;
-    }
-
-    /**
-     * 获得租户编号，从 header 中
-     * 考虑到其它 framework 组件也会使用到租户编号，所以不得不放在 WebFrameworkUtils 统一提供
-     *
-     * @param request 请求
-     * @return 租户编号
-     */
-    public static Long getTenantId(HttpServletRequest request) {
-        String tenantId = request.getHeader(HEADER_TENANT_ID);
-        return StringUtils.isNotEmpty(tenantId) ? Long.valueOf(tenantId) : null;
-    }
 
     public static void setLoginUserId(ServletRequest request, Long userId) {
         request.setAttribute(REQUEST_ATTRIBUTE_LOGIN_USER_ID, userId);
@@ -83,18 +60,7 @@ public final class WebUtils extends org.springframework.web.util.WebUtils {
             return null;
         }
         // 1. 优先，从 Attribute 中获取
-        Integer userType = (Integer) request.getAttribute(REQUEST_ATTRIBUTE_LOGIN_USER_TYPE);
-        if (userType != null) {
-            return userType;
-        }
-        // 2. 其次，基于 URL 前缀的约定
-        if (request.getRequestURI().startsWith(properties.getAdminApi().getPrefix())) {
-            return UserType.ADMIN.getValue();
-        }
-        if (request.getRequestURI().startsWith(properties.getAppApi().getPrefix())) {
-            return UserType.MEMBER.getValue();
-        }
-        return null;
+        return (Integer) request.getAttribute(REQUEST_ATTRIBUTE_LOGIN_USER_TYPE);
     }
 
     public static Integer getLoginUserType() {

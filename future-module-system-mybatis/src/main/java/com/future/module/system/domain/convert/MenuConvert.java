@@ -4,6 +4,7 @@ import com.future.module.system.domain.entity.Menu;
 import com.future.module.system.domain.query.permission.MenuCreateQuery;
 import com.future.module.system.domain.query.permission.MenuUpdateQuery;
 import com.future.module.system.domain.vo.permission.MenuRespVO;
+import com.future.module.system.domain.vo.permission.MenuSimpleRespVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -21,5 +22,9 @@ public interface MenuConvert {
     MenuRespVO convert(Menu bean);
 
     List<MenuRespVO> convertList(List<Menu> list);
+
+    MenuSimpleRespVO convertToSimple(Menu menu);
     
+    List<MenuSimpleRespVO> convertToSimpleList(List<Menu> list);
+
 }

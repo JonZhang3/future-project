@@ -1,5 +1,6 @@
 package com.future.module.system.domain.query.user;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,12 +32,10 @@ public class UserImportExcelQuery {
     @ExcelProperty("手机号码")
     private String mobile;
 
-    @ExcelProperty(value = "用户性别", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.USER_SEX)
+    @ExcelProperty(value = "用户性别")
     private Integer sex;
 
-    @ExcelProperty(value = "账号状态", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.COMMON_STATUS)
+    @ExcelProperty(value = "账号状态")
     private Integer status;
     
 }

@@ -7,16 +7,14 @@ import com.future.framework.common.utils.CollUtils;
 import com.future.framework.common.utils.ExcelUtils;
 import com.future.framework.common.utils.MapUtils;
 import com.future.module.system.domain.convert.OperateLogConvert;
-import com.future.module.system.domain.entity.AdminUser;
 import com.future.module.system.domain.entity.OperationLog;
+import com.future.module.system.domain.entity.User;
 import com.future.module.system.domain.query.logger.OperateLogExportQuery;
 import com.future.module.system.domain.query.logger.OperateLogPageQuery;
 import com.future.module.system.domain.vo.logger.OperateLogExcelVO;
 import com.future.module.system.domain.vo.logger.OperateLogRespVO;
 import com.future.module.system.service.OperateLogService;
 import com.future.module.system.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,9 +32,9 @@ import java.util.Map;
 
 import static com.future.framework.common.constant.enums.OperateType.EXPORT;
 
-@Api(tags = "管理后台 - 操作日志")
+//@Api(tags = "管理后台 - 操作日志")
 @RestController
-@RequestMapping("/system/operate-log")
+@RequestMapping("/admin-api/system/operate-log")
 @Validated
 public class OperateLogController {
 
@@ -46,14 +44,14 @@ public class OperateLogController {
     private UserService userService;
 
     @GetMapping("/page")
-    @ApiOperation("查看操作日志分页列表")
+//    @ApiOperation("查看操作日志分页列表")
     @PreAuthorize("@ss.hasPermission('system:operate-log:query')")
-    public R pageOperateLog(@Valid OperateLogPageQuery query) {
+    public R<PageResult<OperateLogRespVO>> pageOperateLog(@Valid OperateLogPageQuery query) {
         PageResult<OperationLog> pageResult = operateLogService.getOperateLogPage(query);
 
         // 获得拼接需要的数据
         Collection<Long> userIds = CollUtils.convertList(pageResult.getList(), OperationLog::getUserId);
-        Map<Long, AdminUser> userMap = userService.getUserMap(userIds);
+        Map<Long, User> userMap = userService.getUserMap(userIds);
         // 拼接数据
         List<OperateLogRespVO> list = new ArrayList<>(pageResult.getList().size());
         pageResult.getList().forEach(operationLog -> {
@@ -65,7 +63,7 @@ public class OperateLogController {
         return R.ok(new PageResult<>(list, pageResult.getTotal()));
     }
 
-    @ApiOperation("导出操作日志")
+//    @ApiOperation("导出操作日志")
     @GetMapping("/export")
     @PreAuthorize("@ss.hasPermission('system:operate-log:export')")
     @OperateLog(type = EXPORT)
@@ -74,7 +72,7 @@ public class OperateLogController {
 
         // 获得拼接需要的数据
         Collection<Long> userIds = CollUtils.convertList(list, OperationLog::getUserId);
-        Map<Long, AdminUser> userMap = userService.getUserMap(userIds);
+        Map<Long, User> userMap = userService.getUserMap(userIds);
         // 拼接数据
         List<OperateLogExcelVO> excelDataList = OperateLogConvert.INSTANCE.convertToExcelList(list, userMap);
         // 输出

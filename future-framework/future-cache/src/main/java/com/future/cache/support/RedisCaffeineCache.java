@@ -1,8 +1,8 @@
 package com.future.cache.support;
 
-import java.util.concurrent.Callable;
-
 import org.springframework.cache.support.AbstractValueAdaptingCache;
+
+import java.util.concurrent.Callable;
 
 public class RedisCaffeineCache extends AbstractValueAdaptingCache {
 
@@ -32,19 +32,16 @@ public class RedisCaffeineCache extends AbstractValueAdaptingCache {
 
     @Override
     public void evict(Object key) {
-        // TODO Auto-generated method stub
         
     }
 
     @Override
     public void clear() {
-        // TODO Auto-generated method stub
         
     }
 
     @Override
     protected Object lookup(Object key) {
-        // TODO Auto-generated method stub
         return null;
     }
     

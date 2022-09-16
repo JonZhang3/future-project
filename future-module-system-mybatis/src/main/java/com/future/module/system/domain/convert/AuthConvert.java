@@ -1,22 +1,17 @@
 package com.future.module.system.domain.convert;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.future.framework.common.utils.CollUtils;
+import com.future.module.system.constants.enums.MenuId;
+import com.future.module.system.domain.entity.Menu;
+import com.future.module.system.domain.entity.Role;
+import com.future.module.system.domain.entity.User;
+import com.future.module.system.domain.vo.auth.AuthMenuVO;
+import com.future.module.system.domain.vo.auth.AuthPermissionInfoVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.LoggerFactory;
 
-import com.future.framework.common.utils.CollUtils;
-import com.future.module.system.constants.enums.MenuId;
-import com.future.module.system.domain.entity.AdminUser;
-import com.future.module.system.domain.entity.Menu;
-import com.future.module.system.domain.entity.Role;
-import com.future.module.system.domain.vo.auth.AuthMenuVO;
-import com.future.module.system.domain.vo.auth.AuthPermissionInfoVO;
+import java.util.*;
 
 @Mapper
 public interface AuthConvert {
@@ -58,7 +53,7 @@ public interface AuthConvert {
         return CollUtils.filterList(treeNodeMap.values(), node -> MenuId.ROOT.getId().equals(node.getParentId()));
     }
 
-    default AuthPermissionInfoVO convert(AdminUser user, List<Role> roleList, List<Menu> menuList) {
+    default AuthPermissionInfoVO convert(User user, List<Role> roleList, List<Menu> menuList) {
         return AuthPermissionInfoVO.builder()
                 .user(AuthPermissionInfoVO.UserVO.builder().id(user.getId()).nickname(user.getNickname())
                         .avatar(user.getAvatar()).build())

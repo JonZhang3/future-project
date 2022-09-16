@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.future.framework.mybatis.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * 用户和岗位关联
@@ -14,6 +15,7 @@ import lombok.EqualsAndHashCode;
 @TableName("system_user_post")
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
 public class UserPost extends BaseEntity {
 
     /**
@@ -23,7 +25,7 @@ public class UserPost extends BaseEntity {
     private Long id;
     /**
      * 用户 ID
-     * 关联 {@link AdminUser#getId()}
+     * 关联 {@link User#getId()}
      */
     private Long userId;
     /**

@@ -18,9 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 @Configuration
-@MapperScan(
-    value = "${}", annotationClass = Mapper.class
-)
+@MapperScan(value = "com.future", annotationClass = Mapper.class)
 public class MybatisAutoConfiguration {
 
     @Bean

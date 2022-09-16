@@ -36,7 +36,7 @@ public final class CollUtils {
     }
 
     public static <T, K, V> Map<K, Set<V>> convertMultiMap(Collection<T> from, Function<T, K> keyFunc,
-            Function<T, V> valueFunc) {
+                                                           Function<T, V> valueFunc) {
         if (CollectionUtils.isEmpty(from)) {
             return new HashMap<>();
         }
@@ -93,6 +93,17 @@ public final class CollUtils {
             return new ArrayList<>();
         }
         return from.stream().filter(predicate).collect(Collectors.toList());
+    }
+
+    public static <T> Collection<T> subtract(Set<T> coll1, Set<T> coll2) {
+        Set<T> result = new HashSet<>();
+        if (coll1 != null) {
+            result.addAll(coll1);
+        }
+        if (coll2 != null) {
+            result.removeAll(coll2);
+        }
+        return result;
     }
 
 }

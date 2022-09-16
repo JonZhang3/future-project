@@ -23,10 +23,14 @@ public interface PostConvert {
 
     PostRespVO convert(Post id);
 
+    PostSimpleRespVO convertToSimple(Post bean);
+    
     List<PostSimpleRespVO> convertToSimpleList(List<Post> list);
-
+    
     PageResult<PostRespVO> convertPage(PageResult<Post> page);
 
+    PostExcelVO convertToPostExcel(Post post);
+    
     List<PostExcelVO> convertToPostExcelList(List<Post> list);
     
 }

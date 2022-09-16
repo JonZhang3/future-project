@@ -146,7 +146,7 @@ public enum SystemErrorCode implements ErrorCode {
     FILE_NOT_EXISTS(1001003001, "文件不存在"),
     FILE_IS_EMPTY(1001003002, "文件为空");
 
-    private final int code;
+    private final Integer code;
     private final String message;
 
 }

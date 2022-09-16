@@ -1,17 +1,5 @@
 package com.future.framework.security.filter;
 
-import java.io.IOException;
-
-import javax.annotation.Resource;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.jetbrains.annotations.NotNull;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-
 import com.future.framework.common.domain.R;
 import com.future.framework.common.exception.ServiceException;
 import com.future.framework.common.utils.ServletUtils;
@@ -22,6 +10,16 @@ import com.future.framework.security.domain.LoginUser;
 import com.future.framework.security.service.TokenService;
 import com.future.framework.security.util.SecurityUtils;
 import com.future.framework.web.handler.GlobalExceptionHandler;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.annotation.Resource;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Token 过滤器，验证 token 的有效性

@@ -1,9 +1,9 @@
 package com.future.framework.security.service;
 
-import java.util.List;
-
 import com.future.framework.security.domain.AccessTokenCheckResult;
 import com.future.framework.security.domain.TokenResult;
+
+import java.util.List;
 
 public interface TokenService {
 

@@ -5,7 +5,7 @@ import com.future.framework.mybatis.mapper.BaseMapper;
 import com.future.framework.mybatis.query.LambdaQueryWrapper;
 import com.future.module.system.domain.entity.AccessToken;
 import com.future.module.system.domain.query.auth.AccessTokenPageQuery;
-import org.mapstruct.Mapper;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Date;
 import java.util.List;

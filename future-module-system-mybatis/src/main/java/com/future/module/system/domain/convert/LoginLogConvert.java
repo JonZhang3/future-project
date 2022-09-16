@@ -14,8 +14,12 @@ public interface LoginLogConvert {
 
     LoginLogConvert INSTANCE = Mappers.getMapper(LoginLogConvert.class);
 
+    LoginLogRespVO convert(LoginLog bean);
+    
     PageResult<LoginLogRespVO> convertPage(PageResult<LoginLog> page);
 
+    LoginLogExcelVO convertToExcel(LoginLog bean);
+    
     List<LoginLogExcelVO> convertList(List<LoginLog> list);
     
 }

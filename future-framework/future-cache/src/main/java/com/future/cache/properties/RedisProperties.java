@@ -1,10 +1,10 @@
 package com.future.cache.properties;
 
+import lombok.Data;
+
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-
-import lombok.Data;
 
 @Data
 public class RedisProperties {

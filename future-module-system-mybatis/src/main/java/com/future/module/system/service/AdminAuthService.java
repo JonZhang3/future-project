@@ -1,6 +1,6 @@
 package com.future.module.system.service;
 
-import com.future.module.system.domain.entity.AdminUser;
+import com.future.module.system.domain.entity.User;
 import com.future.module.system.domain.query.auth.AuthLoginQuery;
 import com.future.module.system.domain.vo.auth.AuthLoginVO;
 
@@ -22,7 +22,7 @@ public interface AdminAuthService {
      * @param password 密码
      * @return 用户
      */
-    AdminUser authenticate(String username, String password);
+    User authenticate(String username, String password);
 
     /**
      * 账号登录

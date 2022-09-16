@@ -25,8 +25,12 @@ public interface DictTypeConvert {
 
     DictTypeRespVO convert(DictType bean);
 
+    DictTypeSimpleRespVO convertToSimple(DictType bean);
+    
     List<DictTypeSimpleRespVO> convertList(List<DictType> list);
 
+    DictTypeExcelVO convertToExcel(DictType bean);
+    
     List<DictTypeExcelVO> convertToExcelList(List<DictType> list);
     
 }

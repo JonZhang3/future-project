@@ -37,7 +37,7 @@ public class Department extends BaseEntity {
     /**
      * 负责人
      * <p>
-     * 关联 {@link AdminUser#getId()}
+     * 关联 {@link User#getId()}
      */
     private Long leaderUserId;
     /**
