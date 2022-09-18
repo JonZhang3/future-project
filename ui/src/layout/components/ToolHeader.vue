@@ -61,10 +61,7 @@ export default defineComponent({
                         <SizeDropdown class="hover-tigger" color="var(--top-header-text-color)"></SizeDropdown>
                     ) : undefined}
                     {locale.value ? (
-                        <LocaleDropdown
-                            class="hover-tigger"
-                            color="var(--top-header-text-color)"
-                        ></LocaleDropdown>
+                        <LocaleDropdown class="hover-tigger" color="var(--top-header-text-color)"></LocaleDropdown>
                     ) : undefined}
                     <UserInfo class="hover-tigger"></UserInfo>
                 </div>

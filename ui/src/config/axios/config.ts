@@ -34,7 +34,7 @@ const config: {
     /**
      * 接口请求超时时间
      */
-    request_timeout: 30000,// 30s
+    request_timeout: 30000, // 30s
 
     /**
      * 默认接口请求类型

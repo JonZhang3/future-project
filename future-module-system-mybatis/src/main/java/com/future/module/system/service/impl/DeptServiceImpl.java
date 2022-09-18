@@ -15,7 +15,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -75,7 +74,7 @@ public class DeptServiceImpl implements DeptService {
     public void initLocalCache() {
         // 获取部门列表，如果有更新
         List<Department> deptList = loadDeptIfUpdate(maxUpdateTime);
-        if (CollectionUtils.isEmpty(deptList)) {
+        if (CollUtils.isEmpty(deptList)) {
             return;
         }
         // 构建缓存
@@ -165,7 +164,7 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public void validDepts(Collection<Long> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
+        if (CollUtils.isEmpty(ids)) {
             return;
         }
         // 获得科室信息
@@ -227,7 +226,7 @@ public class DeptServiceImpl implements DeptService {
         }
         // 获得子部门
         Collection<Department> depts = parentDeptMap.get(parentId);
-        if (CollectionUtils.isEmpty(depts)) {
+        if (CollUtils.isEmpty(depts)) {
             return;
         }
         result.addAll(depts);

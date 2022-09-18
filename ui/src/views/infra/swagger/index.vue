@@ -6,7 +6,7 @@ const src = ref(BASE_URL + '/doc.html')
 </script>
 
 <template>
-  <ContentWrap>
-    <IFrame :src="src" />
-  </ContentWrap>
+    <ContentWrap>
+        <IFrame :src="src" />
+    </ContentWrap>
 </template>

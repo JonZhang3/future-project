@@ -23,8 +23,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
         <lombok.version>1.18.24</lombok.version>
         <druid.version>1.2.11</druid.version>
         <annotations.version>23.0.0</annotations.version>
-        <commons-collections4.version>4.4</commons-collections4.version>
-        <commons-io.version>2.11.0</commons-io.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
         <querydsl-jpa.version>4.4.0</querydsl-jpa.version>
         <jakarta.annotation-api.version>1.3.5</jakarta.annotation-api.version>
@@ -62,16 +60,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                 <version>${druid.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-collections4</artifactId>
-                <version>${commons-collections4.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons-io.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>

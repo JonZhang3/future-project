@@ -1,10 +1,10 @@
 package com.future.module.system.service;
 
+import com.future.framework.common.utils.CollUtils;
 import com.future.module.system.domain.entity.Department;
 import com.future.module.system.domain.query.dept.DeptCreateQuery;
 import com.future.module.system.domain.query.dept.DeptListQuery;
 import com.future.module.system.domain.query.dept.DeptUpdateQuery;
-import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -103,7 +103,7 @@ public interface DeptService {
      * @return 部门 Map
      */
     default Map<Long, Department> getDeptMap(Collection<Long> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
+        if (CollUtils.isEmpty(ids)) {
             return Collections.emptyMap();
         }
         List<Department> list = getSimpleDepts(ids);

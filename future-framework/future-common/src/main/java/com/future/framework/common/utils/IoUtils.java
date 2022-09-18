@@ -1,17 +1,17 @@
 package com.future.framework.common.utils;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
+
+import cn.hutool.core.io.IoUtil;
 
 /**
  * io 工具类
  *
  * @author JonZhang
  */
-public final class IoUtils extends IOUtils {
+public final class IoUtils extends IoUtil {
 
     private IoUtils() {
     }
@@ -24,7 +24,7 @@ public final class IoUtils extends IOUtils {
                 builder.append(buffer.flip());
             }
         } finally {
-            closeQuietly(reader);
+            close(reader);
         }
         return builder.toString();
     }

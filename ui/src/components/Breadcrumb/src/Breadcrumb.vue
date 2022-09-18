@@ -21,69 +21,69 @@ const appStore = useAppStore()
 const breadcrumbIcon = computed(() => appStore.getBreadcrumbIcon)
 
 export default defineComponent({
-  name: 'Breadcrumb',
-  setup() {
-    const { currentRoute } = useRouter()
+    name: 'Breadcrumb',
+    setup() {
+        const { currentRoute } = useRouter()
 
-    const { t } = useI18n()
+        const { t } = useI18n()
 
-    const levelList = ref<AppRouteRecordRaw[]>([])
+        const levelList = ref<AppRouteRecordRaw[]>([])
 
-    const permissionStore = usePermissionStore()
+        const permissionStore = usePermissionStore()
 
-    const menuRouters = computed(() => {
-      const routers = permissionStore.getRouters
-      return filterBreadcrumb(routers)
-    })
+        const menuRouters = computed(() => {
+            const routers = permissionStore.getRouters
+            return filterBreadcrumb(routers)
+        })
 
-    const getBreadcrumb = () => {
-      const currentPath = currentRoute.value.path
+        const getBreadcrumb = () => {
+            const currentPath = currentRoute.value.path
 
-      levelList.value = filter<AppRouteRecordRaw>(unref(menuRouters), (node: AppRouteRecordRaw) => {
-        return node.path === currentPath
-      })
-    }
-
-    const renderBreadcrumb = () => {
-      const breadcrumbList = treeToList<AppRouteRecordRaw[]>(unref(levelList))
-      return breadcrumbList.map((v) => {
-        const disabled = v.redirect === 'noredirect'
-        const meta = v.meta as RouteMeta
-        return (
-          <ElBreadcrumbItem to={{ path: disabled ? '' : v.path }} key={v.name}>
-            {meta?.icon && breadcrumbIcon.value ? (
-              <>
-                <Icon icon={meta.icon} class="mr-[5px]"></Icon> {t(v?.meta?.title)}
-              </>
-            ) : (
-              t(v?.meta?.title)
-            )}
-          </ElBreadcrumbItem>
-        )
-      })
-    }
-
-    watch(
-      () => currentRoute.value,
-      (route: RouteLocationNormalizedLoaded) => {
-        if (route.path.startsWith('/redirect/')) {
-          return
+            levelList.value = filter<AppRouteRecordRaw>(unref(menuRouters), (node: AppRouteRecordRaw) => {
+                return node.path === currentPath
+            })
         }
-        getBreadcrumb()
-      },
-      {
-        immediate: true
-      }
-    )
 
-    return () => (
-      <ElBreadcrumb separator="/" class={`${prefixCls} flex items-center h-full ml-[10px]`}>
-        <TransitionGroup appear enter-active-class="animate__animated animate__fadeInRight">
-          {renderBreadcrumb()}
-        </TransitionGroup>
-      </ElBreadcrumb>
-    )
-  }
+        const renderBreadcrumb = () => {
+            const breadcrumbList = treeToList<AppRouteRecordRaw[]>(unref(levelList))
+            return breadcrumbList.map((v) => {
+                const disabled = v.redirect === 'noredirect'
+                const meta = v.meta as RouteMeta
+                return (
+                    <ElBreadcrumbItem to={{ path: disabled ? '' : v.path }} key={v.name}>
+                        {meta?.icon && breadcrumbIcon.value ? (
+                            <>
+                                <Icon icon={meta.icon} class="mr-[5px]"></Icon> {t(v?.meta?.title)}
+                            </>
+                        ) : (
+                            t(v?.meta?.title)
+                        )}
+                    </ElBreadcrumbItem>
+                )
+            })
+        }
+
+        watch(
+            () => currentRoute.value,
+            (route: RouteLocationNormalizedLoaded) => {
+                if (route.path.startsWith('/redirect/')) {
+                    return
+                }
+                getBreadcrumb()
+            },
+            {
+                immediate: true
+            }
+        )
+
+        return () => (
+            <ElBreadcrumb separator="/" class={`${prefixCls} flex items-center h-full ml-[10px]`}>
+                <TransitionGroup appear enter-active-class="animate__animated animate__fadeInRight">
+                    {renderBreadcrumb()}
+                </TransitionGroup>
+            </ElBreadcrumb>
+        )
+    }
 })
 </script>
 
@@ -91,37 +91,37 @@ export default defineComponent({
 @prefix-cls: ~'@{elNamespace}-breadcrumb';
 
 .@{prefix-cls} {
-  :deep(&__item) {
-    display: flex;
-    .@{prefix-cls}__inner {
-      display: flex;
-      align-items: center;
-      color: var(--top-header-text-color);
+    :deep(&__item) {
+        display: flex;
+        .@{prefix-cls}__inner {
+            display: flex;
+            align-items: center;
+            color: var(--top-header-text-color);
 
-      &:hover {
-        color: var(--el-color-primary);
-      }
+            &:hover {
+                color: var(--el-color-primary);
+            }
+        }
     }
-  }
 
-  :deep(&__item):not(:last-child) {
-    .@{prefix-cls}__inner {
-      color: var(--top-header-text-color);
+    :deep(&__item):not(:last-child) {
+        .@{prefix-cls}__inner {
+            color: var(--top-header-text-color);
 
-      &:hover {
-        color: var(--el-color-primary);
-      }
+            &:hover {
+                color: var(--el-color-primary);
+            }
+        }
     }
-  }
 
-  :deep(&__item):last-child {
-    .@{prefix-cls}__inner {
-      color: var(--el-text-color-placeholder);
+    :deep(&__item):last-child {
+        .@{prefix-cls}__inner {
+            color: var(--el-text-color-placeholder);
 
-      &:hover {
-        color: var(--el-text-color-placeholder);
-      }
+            &:hover {
+                color: var(--el-text-color-placeholder);
+            }
+        }
     }
-  }
 }
 </style>

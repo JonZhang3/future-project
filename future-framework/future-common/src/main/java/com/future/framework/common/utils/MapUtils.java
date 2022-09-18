@@ -1,15 +1,16 @@
 package com.future.framework.common.utils;
 
-import com.google.common.collect.Multimap;
-import org.apache.commons.collections4.CollectionUtils;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public final class MapUtils {
+import com.google.common.collect.Multimap;
+
+import cn.hutool.core.map.MapUtil;
+
+public final class MapUtils extends MapUtil {
 
     private MapUtils() {
     }
@@ -25,7 +26,7 @@ public final class MapUtils {
         List<V> result = new ArrayList<>();
         keys.forEach(k -> {
             Collection<V> values = multimap.get(k);
-            if (CollectionUtils.isEmpty(values)) {
+            if (CollUtils.isEmpty(values)) {
                 return;
             }
             result.addAll(values);
@@ -42,7 +43,7 @@ public final class MapUtils {
      * @param consumer 进一步处理的逻辑
      */
     public static <K, V> void findAndThen(Map<K, V> map, K key, Consumer<V> consumer) {
-        if (org.apache.commons.collections4.MapUtils.isEmpty(map)) {
+        if (isEmpty(map)) {
             return;
         }
         V value = map.get(key);
@@ -50,14 +51,6 @@ public final class MapUtils {
             return;
         }
         consumer.accept(value);
-    }
-
-    public static boolean isEmpty(Map<?, ?> map) {
-        return org.apache.commons.collections4.MapUtils.isEmpty(map);
-    }
-    
-    public static boolean isNotEmpty(Map<?, ?> map) {
-        return org.apache.commons.collections4.MapUtils.isNotEmpty(map);
     }
 
 }

@@ -5,7 +5,7 @@ const src = ref('http://skywalking.shop.iocoder.cn')
 </script>
 
 <template>
-  <ContentWrap>
-    <IFrame :src="src" />
-  </ContentWrap>
+    <ContentWrap>
+        <IFrame :src="src" />
+    </ContentWrap>
 </template>

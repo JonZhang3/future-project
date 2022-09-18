@@ -9,22 +9,18 @@ const { getPrefixCls } = useDesign()
 const prefixCls = getPrefixCls('screenfull')
 
 defineProps({
-  color: propTypes.string.def('')
+    color: propTypes.string.def('')
 })
 
 const { toggle, isFullscreen } = useFullscreen()
 
 const toggleFullscreen = () => {
-  toggle()
+    toggle()
 }
 </script>
 
 <template>
-  <div :class="prefixCls" @click="toggleFullscreen">
-    <Icon
-      :size="18"
-      :icon="isFullscreen ? 'zmdi:fullscreen-exit' : 'zmdi:fullscreen'"
-      :color="color"
-    />
-  </div>
+    <div :class="prefixCls" @click="toggleFullscreen">
+        <Icon :size="18" :icon="isFullscreen ? 'zmdi:fullscreen-exit' : 'zmdi:fullscreen'" :color="color" />
+    </div>
 </template>

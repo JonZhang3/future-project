@@ -20,13 +20,7 @@ const move = (el: HTMLElement, position: string, amount: number) => {
     el[position] = amount
 }
 
-export function useScrollTo({
-    el,
-    position = 'scrollLeft',
-    to,
-    duration = 500,
-    callback
-}: ScrollToParams) {
+export function useScrollTo({ el, position = 'scrollLeft', to, duration = 500, callback }: ScrollToParams) {
     const isActiveRef = ref(false)
     const start = el[position]
     const change = to - start

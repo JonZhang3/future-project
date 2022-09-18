@@ -3,6 +3,7 @@ package com.future.module.system.service.impl;
 import com.future.framework.common.constant.enums.CommonStatus;
 import com.future.framework.common.domain.PageResult;
 import com.future.framework.common.exception.ServiceException;
+import com.future.framework.common.utils.CollUtils;
 import com.future.module.system.dao.DictDataMapper;
 import com.future.module.system.domain.convert.DictDataConvert;
 import com.future.module.system.domain.entity.DictData;
@@ -13,7 +14,6 @@ import com.future.module.system.domain.query.dict.DictDataPageQuery;
 import com.future.module.system.domain.query.dict.DictDataUpdateQuery;
 import com.future.module.system.service.DictDataService;
 import com.future.module.system.service.DictTypeService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -101,7 +101,7 @@ public class DictDataServiceImpl implements DictDataService {
 
     @Override
     public void validDictDatas(String dictType, Collection<String> values) {
-        if (CollectionUtils.isEmpty(values)) {
+        if (CollUtils.isEmpty(values)) {
             return;
         }
         List<DictData> list = dictDataMapper.selectByDictTypeAndValues(dictType, values);

@@ -10,7 +10,6 @@ import com.future.module.system.domain.query.logger.OperateLogExportQuery;
 import com.future.module.system.domain.query.logger.OperateLogPageQuery;
 import com.future.module.system.service.OperateLogService;
 import com.future.module.system.service.UserService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -43,7 +42,7 @@ public class OperateLogServiceImpl implements OperateLogService {
         Collection<Long> userIds = null;
         if (StringUtils.isNotEmpty(query.getUserNickname())) {
             userIds = CollUtils.convertSet(userService.getUsersByNickname(query.getUserNickname()), User::getId);
-            if (CollectionUtils.isEmpty(userIds)) {
+            if (CollUtils.isEmpty(userIds)) {
                 return PageResult.empty();
             }
         }
@@ -57,7 +56,7 @@ public class OperateLogServiceImpl implements OperateLogService {
         Collection<Long> userIds = null;
         if (StringUtils.isNotEmpty(query.getUserNickname())) {
             userIds = CollUtils.convertSet(userService.getUsersByNickname(query.getUserNickname()), User::getId);
-            if (CollectionUtils.isEmpty(userIds)) {
+            if (CollUtils.isEmpty(userIds)) {
                 return Collections.emptyList();
             }
         }

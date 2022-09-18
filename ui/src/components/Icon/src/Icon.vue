@@ -10,12 +10,12 @@ const { getPrefixCls } = useDesign()
 const prefixCls = getPrefixCls('icon')
 
 const props = defineProps({
-  // icon name
-  icon: propTypes.string,
-  // icon color
-  color: propTypes.string,
-  // icon size
-  size: propTypes.number.def(16)
+    // icon name
+    icon: propTypes.string,
+    // icon color
+    color: propTypes.string,
+    // icon size
+    size: propTypes.number.def(16)
 })
 
 const elRef = ref<ElRef>(null)
@@ -23,56 +23,56 @@ const elRef = ref<ElRef>(null)
 const isLocal = computed(() => props.icon.startsWith('svg-icon:'))
 
 const symbolId = computed(() => {
-  return unref(isLocal) ? `#icon-${props.icon.split('svg-icon:')[1]}` : props.icon
+    return unref(isLocal) ? `#icon-${props.icon.split('svg-icon:')[1]}` : props.icon
 })
 
 const getIconifyStyle = computed(() => {
-  const { color, size } = props
-  return {
-    fontSize: `${size}px`,
-    color
-  }
+    const { color, size } = props
+    return {
+        fontSize: `${size}px`,
+        color
+    }
 })
 
 const updateIcon = async (icon: string) => {
-  if (unref(isLocal)) return
+    if (unref(isLocal)) return
 
-  const el = unref(elRef)
-  if (!el) return
+    const el = unref(elRef)
+    if (!el) return
 
-  await nextTick()
+    await nextTick()
 
-  if (!icon) return
+    if (!icon) return
 
-  const svg = Iconify.renderSVG(icon, {})
-  if (svg) {
-    el.textContent = ''
-    el.appendChild(svg)
-  } else {
-    const span = document.createElement('span')
-    span.className = 'iconify'
-    span.dataset.icon = icon
-    el.textContent = ''
-    el.appendChild(span)
-  }
+    const svg = Iconify.renderSVG(icon, {})
+    if (svg) {
+        el.textContent = ''
+        el.appendChild(svg)
+    } else {
+        const span = document.createElement('span')
+        span.className = 'iconify'
+        span.dataset.icon = icon
+        el.textContent = ''
+        el.appendChild(span)
+    }
 }
 
 watch(
-  () => props.icon,
-  (icon: string) => {
-    updateIcon(icon)
-  }
+    () => props.icon,
+    (icon: string) => {
+        updateIcon(icon)
+    }
 )
 </script>
 
 <template>
-  <ElIcon :class="prefixCls" :size="size" :color="color">
-    <svg v-if="isLocal" aria-hidden="true">
-      <use :xlink:href="symbolId" />
-    </svg>
+    <ElIcon :class="prefixCls" :size="size" :color="color">
+        <svg v-if="isLocal" aria-hidden="true">
+            <use :xlink:href="symbolId" />
+        </svg>
 
-    <span v-else ref="elRef" :class="$attrs.class" :style="getIconifyStyle">
-      <span class="iconify" :data-icon="symbolId"></span>
-    </span>
-  </ElIcon>
+        <span v-else ref="elRef" :class="$attrs.class" :style="getIconifyStyle">
+            <span class="iconify" :data-icon="symbolId"></span>
+        </span>
+    </ElIcon>
 </template>

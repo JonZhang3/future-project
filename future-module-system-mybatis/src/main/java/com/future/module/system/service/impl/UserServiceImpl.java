@@ -12,13 +12,11 @@ import com.future.module.system.domain.entity.Department;
 import com.future.module.system.domain.entity.User;
 import com.future.module.system.domain.entity.UserPost;
 import com.future.module.system.domain.query.user.*;
-import com.future.module.system.domain.vo.user.UserImportRespVO;
 import com.future.module.system.domain.vo.user.UserImportVO;
 import com.future.module.system.service.DeptService;
 import com.future.module.system.service.PermissionService;
 import com.future.module.system.service.PostService;
 import com.future.module.system.service.UserService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.InputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.future.framework.common.utils.CollUtils.convertList;
 import static com.future.module.system.constants.enums.SystemErrorCode.*;
@@ -63,7 +60,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodePassword(query.getPassword())); // 加密密码
         userMapper.insert(user);
         // 插入关联岗位
-        if (CollectionUtils.isNotEmpty(user.getPostIds())) {
+        if (CollUtils.isNotEmpty(user.getPostIds())) {
             userPostMapper.insertBatch(convertList(user.getPostIds(),
                 postId -> new UserPost().setUserId(user.getId()).setPostId(postId)));
         }
@@ -178,7 +175,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUsersByDeptIds(Collection<Long> deptIds) {
-        if (CollectionUtils.isEmpty(deptIds)) {
+        if (CollUtils.isEmpty(deptIds)) {
             return Collections.emptyList();
         }
         return userMapper.selectListByDeptIds(deptIds);
@@ -186,11 +183,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUsersByPostIds(Collection<Long> postIds) {
-        if (CollectionUtils.isEmpty(postIds)) {
+        if (CollUtils.isEmpty(postIds)) {
             return Collections.emptyList();
         }
         Set<Long> userIds = CollUtils.convertSet(userPostMapper.selectListByPostIds(postIds), UserPost::getUserId);
-        if (CollectionUtils.isEmpty(userIds)) {
+        if (CollUtils.isEmpty(userIds)) {
             return Collections.emptyList();
         }
         return userMapper.selectBatchIds(userIds);
@@ -198,7 +195,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUsers(Collection<Long> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
+        if (CollUtils.isEmpty(ids)) {
             return Collections.emptyList();
         }
         return userMapper.selectBatchIds(ids);
@@ -206,7 +203,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void validUsers(Set<Long> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
+        if (CollUtils.isEmpty(ids)) {
             return;
         }
         // 获得岗位信息
@@ -242,7 +239,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class) // 添加事务，异常则回滚所有导入
     @Override
     public UserImportVO importUsers(List<UserImportExcelQuery> importUsers, boolean isUpdateSupport) {
-        if (CollectionUtils.isEmpty(importUsers)) {
+        if (CollUtils.isEmpty(importUsers)) {
             throw new ServiceException(USER_IMPORT_LIST_IS_EMPTY);
         }
         UserImportVO respVO = UserImportVO.builder().createUsernames(new ArrayList<>())
@@ -376,11 +373,11 @@ public class UserServiceImpl implements UserService {
         Collection<Long> createPostIds = CollUtils.subtract(postIds, dbPostIds);
         Collection<Long> deletePostIds = CollUtils.subtract(dbPostIds, postIds);
         // 执行新增和删除。对于已经授权的菜单，不用做任何处理
-        if (!CollectionUtils.isEmpty(createPostIds)) {
+        if (!CollUtils.isEmpty(createPostIds)) {
             userPostMapper.insertBatch(convertList(createPostIds,
                 postId -> new UserPost().setUserId(userId).setPostId(postId)));
         }
-        if (!CollectionUtils.isEmpty(deletePostIds)) {
+        if (!CollUtils.isEmpty(deletePostIds)) {
             userPostMapper.deleteByUserIdAndPostId(userId, deletePostIds);
         }
     }

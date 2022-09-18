@@ -1,19 +1,19 @@
 package com.future.framework.common.utils;
 
-import org.apache.commons.collections4.CollectionUtils;
+import cn.hutool.core.collection.CollUtil;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public final class CollUtils {
+public final class CollUtils extends CollUtil {
 
     private CollUtils() {
     }
 
     public static <T, V extends Comparable<? super V>> V getMaxValue(List<T> from, Function<T, V> valueFunc) {
-        if (CollectionUtils.isEmpty(from)) {
+        if (isEmpty(from)) {
             return null;
         }
         assert from.size() > 0; // 断言，避免告警
@@ -22,14 +22,14 @@ public final class CollUtils {
     }
 
     public static <T, U> Set<U> convertSet(Collection<T> from, Function<T, U> func) {
-        if (CollectionUtils.isEmpty(from)) {
+        if (isEmpty(from)) {
             return new HashSet<>();
         }
         return from.stream().map(func).filter(Objects::nonNull).collect(Collectors.toSet());
     }
 
     public static <T, K> Map<K, T> convertMap(Collection<T> from, Function<T, K> keyFunc) {
-        if (CollectionUtils.isEmpty(from)) {
+        if (isEmpty(from)) {
             return new HashMap<>();
         }
         return from.stream().collect(Collectors.toMap(keyFunc, i -> i));
@@ -37,21 +37,21 @@ public final class CollUtils {
 
     public static <T, K, V> Map<K, Set<V>> convertMultiMap(Collection<T> from, Function<T, K> keyFunc,
                                                            Function<T, V> valueFunc) {
-        if (CollectionUtils.isEmpty(from)) {
+        if (isEmpty(from)) {
             return new HashMap<>();
         }
         return from.stream().collect(Collectors.groupingBy(keyFunc, Collectors.mapping(valueFunc, Collectors.toSet())));
     }
 
     public static <T, U> List<U> convertList(Collection<T> from, Function<T, U> func) {
-        if (CollectionUtils.isEmpty(from)) {
+        if (isEmpty(from)) {
             return new ArrayList<>();
         }
         return from.stream().map(func).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     public static boolean isAnyEmpty(Collection<?>... collections) {
-        return Arrays.stream(collections).anyMatch(CollectionUtils::isEmpty);
+        return Arrays.stream(collections).anyMatch(CollUtils::isEmpty);
     }
 
     public static <T> void addIfNotNull(Collection<T> coll, T item) {
@@ -69,7 +69,7 @@ public final class CollUtils {
      * @return 其中一个集合在另一个集合中是否至少包含一个元素
      */
     public static boolean containsAny(Collection<?> coll1, Collection<?> coll2) {
-        if (CollectionUtils.isEmpty(coll1) || CollectionUtils.isEmpty(coll2)) {
+        if (isEmpty(coll1) || isEmpty(coll2)) {
             return false;
         }
         if (coll1.size() < coll2.size()) {
@@ -89,7 +89,7 @@ public final class CollUtils {
     }
 
     public static <T> List<T> filterList(Collection<T> from, Predicate<T> predicate) {
-        if (CollectionUtils.isEmpty(from)) {
+        if (isEmpty(from)) {
             return new ArrayList<>();
         }
         return from.stream().filter(predicate).collect(Collectors.toList());

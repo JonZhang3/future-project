@@ -15,7 +15,6 @@ import com.future.module.system.domain.query.user.*;
 import com.future.module.system.domain.vo.user.*;
 import com.future.module.system.service.DeptService;
 import com.future.module.system.service.UserService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -86,7 +85,7 @@ public class UserController {
     public R<PageResult<UserPageItemRespVO>> getUserPage(@Valid UserPageQuery query) {
         // 获得用户分页列表
         PageResult<User> pageResult = userService.getUserPage(query);
-        if (CollectionUtils.isEmpty(pageResult.getList())) {
+        if (CollUtils.isEmpty(pageResult.getList())) {
             return R.ok(new PageResult<>(pageResult.getTotal())); // 返回空
         }
 

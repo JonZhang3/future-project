@@ -44,7 +44,7 @@ public final class ServletUtils {
         } catch (IOException e) {
             throw new UtilityException(e);
         } finally {
-            IoUtils.closeQuietly(writer);
+            IoUtils.close(writer);
         }
     }
 
@@ -55,12 +55,13 @@ public final class ServletUtils {
      * @param filename 文件名
      * @param content  附件内容
      */
-    public static void writeAttachment(HttpServletResponse response, String filename, byte[] content) throws IOException {
+    public static void writeAttachment(HttpServletResponse response, String filename, byte[] content)
+            throws IOException {
         // 设置 header 和 contentType
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, "UTF-8"));
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         // 输出附件
-        IoUtils.write(content, response.getOutputStream());
+        IoUtils.write(response.getOutputStream(), false, content);
     }
 
     /**
@@ -102,7 +103,8 @@ public final class ServletUtils {
     }
 
     public static String getClientIP(HttpServletRequest request, String... otherHeaderNames) {
-        String[] headers = {"X-Forwarded-For", "X-Real-IP", "Proxy-Client-IP", "WL-Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR"};
+        String[] headers = { "X-Forwarded-For", "X-Real-IP", "Proxy-Client-IP", "WL-Proxy-Client-IP", "HTTP_CLIENT_IP",
+                "HTTP_X_FORWARDED_FOR" };
         if (ArrayUtils.isNotEmpty(otherHeaderNames)) {
             headers = ArrayUtils.addAll(headers, otherHeaderNames);
         }
@@ -111,7 +113,7 @@ public final class ServletUtils {
     }
 
     public static boolean isJsonRequest(ServletRequest request) {
-        return StringUtils.startsWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE);
+        return StringUtils.startWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE);
     }
 
     public static Map<String, String> getParamMap(ServletRequest request) {

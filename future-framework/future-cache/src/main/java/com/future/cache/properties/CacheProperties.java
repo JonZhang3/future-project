@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
+import com.future.cache.enums.CacheType;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +14,8 @@ import java.util.Set;
 public class CacheProperties {
 
     private Set<String> cacheNames = new HashSet<>();
+
+    private CacheType type;// 缓存类型；none-没有缓存;memory-内存缓存;redis-Redis缓存;all-memory+redis
 
     /**
      * 是否存储空值，默认true，防止缓存穿透
@@ -32,6 +36,6 @@ public class CacheProperties {
     private RedisProperties redis = new RedisProperties();
 
     @NestedConfigurationProperty
-    private CaffeineProperties props = new CaffeineProperties();
+    private MemoryProperties memory = new MemoryProperties();
 
 }

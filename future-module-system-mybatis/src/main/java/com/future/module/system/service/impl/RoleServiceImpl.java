@@ -1,5 +1,6 @@
 package com.future.module.system.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.future.framework.common.constant.enums.CommonStatus;
 import com.future.framework.common.constant.enums.DataScope;
 import com.future.framework.common.constant.enums.RoleCode;
@@ -18,8 +19,6 @@ import com.future.module.system.service.PermissionService;
 import com.future.module.system.service.RoleService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -68,7 +67,7 @@ public class RoleServiceImpl implements RoleService {
     public void initLocalCache() {
         // 获取角色列表，如果有更新
         List<Role> roleList = loadRoleIfUpdate(maxUpdateTime);
-        if (CollectionUtils.isEmpty(roleList)) {
+        if (CollUtils.isEmpty(roleList)) {
             return;
         }
 
@@ -89,7 +88,7 @@ public class RoleServiceImpl implements RoleService {
         checkDuplicateRole(query.getName(), query.getCode(), null);
         // 插入到数据库
         Role role = RoleConvert.INSTANCE.convert(query);
-        role.setType(ObjectUtils.defaultIfNull(type, RoleType.CUSTOM.getType()));
+        role.setType(ObjectUtil.defaultIfNull(type, RoleType.CUSTOM.getType()));
         role.setStatus(CommonStatus.VALID.getValue());
         role.setDataScope(DataScope.ALL.getScope()); // 默认可查看所有数据。原因是，可能一些项目不需要项目权限
         roleMapper.insert(role);
@@ -150,7 +149,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> getRoles(Collection<Integer> statuses) {
-        if (CollectionUtils.isEmpty(statuses)) {
+        if (CollUtils.isEmpty(statuses)) {
             return roleMapper.selectList();
         }
         return roleMapper.selectListByStatus(statuses);
@@ -158,7 +157,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> getRolesFromCache(Collection<Long> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
+        if (CollUtils.isEmpty(ids)) {
             return Collections.emptyList();
         }
         return roleCache.values().stream().filter(roleDO -> ids.contains(roleDO.getId()))
@@ -167,7 +166,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public boolean hasAnySuperAdmin(Collection<Role> roleList) {
-        if (CollectionUtils.isEmpty(roleList)) {
+        if (CollUtils.isEmpty(roleList)) {
             return false;
         }
         return roleList.stream().anyMatch(role -> RoleCode.isSuperAdmin(role.getCode()));
@@ -190,7 +189,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void validRoles(Collection<Long> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
+        if (CollUtils.isEmpty(ids)) {
             return;
         }
         // 获得角色信息

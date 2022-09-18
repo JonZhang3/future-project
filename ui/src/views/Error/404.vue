@@ -5,10 +5,10 @@ import { useRouter } from 'vue-router'
 const { push } = useRouter()
 
 const errorClick = () => {
-  push('/')
+    push('/')
 }
 </script>
 
 <template>
-  <Error @error-click="errorClick" />
+    <Error @error-click="errorClick" />
 </template>

@@ -1,10 +1,10 @@
 package com.future.module.system.service;
 
 import com.future.framework.common.domain.PageResult;
+import com.future.framework.common.utils.CollUtils;
 import com.future.module.system.domain.entity.User;
 import com.future.module.system.domain.query.user.*;
 import com.future.module.system.domain.vo.user.UserImportVO;
-import org.apache.commons.collections4.CollectionUtils;
 
 import javax.validation.Valid;
 import java.io.InputStream;
@@ -160,7 +160,7 @@ public interface UserService {
      * @return 用户 Map
      */
     default Map<Long, User> getUserMap(Collection<Long> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
+        if (CollUtils.isEmpty(ids)) {
             return Collections.emptyMap();
         }
         List<User> users = getUsers(ids);

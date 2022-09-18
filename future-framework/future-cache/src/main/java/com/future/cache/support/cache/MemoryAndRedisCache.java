@@ -1,12 +1,12 @@
-package com.future.cache.support;
-
-import org.springframework.cache.support.AbstractValueAdaptingCache;
+package com.future.cache.support.cache;
 
 import java.util.concurrent.Callable;
 
-public class RedisCaffeineCache extends AbstractValueAdaptingCache {
+import org.springframework.cache.support.AbstractValueAdaptingCache;
 
-    protected RedisCaffeineCache(boolean allowNullValues) {
+public class MemoryAndRedisCache extends AbstractValueAdaptingCache {
+
+    protected MemoryAndRedisCache(boolean allowNullValues) {
         super(allowNullValues);
     }
 
@@ -17,7 +17,7 @@ public class RedisCaffeineCache extends AbstractValueAdaptingCache {
 
     @Override
     public Object getNativeCache() {
-        return this;
+        return null;
     }
 
     @Override

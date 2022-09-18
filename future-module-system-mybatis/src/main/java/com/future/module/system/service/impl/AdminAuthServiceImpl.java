@@ -1,5 +1,6 @@
 package com.future.module.system.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.future.framework.common.constant.enums.CommonStatus;
 import com.future.framework.common.constant.enums.LoginLogType;
 import com.future.framework.common.constant.enums.LoginResult;
@@ -18,7 +19,6 @@ import com.future.module.system.service.AdminAuthService;
 import com.future.module.system.service.CaptchaService;
 import com.future.module.system.service.LoginLogService;
 import com.future.module.system.service.UserService;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -56,7 +56,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
             throw new ServiceException(AUTH_LOGIN_BAD_CREDENTIALS);
         }
         // 校验是否禁用
-        if (ObjectUtils.notEqual(user.getStatus(), CommonStatus.VALID.getValue())) {
+        if (ObjectUtil.notEqual(user.getStatus(), CommonStatus.VALID.getValue())) {
             createLoginLog(user.getId(), username, logTypeEnum, LoginResult.USER_DISABLED);
             throw new ServiceException(AUTH_LOGIN_USER_DISABLED);
         }

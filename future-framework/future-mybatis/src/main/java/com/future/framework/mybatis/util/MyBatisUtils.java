@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.future.framework.common.utils.CollUtils;
 import com.future.framework.mybatis.domain.Sort;
 import net.sf.jsqlparser.expression.Alias;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +33,7 @@ public final class MyBatisUtils {
         // 页码 + 数量
         Page<T> page = new Page<>(pageNo, pageSize);
         // 排序字段
-        if (!CollectionUtils.isEmpty(sortingFields)) {
+        if (!CollUtils.isEmpty(sortingFields)) {
             page.addOrder(sortingFields.stream().map(sortingField -> Sort.ORDER_ASC.equals(sortingField.getOrder()) ?
                     OrderItem.asc(sortingField.getField()) : OrderItem.desc(sortingField.getField()))
                 .collect(Collectors.toList()));

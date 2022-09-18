@@ -15,7 +15,7 @@ import viteCompression from 'vite-plugin-compression'
 
 // 当前执行node命令时文件夹的地址（工作目录）
 const root = process.cwd()
-const envs = join(root, 'envs');
+const envs = root
 
 // 路径查找
 function pathResolve(dir: string) {
@@ -44,11 +44,11 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
             open: env.VITE_OPEN,
             // 本地跨域代理
             proxy: {
-                ['/dev-api']: {
+                ['/admin-api']: {
                     target: env.VITE_BASE_URL,
                     ws: false,
                     changeOrigin: true,
-                    rewrite: (path) => path.replace(new RegExp(`^/dev-api`), ''),
+                    // rewrite: (path) => path.replace(new RegExp(`^/admin-api`), ''),
                 },
             },
         },

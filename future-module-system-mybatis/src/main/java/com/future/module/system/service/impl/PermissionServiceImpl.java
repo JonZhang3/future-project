@@ -18,7 +18,6 @@ import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -137,12 +136,12 @@ public class PermissionServiceImpl implements PermissionService {
     public Set<Long> getUserRoleIdsFromCache(Long userId, Collection<Integer> roleStatuses) {
         Set<Long> cacheRoleIds = userRoleCache.get(userId);
         // 创建用户的时候没有分配角色，会存在空指针异常
-        if (CollectionUtils.isEmpty(cacheRoleIds)) {
+        if (CollUtils.isEmpty(cacheRoleIds)) {
             return Collections.emptySet();
         }
         Set<Long> roleIds = new HashSet<>(cacheRoleIds);
         // 过滤角色状态
-        if (CollectionUtils.isNotEmpty(roleStatuses)) {
+        if (CollUtils.isNotEmpty(roleStatuses)) {
             roleIds.removeIf(roleId -> {
                 Role role = roleService.getRoleFromCache(roleId);
                 return role == null || !roleStatuses.contains(role.getStatus());
@@ -174,10 +173,10 @@ public class PermissionServiceImpl implements PermissionService {
         Set<Long> dbMenuIds = convertSet(roleMenuMapper.selectListByRoleId(roleId),
             RoleMenu::getMenuId);
         // 计算新增和删除的菜单编号
-        Collection<Long> createMenuIds = CollectionUtils.subtract(menuIds, dbMenuIds);
-        Collection<Long> deleteMenuIds = CollectionUtils.subtract(dbMenuIds, menuIds);
+        Collection<Long> createMenuIds = CollUtils.subtract(menuIds, dbMenuIds);
+        Collection<Long> deleteMenuIds = CollUtils.subtract(dbMenuIds, menuIds);
         // 执行新增和删除。对于已经授权的菜单，不用做任何处理
-        if (!CollectionUtils.isEmpty(createMenuIds)) {
+        if (!CollUtils.isEmpty(createMenuIds)) {
             roleMenuMapper.insertBatch(CollUtils.convertList(createMenuIds, menuId -> {
                 RoleMenu entity = new RoleMenu();
                 entity.setRoleId(roleId);
@@ -185,7 +184,7 @@ public class PermissionServiceImpl implements PermissionService {
                 return entity;
             }));
         }
-        if (!CollectionUtils.isEmpty(deleteMenuIds)) {
+        if (!CollUtils.isEmpty(deleteMenuIds)) {
             roleMenuMapper.deleteListByRoleIdAndMenuIds(roleId, deleteMenuIds);
         }
     }
@@ -202,10 +201,10 @@ public class PermissionServiceImpl implements PermissionService {
         Set<Long> dbRoleIds = convertSet(userRoleMapper.selectListByUserId(userId),
             UserRole::getRoleId);
         // 计算新增和删除的角色编号
-        Collection<Long> createRoleIds = CollectionUtils.subtract(roleIds, dbRoleIds);
-        Collection<Long> deleteMenuIds = CollectionUtils.subtract(dbRoleIds, roleIds);
+        Collection<Long> createRoleIds = CollUtils.subtract(roleIds, dbRoleIds);
+        Collection<Long> deleteMenuIds = CollUtils.subtract(dbRoleIds, roleIds);
         // 执行新增和删除。对于已经授权的角色，不用做任何处理
-        if (!CollectionUtils.isEmpty(createRoleIds)) {
+        if (!CollUtils.isEmpty(createRoleIds)) {
             userRoleMapper.insertBatch(CollUtils.convertList(createRoleIds, roleId -> {
                 UserRole entity = new UserRole();
                 entity.setUserId(userId);
@@ -213,7 +212,7 @@ public class PermissionServiceImpl implements PermissionService {
                 return entity;
             }));
         }
-        if (!CollectionUtils.isEmpty(deleteMenuIds)) {
+        if (!CollUtils.isEmpty(deleteMenuIds)) {
             userRoleMapper.deleteListByUserIdAndRoleIdIds(userId, deleteMenuIds);
         }
     }
@@ -251,7 +250,7 @@ public class PermissionServiceImpl implements PermissionService {
 
         // 获得当前登录的角色。如果为空，说明没有权限
         Set<Long> roleIds = getUserRoleIdsFromCache(userId, singleton(CommonStatus.VALID.getValue()));
-        if (CollectionUtils.isEmpty(roleIds)) {
+        if (CollUtils.isEmpty(roleIds)) {
             return false;
         }
         // 判断是否是超管。如果是，当然符合条件
@@ -263,11 +262,11 @@ public class PermissionServiceImpl implements PermissionService {
         return Arrays.stream(permissions).anyMatch(permission -> {
             List<Menu> menuList = menuService.getMenuListByPermissionFromCache(permission);
             // 采用严格模式，如果权限找不到对应的 Menu 的话，认为
-            if (CollectionUtils.isEmpty(menuList)) {
+            if (CollUtils.isEmpty(menuList)) {
                 return false;
             }
             // 获得是否拥有该权限，任一一个
-            return menuList.stream().anyMatch(menu -> CollectionUtils.containsAny(roleIds,
+            return menuList.stream().anyMatch(menu -> CollUtils.containsAny(roleIds,
                 menuRoleCache.get(menu.getId())));
         });
     }
@@ -281,7 +280,7 @@ public class PermissionServiceImpl implements PermissionService {
 
         // 获得当前登录的角色。如果为空，说明没有权限
         Set<Long> roleIds = getUserRoleIdsFromCache(userId, singleton(CommonStatus.VALID.getValue()));
-        if (CollectionUtils.isEmpty(roleIds)) {
+        if (CollUtils.isEmpty(roleIds)) {
             return false;
         }
         // 判断是否是超管。如果是，当然符合条件
@@ -289,7 +288,7 @@ public class PermissionServiceImpl implements PermissionService {
             return true;
         }
         Set<String> userRoles = convertSet(roleService.getRolesFromCache(roleIds), Role::getCode);
-        return CollectionUtils.containsAny(userRoles, Sets.newHashSet(roles));
+        return CollUtils.containsAny(userRoles, Sets.newHashSet(roles));
     }
 
     @Override
@@ -298,7 +297,7 @@ public class PermissionServiceImpl implements PermissionService {
         Set<Long> roleIds = getUserRoleIdsFromCache(userId, singleton(CommonStatus.VALID.getValue()));
         // 如果角色为空，则只能查看自己
         DeptDataPermissionVO result = new DeptDataPermissionVO();
-        if (CollectionUtils.isEmpty(roleIds)) {
+        if (CollUtils.isEmpty(roleIds)) {
             result.setSelf(true);
             return result;
         }
@@ -319,10 +318,10 @@ public class PermissionServiceImpl implements PermissionService {
             }
             // 情况二，DEPT_CUSTOM
             if (Objects.equals(role.getDataScope(), DataScope.DEPT_CUSTOM.getScope())) {
-                CollectionUtils.addAll(result.getDeptIds(), role.getDataScopeDeptIds());
+                CollUtils.addAll(result.getDeptIds(), role.getDataScopeDeptIds());
                 // 自定义可见部门时，保证可以看到自己所在的部门。否则，一些场景下可能会有问题。
                 // 例如说，登录时，基于 t_user 的 username 查询会可能被 dept_id 过滤掉
-                CollectionUtils.addAll(result.getDeptIds(), userDeptIdCache.get());
+                CollUtils.addAll(result.getDeptIds(), userDeptIdCache.get());
                 continue;
             }
             // 情况三，DEPT_ONLY
@@ -333,9 +332,9 @@ public class PermissionServiceImpl implements PermissionService {
             // 情况四，DEPT_DEPT_AND_CHILD
             if (Objects.equals(role.getDataScope(), DataScope.DEPT_AND_CHILD.getScope())) {
                 List<Department> depts = deptService.getDeptsByParentIdFromCache(userDeptIdCache.get(), true);
-                CollectionUtils.addAll(result.getDeptIds(), CollUtils.convertList(depts, Department::getId));
+                CollUtils.addAll(result.getDeptIds(), CollUtils.convertList(depts, Department::getId));
                 // 添加本身部门编号
-                CollectionUtils.addAll(result.getDeptIds(), userDeptIdCache.get());
+                CollUtils.addAll(result.getDeptIds(), userDeptIdCache.get());
                 continue;
             }
             // 情况五，SELF
@@ -352,7 +351,7 @@ public class PermissionServiceImpl implements PermissionService {
     void initUserRoleLocalCache() {
         // 获取用户与角色的关联列表，如果有更新
         List<UserRole> userRoleList = loadUserRoleIfUpdate(userRoleMaxUpdateTime);
-        if (CollectionUtils.isEmpty(userRoleList)) {
+        if (CollUtils.isEmpty(userRoleList)) {
             return;
         }
 
@@ -368,7 +367,7 @@ public class PermissionServiceImpl implements PermissionService {
     void initRoleMenuLocalCache() {
         // 获取角色与菜单的关联列表，如果有更新
         List<RoleMenu> roleMenuList = loadRoleMenuIfUpdate(roleMenuMaxUpdateTime);
-        if (CollectionUtils.isEmpty(roleMenuList)) {
+        if (CollUtils.isEmpty(roleMenuList)) {
             return;
         }
 

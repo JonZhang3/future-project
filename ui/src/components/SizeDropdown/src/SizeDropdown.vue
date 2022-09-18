@@ -11,7 +11,7 @@ const { getPrefixCls } = useDesign()
 const prefixCls = getPrefixCls('size-dropdown')
 
 defineProps({
-  color: propTypes.string.def('')
+    color: propTypes.string.def('')
 })
 
 const { t } = useI18n()
@@ -21,19 +21,19 @@ const appStore = useAppStore()
 const sizeMap = computed(() => appStore.sizeMap)
 
 const setCurrentSize = (size: ElememtPlusSize) => {
-  appStore.setCurrentSize(size)
+    appStore.setCurrentSize(size)
 }
 </script>
 
 <template>
-  <ElDropdown :class="prefixCls" trigger="click" @command="setCurrentSize">
-    <Icon :size="18" icon="mdi:format-size" :color="color" class="cursor-pointer" />
-    <template #dropdown>
-      <ElDropdownMenu>
-        <ElDropdownItem v-for="item in sizeMap" :key="item" :command="item">
-          {{ t(`size.${item}`) }}
-        </ElDropdownItem>
-      </ElDropdownMenu>
-    </template>
-  </ElDropdown>
+    <ElDropdown :class="prefixCls" trigger="click" @command="setCurrentSize">
+        <Icon :size="18" icon="mdi:format-size" :color="color" class="cursor-pointer" />
+        <template #dropdown>
+            <ElDropdownMenu>
+                <ElDropdownItem v-for="item in sizeMap" :key="item" :command="item">
+                    {{ t(`size.${item}`) }}
+                </ElDropdownItem>
+            </ElDropdownMenu>
+        </template>
+    </ElDropdown>
 </template>

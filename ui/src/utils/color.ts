@@ -44,9 +44,7 @@ export const hexToRGB = (hex: string, opacity?: number) => {
         for (let i = 1; i < 7; i += 2) {
             sColorChange.push(parseInt('0x' + sHex.slice(i, i + 2)))
         }
-        return opacity
-            ? 'RGBA(' + sColorChange.join(',') + ',' + opacity + ')'
-            : 'RGB(' + sColorChange.join(',') + ')'
+        return opacity ? 'RGBA(' + sColorChange.join(',') + ',' + opacity + ')' : 'RGB(' + sColorChange.join(',') + ')'
     }
     return sHex
 }
@@ -84,10 +82,10 @@ export const darken = (color: string, amount: number) => {
 export const lighten = (color: string, amount: number) => {
     color = color.indexOf('#') >= 0 ? color.substring(1, color.length) : color
     amount = Math.trunc((255 * amount) / 100)
-    return `#${addLight(color.substring(0, 2), amount)}${addLight(
-        color.substring(2, 4),
+    return `#${addLight(color.substring(0, 2), amount)}${addLight(color.substring(2, 4), amount)}${addLight(
+        color.substring(4, 6),
         amount
-    )}${addLight(color.substring(4, 6), amount)}`
+    )}`
 }
 
 /* Suma el porcentaje indicado a un color (RR, GG o BB) hexadecimal para aclararlo */
@@ -123,10 +121,7 @@ const luminanace = (r: number, g: number, b: number) => {
  * @param {string} rgb2 rgb color 2
  */
 const contrast = (rgb1: string[], rgb2: number[]) => {
-    return (
-        (luminanace(~~rgb1[0], ~~rgb1[1], ~~rgb1[2]) + 0.05) /
-        (luminanace(rgb2[0], rgb2[1], rgb2[2]) + 0.05)
-    )
+    return (luminanace(~~rgb1[0], ~~rgb1[1], ~~rgb1[2]) + 0.05) / (luminanace(rgb2[0], rgb2[1], rgb2[2]) + 0.05)
 }
 
 /**

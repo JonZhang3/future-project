@@ -2,6 +2,7 @@ package com.future.module.admin.controller;
 
 import com.future.framework.common.domain.R;
 import com.future.framework.common.exception.ServiceException;
+import com.future.framework.common.utils.CollUtils;
 import com.future.framework.security.util.SecurityUtils;
 import com.future.module.system.constants.enums.SystemErrorCode;
 import com.future.module.system.domain.convert.UserConvert;
@@ -13,7 +14,6 @@ import com.future.module.system.domain.query.user.UserProfileUpdatePasswordQuery
 import com.future.module.system.domain.query.user.UserProfileUpdateQuery;
 import com.future.module.system.domain.vo.user.UserProfileRespVO;
 import com.future.module.system.service.*;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,7 +55,7 @@ public class UserProfileController {
             resp.setDept(UserConvert.INSTANCE.convertToDept(dept));
         }
         // 获得岗位信息
-        if (CollectionUtils.isNotEmpty(user.getPostIds())) {
+        if (CollUtils.isNotEmpty(user.getPostIds())) {
             List<Post> posts = postService.getPosts(user.getPostIds());
             resp.setPosts(UserConvert.INSTANCE.convertToPostList(posts));
         }

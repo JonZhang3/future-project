@@ -39,7 +39,7 @@ service.interceptors.request.use(
         const isToken = (config!.headers || {}).isToken === false
         const accessToken = getAccessToken()
         if (accessToken && !isToken) {
-            ; (config as Recordable).headers.Authorization = 'Bearer ' + accessToken // 让每个请求携带自定义token
+            ;(config as Recordable).headers.Authorization = 'Bearer ' + accessToken // 让每个请求携带自定义token
         }
         const params = config.params || {}
         const data = config.data || false
@@ -94,10 +94,7 @@ service.interceptors.response.use(
         // 未设置状态码则默认成功状态
         const code = data.code || result_code
         // 二进制数据则直接返回
-        if (
-            response.request.responseType === 'blob' ||
-            response.request.responseType === 'arraybuffer'
-        ) {
+        if (response.request.responseType === 'blob' || response.request.responseType === 'arraybuffer') {
             return response.data
         }
         // 获取错误信息

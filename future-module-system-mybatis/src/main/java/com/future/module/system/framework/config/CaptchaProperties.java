@@ -16,7 +16,7 @@ public class CaptchaProperties {
      * 是否开启
      * 注意，这里仅仅是后端 Server 是否校验，暂时不控制前端的逻辑
      */
-    private Boolean enable = false;
+    private Boolean enable = true;
     /**
      * 验证码的过期时间
      */

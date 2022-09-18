@@ -17,7 +17,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,7 +67,7 @@ public class MenuServiceImpl implements MenuService {
     public void initLocalCache() {
         // 获取菜单列表，如果有更新
         List<Menu> menuList = this.loadMenuIfUpdate(maxUpdateTime);
-        if (CollectionUtils.isEmpty(menuList)) {
+        if (CollUtils.isEmpty(menuList)) {
             return;
         }
 
@@ -152,7 +151,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Menu> getMenuListFromCache(Collection<Integer> menuTypes, Collection<Integer> menusStatuses) {
         // 任一一个参数为空，则返回空
-        if (CollectionUtils.isEmpty(menuTypes) || CollectionUtils.isEmpty(menusStatuses)) {
+        if (CollUtils.isAnyEmpty(menuTypes, menusStatuses)) {
             return Collections.emptyList();
         }
         // 创建新数组，避免缓存被修改
@@ -164,8 +163,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Menu> getMenuListFromCache(Collection<Long> menuIds, Collection<Integer> menuTypes, Collection<Integer> menusStatuses) {
         // 任一一个参数为空，则返回空
-        if (CollectionUtils.isEmpty(menuIds) || CollectionUtils.isEmpty(menuTypes)
-            || CollectionUtils.isEmpty(menusStatuses)) {
+        if (CollUtils.isAnyEmpty(menuIds, menuTypes, menusStatuses)) {
             return Collections.emptyList();
         }
         return menuCache.values().stream().filter(menu -> menuIds.contains(menu.getId())

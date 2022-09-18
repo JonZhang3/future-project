@@ -24,7 +24,7 @@ export const listToTree = <T = any>(list: any[], config: Partial<TreeHelperConfi
     }
     for (const node of list) {
         const parent = nodeMap.get(node[pid])
-            ; (parent ? parent.children : result).push(node)
+        ;(parent ? parent.children : result).push(node)
     }
     return result
 }
@@ -40,11 +40,7 @@ export const treeToList = <T = any>(tree: any, config: Partial<TreeHelperConfig>
     return result
 }
 
-export const findNode = <T = any>(
-    tree: any,
-    func: Fn,
-    config: Partial<TreeHelperConfig> = {}
-): T | null => {
+export const findNode = <T = any>(tree: any, func: Fn, config: Partial<TreeHelperConfig> = {}): T | null => {
     config = getConfig(config)
     const { children } = config
     const list = [...tree]
@@ -55,11 +51,7 @@ export const findNode = <T = any>(
     return null
 }
 
-export const findNodeAll = <T = any>(
-    tree: any,
-    func: Fn,
-    config: Partial<TreeHelperConfig> = {}
-): T[] => {
+export const findNodeAll = <T = any>(tree: any, func: Fn, config: Partial<TreeHelperConfig> = {}): T[] => {
     config = getConfig(config)
     const { children } = config
     const list = [...tree]
@@ -71,11 +63,7 @@ export const findNodeAll = <T = any>(
     return result
 }
 
-export const findPath = <T = any>(
-    tree: any,
-    func: Fn,
-    config: Partial<TreeHelperConfig> = {}
-): T | T[] | null => {
+export const findPath = <T = any>(tree: any, func: Fn, config: Partial<TreeHelperConfig> = {}): T | T[] | null => {
     config = getConfig(config)
     const path: T[] = []
     const list = [...tree]
@@ -120,11 +108,7 @@ export const findPathAll = (tree: any, func: Fn, config: Partial<TreeHelperConfi
     return result
 }
 
-export const filter = <T = any>(
-    tree: T[],
-    func: (n: T) => boolean,
-    config: Partial<TreeHelperConfig> = {}
-): T[] => {
+export const filter = <T = any>(tree: T[], func: (n: T) => boolean, config: Partial<TreeHelperConfig> = {}): T[] => {
     config = getConfig(config)
     const children = config.children as string
     function listFilter(list: T[]) {
@@ -138,11 +122,7 @@ export const filter = <T = any>(
     return listFilter(tree)
 }
 
-export const forEach = <T = any>(
-    tree: T[],
-    func: (n: T) => any,
-    config: Partial<TreeHelperConfig> = {}
-): void => {
+export const forEach = <T = any>(tree: T[], func: (n: T) => any, config: Partial<TreeHelperConfig> = {}): void => {
     config = getConfig(config)
     const list: any[] = [...tree]
     const { children } = config
@@ -158,10 +138,7 @@ export const forEach = <T = any>(
 /**
  * @description: Extract tree specified structure
  */
-export const treeMap = <T = any>(
-    treeData: T[],
-    opt: { children?: string; conversion: Fn }
-): T[] => {
+export const treeMap = <T = any>(treeData: T[], opt: { children?: string; conversion: Fn }): T[] => {
     return treeData.map((item) => treeMapEach(item, opt))
 }
 

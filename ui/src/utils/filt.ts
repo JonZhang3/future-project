@@ -64,12 +64,7 @@ export const urlToBase64 = (url: string, mineType?: string): Promise<string> => 
  * @param mime
  * @param bom
  */
-export const downloadByOnlineUrl = (
-    url: string,
-    filename: string,
-    mime?: string,
-    bom?: BlobPart
-) => {
+export const downloadByOnlineUrl = (url: string, filename: string, mime?: string, bom?: BlobPart) => {
     urlToBase64(url).then((base64) => {
         downloadByBase64(base64, filename, mime, bom)
     })

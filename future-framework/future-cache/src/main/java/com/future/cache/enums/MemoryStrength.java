@@ -1,6 +1,6 @@
 package com.future.cache.enums;
 
-public enum CaffeineStrength {
+public enum MemoryStrength {
 
     /**
      * 弱引用

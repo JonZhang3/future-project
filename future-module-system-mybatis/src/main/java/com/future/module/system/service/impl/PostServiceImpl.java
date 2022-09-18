@@ -3,6 +3,7 @@ package com.future.module.system.service.impl;
 import com.future.framework.common.constant.enums.CommonStatus;
 import com.future.framework.common.domain.PageResult;
 import com.future.framework.common.exception.ServiceException;
+import com.future.framework.common.utils.CollUtils;
 import com.future.module.system.dao.PostMapper;
 import com.future.module.system.domain.convert.PostConvert;
 import com.future.module.system.domain.entity.Post;
@@ -11,7 +12,6 @@ import com.future.module.system.domain.query.dept.PostExportQuery;
 import com.future.module.system.domain.query.dept.PostPageQuery;
 import com.future.module.system.domain.query.dept.PostUpdateQuery;
 import com.future.module.system.service.PostService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -82,7 +82,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void validPosts(Collection<Long> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
+        if (CollUtils.isEmpty(ids)) {
             return;
         }
         // 获得岗位信息

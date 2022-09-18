@@ -77,7 +77,7 @@ const handleDelete = async (data: { id: number }) => {
             await DeptApi.deleteDeptApi(data.id)
             message.success(t('common.delSuccess'))
         })
-        .catch(() => { })
+        .catch(() => {})
     await getTree()
 }
 // 提交按钮
@@ -119,22 +119,42 @@ onMounted(async () => {
                 <!-- <p>部门列表</p> -->
                 <!-- 操作工具栏 -->
                 <el-input v-model="filterText" placeholder="搜索部门" />
-                <el-tree ref="treeRef" node-key="id" :data="deptOptions" :props="defaultProps" :highlight-current="true"
-                    default-expand-all :filter-node-method="filterNode" :expand-on-click-node="false">
+                <el-tree
+                    ref="treeRef"
+                    node-key="id"
+                    :data="deptOptions"
+                    :props="defaultProps"
+                    :highlight-current="true"
+                    default-expand-all
+                    :filter-node-method="filterNode"
+                    :expand-on-click-node="false"
+                >
                     <template #default="{ node, data }">
                         <span class="custom-tree-node">
                             <span>{{ node.label }}</span>
                             <span>
-                                <el-button link type="primary" v-hasPermi="['system:dept:create']"
-                                    @click="handleAdd(data)">
+                                <el-button
+                                    link
+                                    type="primary"
+                                    v-hasPermi="['system:dept:create']"
+                                    @click="handleAdd(data)"
+                                >
                                     <Icon icon="ep:zoom-in" class="mr-5px" /> {{ t('action.add') }}
                                 </el-button>
-                                <el-button link type="primary" v-hasPermi="['system:dept:update']"
-                                    @click="handleUpdate(data)">
+                                <el-button
+                                    link
+                                    type="primary"
+                                    v-hasPermi="['system:dept:update']"
+                                    @click="handleUpdate(data)"
+                                >
                                     <Icon icon="ep:edit" class="mr-1px" /> {{ t('action.edit') }}
                                 </el-button>
-                                <el-button link type="primary" v-hasPermi="['system:dept:delete']"
-                                    @click="handleDelete(data)">
+                                <el-button
+                                    link
+                                    type="primary"
+                                    v-hasPermi="['system:dept:delete']"
+                                    @click="handleDelete(data)"
+                                >
                                     <Icon icon="ep:delete" class="mr-1px" /> {{ t('action.del') }}
                                 </el-button>
                             </span>
@@ -158,13 +178,22 @@ onMounted(async () => {
                 <!-- 操作工具栏 -->
                 <Form ref="formRef" :schema="modelSchema" :rules="rules">
                     <template #parentId>
-                        <el-tree-select node-key="id" v-model="deptParentId" :props="defaultProps" :data="deptOptions"
-                            check-strictly />
+                        <el-tree-select
+                            node-key="id"
+                            v-model="deptParentId"
+                            :props="defaultProps"
+                            :data="deptOptions"
+                            check-strictly
+                        />
                     </template>
                     <template #leaderUserId>
                         <el-select v-model="leaderUserId">
-                            <el-option v-for="item in userOption" :key="parseInt(item.id)" :label="item.nickname"
-                                :value="parseInt(item.id)" />
+                            <el-option
+                                v-for="item in userOption"
+                                :key="parseInt(item.id)"
+                                :label="item.nickname"
+                                :value="parseInt(item.id)"
+                            />
                         </el-select>
                     </template>
                 </Form>

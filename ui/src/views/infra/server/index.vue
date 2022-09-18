@@ -6,7 +6,7 @@ const src = ref(BASE_URL + '/admin/applications')
 </script>
 
 <template>
-  <ContentWrap>
-    <IFrame :src="src" />
-  </ContentWrap>
+    <ContentWrap>
+        <IFrame :src="src" />
+    </ContentWrap>
 </template>

@@ -6,7 +6,7 @@ const src = ref(BASE_URL + '/druid/index.html')
 </script>
 
 <template>
-  <ContentWrap>
-    <IFrame :src="src" />
-  </ContentWrap>
+    <ContentWrap>
+        <IFrame :src="src" />
+    </ContentWrap>
 </template>

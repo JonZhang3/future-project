@@ -7,29 +7,29 @@ import type { LocaleState } from '@/config/locale'
 const { wsCache } = useCache()
 
 export const useLocaleStore = defineStore({
-  id: 'locales',
-  state: (): LocaleState => localeModules,
-  persist: {
-    enabled: true
-  },
-  getters: {
-    getCurrentLocale(): LocaleDropdownType {
-      return this.currentLocale
+    id: 'locales',
+    state: (): LocaleState => localeModules,
+    persist: {
+        enabled: true
     },
-    getLocaleMap(): LocaleDropdownType[] {
-      return this.localeMap
+    getters: {
+        getCurrentLocale(): LocaleDropdownType {
+            return this.currentLocale
+        },
+        getLocaleMap(): LocaleDropdownType[] {
+            return this.localeMap
+        }
+    },
+    actions: {
+        setCurrentLocale(localeMap: LocaleDropdownType) {
+            // this.locale = Object.assign(this.locale, localeMap)
+            this.currentLocale.lang = localeMap?.lang
+            this.currentLocale.elLocale = elLocaleMap[localeMap?.lang]
+            wsCache.set('lang', localeMap?.lang)
+        }
     }
-  },
-  actions: {
-    setCurrentLocale(localeMap: LocaleDropdownType) {
-      // this.locale = Object.assign(this.locale, localeMap)
-      this.currentLocale.lang = localeMap?.lang
-      this.currentLocale.elLocale = elLocaleMap[localeMap?.lang]
-      wsCache.set('lang', localeMap?.lang)
-    }
-  }
 })
 
 export const useLocaleStoreWithOut = () => {
-  return useLocaleStore(store)
+    return useLocaleStore(store)
 }

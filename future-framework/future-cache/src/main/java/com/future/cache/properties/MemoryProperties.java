@@ -1,12 +1,12 @@
 package com.future.cache.properties;
 
-import com.future.cache.enums.CaffeineStrength;
+import com.future.cache.enums.MemoryStrength;
 import lombok.Data;
 
 import java.time.Duration;
 
 @Data
-public class CaffeineProperties {
+public class MemoryProperties {
 
     /**
      * 访问后过期时间
@@ -36,11 +36,11 @@ public class CaffeineProperties {
     /**
      * key 强度
      */
-    private CaffeineStrength keyStrength;
+    private MemoryStrength keyStrength;
 
     /**
      * value 强度
      */
-    private CaffeineStrength valueStrength;
+    private MemoryStrength valueStrength;
 
 }

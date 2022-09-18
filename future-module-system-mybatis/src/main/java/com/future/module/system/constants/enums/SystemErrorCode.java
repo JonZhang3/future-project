@@ -11,7 +11,7 @@ public enum SystemErrorCode implements ErrorCode {
     // ========== AUTH 模块 1002000000 ==========
     AUTH_LOGIN_BAD_CREDENTIALS(1002000000, "登录失败，账号密码不正确"),
     AUTH_LOGIN_USER_DISABLED(1002000001, "登录失败，账号被禁用"),
-    AUTH_LOGIN_CAPTCHA_NOT_FOUND(1002000003, "验证码不存在"),
+    AUTH_LOGIN_CAPTCHA_NOT_FOUND(1002000003, "验证码不正确"),
     AUTH_LOGIN_CAPTCHA_CODE_ERROR(1002000004, "验证码不正确"),
     AUTH_THIRD_LOGIN_NOT_BIND(1002000005, "未绑定账号，需要进行绑定"),
     AUTH_TOKEN_EXPIRED(1002000006, "Token 已经过期"),
