@@ -59,7 +59,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                     SecurityUtils.setLoginUser(loginUser, request);
                 }
             } catch (Throwable ex) {
-                R result = globalExceptionHandler.allExceptionHandler(request, ex);
+                R<?> result = globalExceptionHandler.allExceptionHandler(request, ex);
                 ServletUtils.writeJSON(response, result);
                 return;
             }

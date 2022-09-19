@@ -188,6 +188,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
             </dependency>
             <dependency>
                 <groupId>com.future</groupId>
+                <artifactId>future-cache</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.future</groupId>
                 <artifactId>future-module-system-mybatis</artifactId>
                 <version>${revision}</version>
             </dependency>

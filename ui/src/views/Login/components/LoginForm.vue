@@ -4,7 +4,7 @@ import LoginFormTitle from './LoginFormTitle.vue'
 import { ElForm, ElFormItem, ElInput, ElCheckbox, ElCol, ElRow } from 'element-plus'
 import { reactive, ref, unref, onMounted, computed, watch } from 'vue'
 import * as LoginApi from '@/api/login'
-import { setToken, getUsername, getRememberMe, getPassword, getTenantName } from '@/utils/auth'
+import { setToken, getUsername, getRememberMe, getPassword } from '@/utils/auth'
 import { useUserStoreWithOut } from '@/store/modules/user'
 import { useCache } from '@/hooks/web/useCache'
 import { usePermissionStore } from '@/store/modules/permission'
@@ -51,7 +51,6 @@ const loginData = reactive({
         signIn: false
     },
     loginForm: {
-        tenantName: '芋道源码',
         username: 'admin',
         password: 'admin123',
         rememberMe: false,
@@ -62,7 +61,7 @@ const loginData = reactive({
 
 // 获取验证码
 const getCode = async () => {
-    const res = await LoginApi.getCodeImgApi()
+    const res = await LoginApi.getCodeImg()
     loginData.captchaEnable = res.enable
     if (res.enable) {
         loginData.codeImg = 'data:image/gif;base64,' + res.img
@@ -74,13 +73,11 @@ const getCookie = () => {
     const username = getUsername()
     const password = getPassword()
     const rememberMe = getRememberMe()
-    const tenantName = getTenantName()
     loginData.loginForm = {
         ...loginData.loginForm,
         username: username ? username : loginData.loginForm.username,
         password: password ? password : loginData.loginForm.password,
-        rememberMe: rememberMe ? getRememberMe() : false,
-        tenantName: tenantName ? tenantName : loginData.loginForm.tenantName
+        rememberMe: rememberMe ? getRememberMe() : false
     }
 }
 // 登录
@@ -88,10 +85,10 @@ const handleLogin = async () => {
     const data = await validForm()
     if (!data) return
     loginLoading.value = true
-    await LoginApi.loginApi(loginData.loginForm)
+    await LoginApi.login(loginData.loginForm)
         .then(async (res) => {
             setToken(res)
-            const userInfo = await LoginApi.getInfoApi()
+            const userInfo = await LoginApi.getInfo()
             await userStore.getUserInfoAction(userInfo)
             await getRoutes()
         })
@@ -106,7 +103,7 @@ const handleLogin = async () => {
 // 获取路由
 const getRoutes = async () => {
     // 后端过滤菜单
-    const res = await LoginApi.getAsyncRoutesApi()
+    const res = await LoginApi.getAsyncRoutes()
     wsCache.set('roleRouters', res)
     await permissionStore.generateRoutes(res)
     permissionStore.getAddRouters.forEach((route) => {
@@ -150,7 +147,7 @@ onMounted(async () => {
         v-show="getShow"
         ref="formLogin"
     >
-        <el-row style="maring-left: -10px; maring-right: -10px">
+        <el-row style="margin: 0 -10px">
             <el-col :span="24" style="padding-left: 10px; padding-right: 10px">
                 <el-form-item>
                     <LoginFormTitle style="width: 100%" />

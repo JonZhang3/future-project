@@ -30,7 +30,10 @@
         <dependency>
             <groupId>com.future</groupId>
             <artifactId>future-security</artifactId>
-            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.future</groupId>
+            <artifactId>future-cache</artifactId>
         </dependency>
     </dependencies>
 

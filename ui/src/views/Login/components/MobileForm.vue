@@ -5,7 +5,7 @@ import LoginFormTitle from './LoginFormTitle.vue'
 import { ElForm, ElFormItem, ElInput, ElRow, ElCol, ElMessage } from 'element-plus'
 import { useI18n } from '@/hooks/web/useI18n'
 import { required } from '@/utils/formRules'
-import { getTenantIdByNameApi, getAsyncRoutesApi, sendSmsCodeApi, smsLoginApi, getInfoApi } from '@/api/login'
+import { getTenantIdByNameApi, getAsyncRoutes, sendSmsCodeApi, smsLoginApi, getInfo } from '@/api/login'
 import { useCache } from '@/hooks/web/useCache'
 import { usePermissionStore } from '@/store/modules/permission'
 import { useRouter } from 'vue-router'
@@ -102,7 +102,7 @@ const signIn = async () => {
     await smsLoginApi(smsVO.loginSms)
         .then(async (res) => {
             setToken(res?.token)
-            const userInfo = await getInfoApi()
+            const userInfo = await getInfo()
             await userStore.getUserInfoAction(userInfo)
             getRoutes()
         })
@@ -114,7 +114,7 @@ const signIn = async () => {
 // 获取路由
 const getRoutes = async () => {
     // 后端过滤菜单
-    const routers = await getAsyncRoutesApi()
+    const routers = await getAsyncRoutes()
     wsCache.set('roleRouters', routers)
     await permissionStore.generateRoutes(routers).catch(() => {})
     permissionStore.getAddRouters.forEach((route) => {

@@ -9,6 +9,8 @@ import com.future.module.system.service.CaptchaService;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,8 +18,13 @@ import javax.annotation.Resource;
 @Service
 public class CaptchaServiceImpl implements CaptchaService {
 
+    private static final String CACHE_NAME = "$Captcha$";
+
     @Resource
     private CaptchaProperties captchaProperties;
+
+    @Autowired(required = false)
+    private CacheManager cacheManager;
 
     @Override
     public CaptchaImageVO getCaptchaImage() {
@@ -28,9 +35,9 @@ public class CaptchaServiceImpl implements CaptchaService {
         // 生成验证码
         CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(captchaProperties.getWidth(),
                 captchaProperties.getHeight());
+        captcha.createCode();
         String uuid = IdUtils.fastSimpleUUID();
-        // TODO save to cache
-        // captchaRedisDAO.set(uuid, captcha.getCode(), captchaProperties.getTimeout());
+        cacheManager.getCache(CACHE_NAME).put(uuid, captcha.getCode());
         return CaptchaConvert.INSTANCE.convert(uuid, captcha).setEnable(enable);
     }
 
@@ -41,12 +48,11 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     @Override
     public String getCaptchaCode(String uuid) {
-        // TODO from cache
-        return null;
+        return cacheManager.getCache(CACHE_NAME).get(uuid, String.class);
     }
 
     @Override
     public void deleteCaptchaCode(String uuid) {
-        // TODO delete from cache
+        cacheManager.getCache(CACHE_NAME).evict(uuid);
     }
 }

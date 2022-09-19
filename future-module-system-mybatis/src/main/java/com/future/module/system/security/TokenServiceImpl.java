@@ -31,8 +31,7 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public TokenResult createAccessToken(Long userId, Integer userType, List<String> scopes) {
-        LoginUser loginUser = new LoginUser().setId(userId)
-                .setUserType(userType).setScopes(scopes);
+        LoginUser loginUser = new LoginUser().setId(userId).setUserType(userType).setScopes(scopes);
         String accessToken = TokenUtils.generate(loginUser, securityProperties.getAccessTokenDuration());
         String refreshToken = TokenUtils.generate(loginUser, securityProperties.getRefreshTokenDuration());
         // 存储 Token

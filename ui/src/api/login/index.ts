@@ -19,12 +19,12 @@ export interface SmsLoginVO {
 }
 
 // 获取验证码
-export const getCodeImgApi = () => {
+export const getCodeImg = () => {
     return request.get({ url: '/system/captcha/get-image' })
 }
 
 // 登录
-export const loginApi = (data: UserLoginVO) => {
+export const login = (data: UserLoginVO) => {
     return request.post({ url: '/system/auth/login', data })
 }
 
@@ -39,17 +39,17 @@ export const getTenantIdByNameApi = (name: string) => {
 }
 
 // 登出
-export const loginOutApi = () => {
+export const logout = () => {
     return request.delete({ url: '/system/auth/logout' })
 }
 
 // 获取用户权限信息
-export const getInfoApi = () => {
+export const getInfo = () => {
     return request.get({ url: '/system/auth/get-permission-info' })
 }
 
 // 路由
-export const getAsyncRoutesApi = () => {
+export const getAsyncRoutes = () => {
     return request.get({ url: '/system/auth/list-menus' })
 }
 
@@ -61,11 +61,4 @@ export const sendSmsCodeApi = (data: SmsCodeVO) => {
 // 短信验证码登录
 export const smsLoginApi = (data: SmsLoginVO) => {
     return request.post({ url: '/system/auth/sms-login', data })
-}
-
-// 社交授权的跳转
-export const socialAuthRedirectApi = (type: string, redirectUri: string) => {
-    return request.get({
-        url: '/system/auth/social-auth-redirect?type=' + type + '&redirectUri=' + redirectUri
-    })
 }

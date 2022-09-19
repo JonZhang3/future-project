@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.future.cache.CacheAutoConfiguration
+  com.future.cache.MultilevelCacheAutoConfiguration
