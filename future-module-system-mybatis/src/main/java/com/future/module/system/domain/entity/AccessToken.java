@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.future.framework.mybatis.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 @TableName(value = "system_access_token", autoResultMap = true)
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
 public class AccessToken extends BaseEntity {
 
     /**
