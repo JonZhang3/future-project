@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, unref, ref, watch, nextTick } from 'vue'
-import { ElIcon } from 'element-plus'
 import { propTypes } from '@/utils/propTypes'
 import Iconify from '@purge-icons/generated'
 import { useDesign } from '@/hooks/web/useDesign'
@@ -66,7 +65,7 @@ watch(
 </script>
 
 <template>
-    <ElIcon :class="prefixCls" :size="size" :color="color">
+    <el-icon :class="prefixCls" :size="size" :color="color">
         <svg v-if="isLocal" aria-hidden="true">
             <use :xlink:href="symbolId" />
         </svg>
@@ -74,5 +73,5 @@ watch(
         <span v-else ref="elRef" :class="$attrs.class" :style="getIconifyStyle">
             <span class="iconify" :data-icon="symbolId"></span>
         </span>
-    </ElIcon>
+    </el-icon>
 </template>

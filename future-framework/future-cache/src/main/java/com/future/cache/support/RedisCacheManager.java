@@ -49,8 +49,8 @@ public class RedisCacheManager extends org.springframework.data.redis.cache.Redi
         if (!cacheProperties.isAllowNullValues()) {
             cacheConfig = cacheConfig.disableCachingNullValues();
         }
-        if (StringUtils.hasLength(cacheProperties.getRedis().getCachePrefix())) {
-            cacheConfig = cacheConfig.computePrefixWith((cacheName) -> cacheProperties.getRedis().getCachePrefix());
+        if (StringUtils.hasLength(cacheProperties.getRedis().getKeyPrefix())) {
+            cacheConfig = cacheConfig.computePrefixWith((cacheName) -> cacheProperties.getRedis().getKeyPrefix());
         }
         return cacheConfig;
     }

@@ -50,10 +50,6 @@ public class AccessToken extends BaseEntity {
      */
     private Integer userType;
     /**
-     * 客户端编号
-     */
-    private String clientId;
-    /**
      * 授权范围
      */
     @TableField(typeHandler = JacksonTypeHandler.class)

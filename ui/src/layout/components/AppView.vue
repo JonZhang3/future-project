@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTagsViewStore } from '@/store/modules/tagsView'
 import { useAppStore } from '@/store/modules/app'
-import { Footer } from '@/components/Footer'
+// import { Footer } from '@/components/Footer'
 import { computed } from 'vue'
 
 const appStore = useAppStore()
@@ -48,5 +48,5 @@ const getCaches = computed((): string[] => {
             </template>
         </router-view>
     </section>
-    <Footer v-if="footer" />
+    <!--    <Footer v-if="footer" />-->
 </template>

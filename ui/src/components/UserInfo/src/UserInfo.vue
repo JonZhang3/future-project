@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElMessageBox } from 'element-plus'
+import { ElMessageBox } from 'element-plus'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useCache } from '@/hooks/web/useCache'
 import { removeToken } from '@/utils/auth'
@@ -45,13 +45,10 @@ const loginOut = () => {
 const toProfile = async () => {
     push('/userinfo/profile')
 }
-const toDocument = () => {
-    window.open('https://doc.iocoder.cn/')
-}
 </script>
 
 <template>
-    <ElDropdown :class="prefixCls" trigger="click">
+    <el-dropdown :class="prefixCls" trigger="click">
         <div class="flex items-center">
             <img :src="avatar" alt="" class="w-[calc(var(--logo-height)-25px)] rounded-[50%]" />
             <span class="<lg:hidden text-14px pl-[5px] text-[var(--top-header-text-color)]">
@@ -59,20 +56,20 @@ const toDocument = () => {
             </span>
         </div>
         <template #dropdown>
-            <ElDropdownMenu>
+            <el-dropdown-menu>
                 <ElDropdownItem>
                     <Icon icon="ep:tools" />
                     <div @click="toProfile">{{ t('common.profile') }}</div>
                 </ElDropdownItem>
-                <ElDropdownItem>
-                    <Icon icon="ep:menu" />
-                    <div @click="toDocument">{{ t('common.document') }}</div>
-                </ElDropdownItem>
-                <ElDropdownItem divided>
+                <el-dropdown-item>
+                    <Icon icon="ep:setting" />
+                    <div>{{ t('common.setting') }}</div>
+                </el-dropdown-item>
+                <el-dropdown-item divided>
                     <Icon icon="ep:switch-button" />
                     <div @click="loginOut">{{ t('common.loginOut') }}</div>
-                </ElDropdownItem>
-            </ElDropdownMenu>
+                </el-dropdown-item>
+            </el-dropdown-menu>
         </template>
-    </ElDropdown>
+    </el-dropdown>
 </template>

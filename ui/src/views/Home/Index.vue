@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ElRow, ElCol, ElSkeleton, ElCard, ElDivider, ElLink } from 'element-plus'
 import { useI18n } from '@/hooks/web/useI18n'
 import { ref, reactive } from 'vue'
 import { CountTo } from '@/components/CountTo'
@@ -40,36 +39,8 @@ let projects = reactive<Project[]>([])
 const getProject = async () => {
     const data = [
         {
-            name: 'Github',
-            icon: 'akar-icons:github-fill',
-            message: 'workplace.introduction',
-            personal: 'Archer',
-            time: new Date()
-        },
-        {
             name: 'Vue',
             icon: 'logos:vue',
-            message: 'workplace.introduction',
-            personal: 'Archer',
-            time: new Date()
-        },
-        {
-            name: 'Angular',
-            icon: 'logos:angular-icon',
-            message: 'workplace.introduction',
-            personal: 'Archer',
-            time: new Date()
-        },
-        {
-            name: 'React',
-            icon: 'logos:react',
-            message: 'workplace.introduction',
-            personal: 'Archer',
-            time: new Date()
-        },
-        {
-            name: 'Webpack',
-            icon: 'logos:webpack',
             message: 'workplace.introduction',
             personal: 'Archer',
             time: new Date()
@@ -419,23 +390,6 @@ getAllApi()
             </el-card>
         </el-col>
         <el-col :xl="8" :lg="8" :md="24" :sm="24" :xs="24" class="mb-20px">
-            <el-card shadow="never">
-                <template #header>
-                    <span>{{ t('workplace.shortcutOperation') }}</span>
-                </template>
-                <el-skeleton :loading="loading" animated>
-                    <el-row>
-                        <el-col v-for="item in shortcut" :key="`team-${item.name}`" :span="8" class="mb-20px">
-                            <div class="flex items-center">
-                                <Icon :icon="item.icon" class="mr-10px" />
-                                <el-link type="default" :underline="false" :href="item.url">
-                                    {{ item.name }}
-                                </el-link>
-                            </div>
-                        </el-col>
-                    </el-row>
-                </el-skeleton>
-            </el-card>
             <el-card shadow="never" class="mt-10px">
                 <template #header>
                     <div class="flex justify-between">

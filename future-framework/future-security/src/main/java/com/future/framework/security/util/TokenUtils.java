@@ -40,18 +40,18 @@ public final class TokenUtils {
      */
     @NotNull
     public static String generate(@NotNull LoginUser user,
-            @NotNull Duration validTime, String secret) {
+                                  @NotNull Duration validTime, String secret) {
         if (StringUtils.isEmpty(secret)) {
             secret = DEFAULT_SECRET;
         }
         Date expiresAt = new Date(System.currentTimeMillis() + validTime.getSeconds() * 1000);
         Algorithm algorithm = Algorithm.HMAC256(secret);
         return JWT.create()
-                .withIssuer(ISSUER)
-                .withExpiresAt(expiresAt)
-                .withClaim(CLAIM_KEY_USERID, user.getId())
-                .withClaim(CLAIM_KEY_USERTYPE, user.getUserType())
-                .sign(algorithm);
+            .withIssuer(ISSUER)
+            .withExpiresAt(expiresAt)
+            .withClaim(CLAIM_KEY_USERID, user.getId())
+            .withClaim(CLAIM_KEY_USERTYPE, user.getUserType())
+            .sign(algorithm);
     }
 
     public static boolean validate(@NotNull String token) {
@@ -98,8 +98,9 @@ public final class TokenUtils {
             JWTVerifier verifier = JWT.require(algorithm).withIssuer(ISSUER).build();
             DecodedJWT jwt = verifier.verify(token);
             return new LoginUser()
-                    .setId(jwt.getClaim(CLAIM_KEY_USERID).asLong())
-                    .setUserType(jwt.getClaim(CLAIM_KEY_USERTYPE).asInt());
+                .setId(jwt.getClaim(CLAIM_KEY_USERID).asLong())
+                .setExpiresAt(jwt.getExpiresAt())
+                .setUserType(jwt.getClaim(CLAIM_KEY_USERTYPE).asInt());
         } catch (JWTVerificationException e) {
             return null;
         }
@@ -116,8 +117,9 @@ public final class TokenUtils {
         try {
             DecodedJWT jwt = JWT.decode(token);
             return new LoginUser()
-                    .setId(jwt.getClaim(CLAIM_KEY_USERID).asLong())
-                    .setUserType(jwt.getClaim(CLAIM_KEY_USERTYPE).asInt());
+                .setId(jwt.getClaim(CLAIM_KEY_USERID).asLong())
+                .setExpiresAt(jwt.getExpiresAt())
+                .setUserType(jwt.getClaim(CLAIM_KEY_USERTYPE).asInt());
         } catch (JWTDecodeException e) {
             return null;
         }

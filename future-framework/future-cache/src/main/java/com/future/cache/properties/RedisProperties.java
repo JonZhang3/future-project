@@ -22,6 +22,6 @@ public class RedisProperties {
     /**
      * 缓存key的前缀
      */
-    private String cachePrefix;
+    private String keyPrefix;
 
 }

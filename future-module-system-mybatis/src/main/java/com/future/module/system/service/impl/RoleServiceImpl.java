@@ -48,7 +48,7 @@ public class RoleServiceImpl implements RoleService {
      * 这里声明 volatile 修饰的原因是，每次刷新时，直接修改指向
      */
     @Getter
-    private volatile Map<Long, Role> roleCache;
+    private volatile Map<Long, Role> roleCache = new HashMap<>();
     /**
      * 缓存角色的最大更新时间，用于后续的增量轮询，判断是否有更新
      */

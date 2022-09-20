@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,9 @@ public class LoginUser implements Serializable {
      * 关联 {@link com.future.framework.common.constant.enums.UserType}
      */
     private Integer userType;
+    
+    private Date expiresAt;
+    
     /**
      * 授权范围
      */

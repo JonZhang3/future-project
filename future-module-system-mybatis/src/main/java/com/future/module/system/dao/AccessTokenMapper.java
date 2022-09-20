@@ -25,7 +25,6 @@ public interface AccessTokenMapper extends BaseMapper<AccessToken> {
         return selectPage(query.getPageNo(), query.getPageSize(), new LambdaQueryWrapper<AccessToken>()
             .eqIfPresent(AccessToken::getUserId, query.getUserId())
             .eqIfPresent(AccessToken::getUserType, query.getUserType())
-            .likeIfPresent(AccessToken::getClientId, query.getClientId())
             .gt(AccessToken::getExpiresTime, new Date())
             .orderByDesc(AccessToken::getId));
     }

@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ConfigGlobal } from '@/components/ConfigGlobal'
-import { isDark } from '@/utils/is'
+// import { isDark } from '@/utils/is'
 import { useDesign } from '@/hooks/web/useDesign'
 import { useCache } from '@/hooks/web/useCache'
 
@@ -24,7 +24,7 @@ const setDefaultTheme = () => {
         appStore.setIsDark(wsCache.get('isDark'))
         return
     }
-    const isDarkTheme = isDark()
+    const isDarkTheme = false // isDark()
     appStore.setIsDark(isDarkTheme)
 }
 

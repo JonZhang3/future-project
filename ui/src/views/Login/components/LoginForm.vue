@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useIcon } from '@/hooks/web/useIcon'
 import LoginFormTitle from './LoginFormTitle.vue'
-import { ElForm, ElFormItem, ElInput, ElCheckbox, ElCol, ElRow } from 'element-plus'
 import { reactive, ref, unref, onMounted, computed, watch } from 'vue'
 import * as LoginApi from '@/api/login'
 import { setToken, getUsername, getRememberMe, getPassword } from '@/utils/auth'

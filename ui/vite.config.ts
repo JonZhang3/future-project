@@ -1,4 +1,4 @@
-import { resolve, join } from 'path'
+import { resolve } from 'path'
 import { loadEnv } from 'vite'
 import type { UserConfig, ConfigEnv } from 'vite'
 import Vue from '@vitejs/plugin-vue'
@@ -15,7 +15,6 @@ import viteCompression from 'vite-plugin-compression'
 
 // 当前执行node命令时文件夹的地址（工作目录）
 const root = process.cwd()
-const envs = root
 
 // 路径查找
 function pathResolve(dir: string) {
@@ -27,9 +26,9 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     let env = {} as any
     const isBuild = command === 'build'
     if (!isBuild) {
-        env = loadEnv((process.argv[3] === '--mode' ? process.argv[4] : process.argv[3]), envs)
+        env = loadEnv((process.argv[3] === '--mode' ? process.argv[4] : process.argv[3]), root)
     } else {
-        env = loadEnv(mode, envs)
+        env = loadEnv(mode, root)
     }
     return {
         base: env.VITE_BASE_PATH,
