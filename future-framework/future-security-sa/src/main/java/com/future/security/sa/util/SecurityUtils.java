@@ -40,5 +40,12 @@ public final class SecurityUtils {
     public static String getToken() {
         return StpUtil.getTokenValue();
     }
+
+    /**
+     * 获取 Token 名称
+     */
+    public static String getTokenName() {
+        return StpUtil.getTokenName();
+    }
     
 }

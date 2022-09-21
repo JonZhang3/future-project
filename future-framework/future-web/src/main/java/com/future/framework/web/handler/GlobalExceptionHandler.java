@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
         if (ex instanceof AccessDeniedException) {
             return accessDeniedExceptionHandler(request, (AccessDeniedException) ex);
         }
-        return defaultExceptionHandler(request, ex);
+        return defaultExceptionHandler(ex);
     }
 
     /**
@@ -204,17 +204,11 @@ public class GlobalExceptionHandler {
     /**
      * 处理系统异常，兜底处理所有的一切
      */
-    @ExceptionHandler(value = Exception.class)
-    public R<?> defaultExceptionHandler(HttpServletRequest req, Throwable ex) {
+    @ExceptionHandler(value = Throwable.class)
+    public R<?> defaultExceptionHandler(Throwable ex) {
         log.error("[defaultExceptionHandler]", ex);
-        // 插入异常日志
-//        this.createExceptionLog(req, ex);
         // 返回 ERROR CommonResult
         return R.fail(INTERNAL_SERVER_ERROR);
-    }
-
-    private static String getMessage(Throwable e) {
-        return null == e ? "null" : String.format("%s: %s", e.getClass().getSimpleName(), e.getMessage());
     }
 
 }

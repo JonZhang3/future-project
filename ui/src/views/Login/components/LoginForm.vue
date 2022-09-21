@@ -86,6 +86,7 @@ const handleLogin = async () => {
     loginLoading.value = true
     await LoginApi.login(loginData.loginForm)
         .then(async (res) => {
+            debugger
             setToken(res)
             const userInfo = await LoginApi.getInfo()
             await userStore.getUserInfoAction(userInfo)

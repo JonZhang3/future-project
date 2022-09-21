@@ -1,5 +1,6 @@
 package com.future.module.admin.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaIgnore;
 import com.future.framework.common.annotations.OperateLog;
 import com.future.framework.common.constant.enums.CommonStatus;
@@ -18,6 +19,7 @@ import com.future.module.system.service.AdminAuthService;
 import com.future.module.system.service.PermissionService;
 import com.future.module.system.service.RoleService;
 import com.future.module.system.service.UserService;
+import com.future.security.sa.util.SecurityUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -70,9 +72,10 @@ public class AuthController {
 
     @GetMapping("/get-permission-info")
 //    @ApiOperation("获取登录用户的权限信息")
+    @SaCheckLogin
     public R<AuthPermissionInfoVO> getPermissionInfo() {
         // 获得用户信息
-        User user = userService.getUser(getLoginUserId());
+        User user = userService.getUser(SecurityUtils.getUserId());
         if (user == null) {
             return null;
         }
