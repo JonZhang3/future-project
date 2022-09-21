@@ -3,7 +3,6 @@ package com.future.module.admin.controller;
 import com.future.framework.common.domain.R;
 import com.future.framework.common.exception.ServiceException;
 import com.future.framework.common.utils.CollUtils;
-import com.future.framework.security.util.SecurityUtils;
 import com.future.module.system.constants.enums.SystemErrorCode;
 import com.future.module.system.domain.convert.UserConvert;
 import com.future.module.system.domain.entity.Department;
@@ -14,6 +13,7 @@ import com.future.module.system.domain.query.user.UserProfileUpdatePasswordQuery
 import com.future.module.system.domain.query.user.UserProfileUpdateQuery;
 import com.future.module.system.domain.vo.user.UserProfileRespVO;
 import com.future.module.system.service.*;
+import com.future.security.sa.util.SecurityUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +44,7 @@ public class UserProfileController {
     // @DataPermission(enable = false) // 关闭数据权限，避免只查看自己时，查询不到部门。
     public R<UserProfileRespVO> profile() {
         // 获得用户基本信息
-        User user = userService.getUser(SecurityUtils.getLoginUserId());
+        User user = userService.getUser(SecurityUtils.getUserId());
         UserProfileRespVO resp = UserConvert.INSTANCE.convertToUserProfile(user);
         // 获得用户角色
         List<Role> userRoles = roleService.getRolesFromCache(permissionService.getUserRoleIdListByUserId(user.getId()));
@@ -65,25 +65,25 @@ public class UserProfileController {
     @PutMapping("/update")
 //    @ApiOperation("修改用户个人信息")
     public R<Boolean> updateUserProfile(@Valid @RequestBody UserProfileUpdateQuery query) {
-        userService.updateUserProfile(SecurityUtils.getLoginUserId(), query);
+        userService.updateUserProfile(SecurityUtils.getUserId(), query);
         return R.ok(true);
     }
 
     @PutMapping("/update-password")
 //    @ApiOperation("修改用户个人密码")
     public R<Boolean> updateUserProfilePassword(@Valid @RequestBody UserProfileUpdatePasswordQuery query) {
-        userService.updateUserPassword(SecurityUtils.getLoginUserId(), query);
+        userService.updateUserPassword(SecurityUtils.getUserId(), query);
         return R.ok(true);
     }
 
-    @RequestMapping(value = "/update-avatar", method = { RequestMethod.POST, RequestMethod.PUT })
+    @RequestMapping(value = "/update-avatar", method = {RequestMethod.POST, RequestMethod.PUT})
     // 解决 uni-app 不支持 Put 上传文件的问题
 //    @ApiOperation("上传用户个人头像")
     public R<String> updateUserAvatar(@RequestParam("avatarFile") MultipartFile file) throws Exception {
         if (file.isEmpty()) {
             throw new ServiceException(SystemErrorCode.FILE_IS_EMPTY);
         }
-        String avatar = userService.updateUserAvatar(SecurityUtils.getLoginUserId(), file.getInputStream());
+        String avatar = userService.updateUserAvatar(SecurityUtils.getUserId(), file.getInputStream());
         return R.ok(avatar);
     }
 

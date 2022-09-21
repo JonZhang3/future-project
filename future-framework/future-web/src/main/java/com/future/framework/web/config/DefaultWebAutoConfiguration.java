@@ -1,18 +1,28 @@
 package com.future.framework.web.config;
 
+import cn.dev33.satoken.interceptor.SaInterceptor;
 import com.future.framework.common.constant.WebFilterOrders;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
 
 @Configuration
-public class WebAutoConfiguration implements WebMvcConfigurer {
+@ConditionalOnMissingBean(CustomWebMvcConfigurer.class)
+public class DefaultWebAutoConfiguration implements WebMvcConfigurer {
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new SaInterceptor()).
+            addPathPatterns("/**")
+            .excludePathPatterns("");
+    }
 
     // ========== Filter 相关 ==========
 

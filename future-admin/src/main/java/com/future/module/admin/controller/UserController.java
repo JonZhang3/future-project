@@ -1,5 +1,6 @@
 package com.future.module.admin.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.future.framework.common.annotations.OperateLog;
 import com.future.framework.common.constant.enums.CommonStatus;
 import com.future.framework.common.constant.enums.Sex;
@@ -15,7 +16,6 @@ import com.future.module.system.domain.query.user.*;
 import com.future.module.system.domain.vo.user.*;
 import com.future.module.system.service.DeptService;
 import com.future.module.system.service.UserService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,14 +41,14 @@ public class UserController {
 
     @PostMapping("/create")
 //    @ApiOperation("新增用户")
-    @PreAuthorize("@ss.hasPermission('system:user:create')")
+    @SaCheckPermission("system:user:create")
     public R<Long> createUser(@Valid @RequestBody UserCreateQuery query) {
         return R.ok(userService.createUser(query));
     }
 
     @PutMapping("update")
 //    @ApiOperation("修改用户")
-    @PreAuthorize("@ss.hasPermission('system:user:update')")
+    @SaCheckPermission("system:user:update")
     public R<Boolean> updateUser(@Valid @RequestBody UserUpdateQuery query) {
         userService.updateUser(query);
         return R.ok(true);
@@ -57,7 +57,7 @@ public class UserController {
     @DeleteMapping("/delete")
 //    @ApiOperation("删除用户")
 //    @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024", dataTypeClass = Long.class)
-    @PreAuthorize("@ss.hasPermission('system:user:delete')")
+    @SaCheckPermission("system:user:delete")
     public R<Boolean> deleteUser(@RequestParam("id") Long id) {
         userService.deleteUser(id);
         return R.ok(true);
@@ -65,7 +65,7 @@ public class UserController {
 
     @PutMapping("/update-password")
 //    @ApiOperation("重置用户密码")
-    @PreAuthorize("@ss.hasPermission('system:user:update-password')")
+    @SaCheckPermission("system:user:update-password")
     public R<Boolean> updateUserPassword(@Valid @RequestBody UserUpdatePasswordReqVO reqVO) {
         userService.updateUserPassword(reqVO.getId(), reqVO.getPassword());
         return R.ok(true);
@@ -73,7 +73,7 @@ public class UserController {
 
     @PutMapping("/update-status")
 //    @ApiOperation("修改用户状态")
-    @PreAuthorize("@ss.hasPermission('system:user:update')")
+    @SaCheckPermission("system:user:update")
     public R<Boolean> updateUserStatus(@Valid @RequestBody UserUpdateStatusReqVO reqVO) {
         userService.updateUserStatus(reqVO.getId(), reqVO.getStatus());
         return R.ok(true);
@@ -81,7 +81,7 @@ public class UserController {
 
     @GetMapping("/page")
 //    @ApiOperation("获得用户分页列表")
-    @PreAuthorize("@ss.hasPermission('system:user:list')")
+    @SaCheckPermission("system:user:list")
     public R<PageResult<UserPageItemRespVO>> getUserPage(@Valid UserPageQuery query) {
         // 获得用户分页列表
         PageResult<User> pageResult = userService.getUserPage(query);
@@ -114,14 +114,14 @@ public class UserController {
     @GetMapping("/get")
 //    @ApiOperation("获得用户详情")
 //    @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024", dataTypeClass = Long.class)
-    @PreAuthorize("@ss.hasPermission('system:user:query')")
+    @SaCheckPermission("system:user:query")
     public R<UserProfileRespVO> getInfo(@RequestParam("id") Long id) {
         return R.ok(UserConvert.INSTANCE.convertToUserProfile(userService.getUser(id)));
     }
 
     @GetMapping("/export")
 //    @ApiOperation("导出用户")
-    @PreAuthorize("@ss.hasPermission('system:user:export')")
+    @SaCheckPermission("system:user:export")
     @OperateLog(type = EXPORT)
     public void exportUsers(@Validated UserExportQuery query,
             HttpServletResponse response) throws IOException {
@@ -172,7 +172,7 @@ public class UserController {
 //            @ApiImplicitParam(name = "file", value = "Excel 文件", required = true, dataTypeClass = MultipartFile.class),
 //            @ApiImplicitParam(name = "updateSupport", value = "是否支持更新，默认为 false", example = "true", dataTypeClass = Boolean.class)
 //    })
-    @PreAuthorize("@ss.hasPermission('system:user:import')")
+    @SaCheckPermission("system:user:import")
     public R<UserImportVO> importExcel(@RequestParam("file") MultipartFile file,
             @RequestParam(value = "updateSupport", required = false, defaultValue = "false") Boolean updateSupport)
             throws Exception {

@@ -17,6 +17,7 @@ import com.future.module.system.service.DeptService;
 import com.future.module.system.service.PermissionService;
 import com.future.module.system.service.PostService;
 import com.future.module.system.service.UserService;
+import com.future.security.sa.util.SecurityUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,9 +44,6 @@ public class UserServiceImpl implements UserService {
     private PermissionService permissionService;
     @Resource
     private UserPostMapper userPostMapper;
-
-    @Resource
-    private PasswordEncoder passwordEncoder;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -281,7 +279,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isPasswordMatch(String rawPassword, String encodedPassword) {
-        return passwordEncoder.matches(rawPassword, encodedPassword);
+        return SecurityUtils.matches(rawPassword, encodedPassword);
     }
 
     private void checkCreateOrUpdate(Long id, String username, String mobile, String email,
@@ -362,7 +360,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private String encodePassword(String password) {
-        return passwordEncoder.encode(password);
+        return SecurityUtils.encodePassword(password);
     }
 
     private void updateUserPost(UserUpdateQuery query, User updateObj) {

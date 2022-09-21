@@ -1,5 +1,6 @@
 package com.future.module.admin.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.future.framework.common.constant.enums.CommonStatus;
 import com.future.framework.common.domain.R;
 import com.future.module.system.domain.convert.DeptConvert;
@@ -9,7 +10,6 @@ import com.future.module.system.domain.query.dept.DeptListQuery;
 import com.future.module.system.domain.query.dept.DeptUpdateQuery;
 import com.future.module.system.domain.vo.dept.DeptSimpleRespVO;
 import com.future.module.system.service.DeptService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +29,7 @@ public class DeptController {
 
     @PostMapping("create")
 //    @ApiOperation("创建部门")
-    @PreAuthorize("@ss.hasPermission('system:dept:create')")
+    @SaCheckPermission("system:dept:create")
     public R<Long> createDept(@Valid @RequestBody DeptCreateQuery query) {
         Long deptId = deptService.createDept(query);
         return R.ok(deptId);
@@ -37,7 +37,7 @@ public class DeptController {
 
     @PutMapping("update")
 //    @ApiOperation("更新部门")
-    @PreAuthorize("@ss.hasPermission('system:dept:update')")
+    @SaCheckPermission("system:dept:update")
     public R<Boolean> updateDept(@Valid @RequestBody DeptUpdateQuery query) {
         deptService.updateDept(query);
         return R.ok(true);
@@ -46,7 +46,7 @@ public class DeptController {
     @DeleteMapping("delete")
 //    @ApiOperation("删除部门")
 //    @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024", dataTypeClass = Long.class)
-    @PreAuthorize("@ss.hasPermission('system:dept:delete')")
+    @SaCheckPermission("system:dept:delete")
     public R<Boolean> deleteDept(@RequestParam("id") Long id) {
         deptService.deleteDept(id);
         return R.ok(true);
@@ -54,7 +54,7 @@ public class DeptController {
 
     @GetMapping("/list")
 //    @ApiOperation("获取部门列表")
-    @PreAuthorize("@ss.hasPermission('system:dept:query')")
+    @SaCheckPermission("system:dept:query")
     public R<List<Department>> listDepts(DeptListQuery query) {
         List<Department> list = deptService.getSimpleDepts(query);
         list.sort(Comparator.comparing(Department::getSort));
@@ -76,7 +76,7 @@ public class DeptController {
     @GetMapping("/get")
 //    @ApiOperation("获得部门信息")
 //    @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024", dataTypeClass = Long.class)
-    @PreAuthorize("@ss.hasPermission('system:dept:query')")
+    @SaCheckPermission("system:dept:query")
     public R<Department> getDept(@RequestParam("id") Long id) {
         return R.ok(deptService.getDept(id));
     }

@@ -1,5 +1,6 @@
 package com.future.module.admin.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.future.framework.common.annotations.OperateLog;
 import com.future.framework.common.constant.enums.CommonStatus;
 import com.future.framework.common.domain.PageResult;
@@ -16,7 +17,6 @@ import com.future.module.system.domain.vo.permission.RoleRespVO;
 import com.future.module.system.domain.vo.permission.RoleSimpleRespVO;
 import com.future.module.system.domain.vo.permission.RoleUpdateStatusReqVO;
 import com.future.module.system.service.RoleService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,14 +41,14 @@ public class RoleController {
 
     @PostMapping("/create")
 //    @ApiOperation("创建角色")
-    @PreAuthorize("@ss.hasPermission('system:role:create')")
+    @SaCheckPermission("system:role:create")
     public R<Long> createRole(@Valid @RequestBody RoleCreateQuery query) {
         return R.ok(roleService.createRole(query, null));
     }
 
     @PutMapping("/update")
 //    @ApiOperation("修改角色")
-    @PreAuthorize("@ss.hasPermission('system:role:update')")
+    @SaCheckPermission("system:role:update")
     public R<Boolean> updateRole(@Valid @RequestBody RoleUpdateQuery query) {
         roleService.updateRole(query);
         return R.ok(true);
@@ -56,7 +56,7 @@ public class RoleController {
 
     @PutMapping("/update-status")
 //    @ApiOperation("修改角色状态")
-    @PreAuthorize("@ss.hasPermission('system:role:update')")
+    @SaCheckPermission("system:role:update")
     public R<Boolean> updateRoleStatus(@Valid @RequestBody RoleUpdateStatusReqVO reqVO) {
         roleService.updateRoleStatus(reqVO.getId(), reqVO.getStatus());
         return R.ok(true);
@@ -65,7 +65,7 @@ public class RoleController {
     @DeleteMapping("/delete")
 //    @ApiOperation("删除角色")
 //    @ApiImplicitParam(name = "id", value = "角色编号", required = true, example = "1024", dataTypeClass = Long.class)
-    @PreAuthorize("@ss.hasPermission('system:role:delete')")
+    @SaCheckPermission("system:role:delete")
     public R<Boolean> deleteRole(@RequestParam("id") Long id) {
         roleService.deleteRole(id);
         return R.ok(true);
@@ -73,7 +73,7 @@ public class RoleController {
 
     @GetMapping("/get")
 //    @ApiOperation("获得角色信息")
-    @PreAuthorize("@ss.hasPermission('system:role:query')")
+    @SaCheckPermission("system:role:query")
     public R<RoleRespVO> getRole(@RequestParam("id") Long id) {
         Role role = roleService.getRole(id);
         return R.ok(RoleConvert.INSTANCE.convert(role));
@@ -81,7 +81,7 @@ public class RoleController {
 
     @GetMapping("/page")
 //    @ApiOperation("获得角色分页")
-    @PreAuthorize("@ss.hasPermission('system:role:query')")
+    @SaCheckPermission("system:role:query")
     public R<PageResult<Role>> getRolePage(RolePageQuery query) {
         return R.ok(roleService.getRolePage(query));
     }
@@ -98,7 +98,7 @@ public class RoleController {
 
     @GetMapping("/export")
     @OperateLog(type = EXPORT)
-    @PreAuthorize("@ss.hasPermission('system:role:export')")
+    @SaCheckPermission("system:role:export")
     public void export(HttpServletResponse response, @Validated RoleExportQuery query) throws IOException {
         List<Role> list = roleService.getRoleList(query);
         List<RoleExcelVO> data = RoleConvert.INSTANCE.convertToRoleExcelList(list);

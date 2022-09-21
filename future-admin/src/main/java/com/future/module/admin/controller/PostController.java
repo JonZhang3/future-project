@@ -1,5 +1,6 @@
 package com.future.module.admin.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.future.framework.common.annotations.OperateLog;
 import com.future.framework.common.constant.enums.CommonStatus;
 import com.future.framework.common.domain.PageResult;
@@ -15,7 +16,6 @@ import com.future.module.system.domain.vo.dept.PostExcelVO;
 import com.future.module.system.domain.vo.dept.PostRespVO;
 import com.future.module.system.domain.vo.dept.PostSimpleRespVO;
 import com.future.module.system.service.PostService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,14 +40,14 @@ public class PostController {
 
     @PostMapping("/create")
 //    @ApiOperation("创建岗位")
-    @PreAuthorize("@ss.hasPermission('system:post:create')")
+    @SaCheckPermission("system:post:create")
     public R<Long> createPost(@Valid @RequestBody PostCreateQuery query) {
         return R.ok(postService.createPost(query));
     }
 
     @PutMapping("/update")
 //    @ApiOperation("修改岗位")
-    @PreAuthorize("@ss.hasPermission('system:post:update')")
+    @SaCheckPermission("system:post:update")
     public R<Boolean> updatePost(@Valid @RequestBody PostUpdateQuery query) {
         postService.updatePost(query);
         return R.ok(true);
@@ -55,7 +55,7 @@ public class PostController {
 
     @DeleteMapping("/delete")
 //    @ApiOperation("删除岗位")
-    @PreAuthorize("@ss.hasPermission('system:post:delete')")
+    @SaCheckPermission("system:post:delete")
     public R<Boolean> deletePost(@RequestParam("id") Long id) {
         postService.deletePost(id);
         return R.ok(true);
@@ -64,7 +64,7 @@ public class PostController {
     @GetMapping(value = "/get")
 //    @ApiOperation("获得岗位信息")
 //    @ApiImplicitParam(name = "id", value = "岗位编号", required = true, example = "1024", dataTypeClass = Long.class)
-    @PreAuthorize("@ss.hasPermission('system:post:query')")
+    @SaCheckPermission("system:post:query")
     public R<PostRespVO> getPost(@RequestParam("id") Long id) {
         return R.ok(PostConvert.INSTANCE.convert(postService.getPost(id)));
     }
@@ -81,14 +81,14 @@ public class PostController {
 
     @GetMapping("/page")
 //    @ApiOperation("获得岗位分页列表")
-    @PreAuthorize("@ss.hasPermission('system:post:query')")
+    @SaCheckPermission("system:post:query")
     public R<PageResult<PostRespVO>> getPostPage(@Validated PostPageQuery query) {
         return R.ok(PostConvert.INSTANCE.convertPage(postService.getPostPage(query)));
     }
 
     @GetMapping("/export")
 //    @ApiOperation("岗位管理")
-    @PreAuthorize("@ss.hasPermission('system:post:export')")
+    @SaCheckPermission("system:post:export")
     @OperateLog(type = EXPORT)
     public void export(HttpServletResponse response, @Validated PostExportQuery query) throws IOException {
         List<Post> posts = postService.getPosts(query);

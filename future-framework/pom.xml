@@ -25,6 +25,7 @@
         <module>future-web</module>
         <module>future-security</module>
         <module>future-cache</module>
+        <module>future-security-sa</module>
     </modules>
     
 </project>

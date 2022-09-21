@@ -1,5 +1,6 @@
 package com.future.module.admin.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.future.framework.common.annotations.OperateLog;
 import com.future.framework.common.domain.PageResult;
 import com.future.framework.common.domain.R;
@@ -15,7 +16,6 @@ import com.future.module.system.domain.vo.logger.OperateLogExcelVO;
 import com.future.module.system.domain.vo.logger.OperateLogRespVO;
 import com.future.module.system.service.OperateLogService;
 import com.future.module.system.service.UserService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +45,7 @@ public class OperateLogController {
 
     @GetMapping("/page")
 //    @ApiOperation("查看操作日志分页列表")
-    @PreAuthorize("@ss.hasPermission('system:operate-log:query')")
+    @SaCheckPermission("system:operate-log:query")
     public R<PageResult<OperateLogRespVO>> pageOperateLog(@Valid OperateLogPageQuery query) {
         PageResult<OperationLog> pageResult = operateLogService.getOperateLogPage(query);
 
@@ -65,7 +65,7 @@ public class OperateLogController {
 
 //    @ApiOperation("导出操作日志")
     @GetMapping("/export")
-    @PreAuthorize("@ss.hasPermission('system:operate-log:export')")
+    @SaCheckPermission("system:operate-log:export")
     @OperateLog(type = EXPORT)
     public void exportOperateLog(HttpServletResponse response, @Valid OperateLogExportQuery query) throws IOException {
         List<OperationLog> list = operateLogService.getOperateLogs(query);

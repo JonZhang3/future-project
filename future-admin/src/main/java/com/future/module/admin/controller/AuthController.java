@@ -1,13 +1,11 @@
 package com.future.module.admin.controller;
 
+import cn.dev33.satoken.annotation.SaIgnore;
 import com.future.framework.common.annotations.OperateLog;
 import com.future.framework.common.constant.enums.CommonStatus;
 import com.future.framework.common.constant.enums.LoginLogType;
 import com.future.framework.common.constant.enums.MenuType;
 import com.future.framework.common.domain.R;
-import com.future.framework.common.utils.StringUtils;
-import com.future.framework.security.config.SecurityProperties;
-import com.future.framework.security.util.SecurityUtils;
 import com.future.module.system.domain.convert.AuthConvert;
 import com.future.module.system.domain.entity.Menu;
 import com.future.module.system.domain.entity.Role;
@@ -48,24 +46,18 @@ public class AuthController {
     @Resource
     private PermissionService permissionService;
 
-    @Resource
-    private SecurityProperties securityProperties;
-
     @PostMapping("/login")
-    @PermitAll
+    @SaIgnore
     @OperateLog(enable = false) // 避免 Post 请求被记录操作日志
     public R<AuthLoginVO> login(@RequestBody @Valid AuthLoginQuery query) {
         return R.ok(authService.login(query));
     }
 
     @PostMapping("/logout")
-    @PermitAll
+    @SaIgnore
     @OperateLog(enable = false) // 避免 Post 请求被记录操作日志
     public R<Boolean> logout(HttpServletRequest request) {
-        String token = SecurityUtils.obtainAuthorization(request, securityProperties.getTokenHeader());
-        if (StringUtils.isNotBlank(token)) {
-            authService.logout(token, LoginLogType.LOGOUT_SELF.getType());
-        }
+        authService.logout(LoginLogType.LOGOUT_SELF.getType());
         return R.ok(true);
     }
 

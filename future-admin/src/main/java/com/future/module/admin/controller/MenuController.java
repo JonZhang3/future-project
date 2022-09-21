@@ -1,5 +1,6 @@
 package com.future.module.admin.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.future.framework.common.constant.enums.CommonStatus;
 import com.future.framework.common.domain.R;
 import com.future.module.system.domain.convert.MenuConvert;
@@ -10,7 +11,6 @@ import com.future.module.system.domain.query.permission.MenuUpdateQuery;
 import com.future.module.system.domain.vo.permission.MenuRespVO;
 import com.future.module.system.domain.vo.permission.MenuSimpleRespVO;
 import com.future.module.system.service.MenuService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,28 +28,28 @@ public class MenuController {
     private MenuService menuService;
 
     @PostMapping("/create")
-    @PreAuthorize("@ss.hasPermission('system:menu:create')")
+    @SaCheckPermission("system:menu:create")
     public R<Long> createMenu(@Valid @RequestBody MenuCreateQuery query) {
         Long menuId = menuService.createMenu(query);
         return R.ok(menuId);
     }
 
     @PutMapping("/update")
-    @PreAuthorize("@ss.hasPermission('system:menu:update')")
+    @SaCheckPermission("system:menu:update")
     public R<Boolean> updateMenu(@Valid @RequestBody MenuUpdateQuery query) {
         menuService.updateMenu(query);
         return R.ok(true);
     }
 
     @DeleteMapping("/delete")
-    @PreAuthorize("@ss.hasPermission('system:menu:delete')")
+    @SaCheckPermission("system:menu:delete")
     public R<Boolean> deleteMenu(@RequestParam("id") Long id) {
         menuService.deleteMenu(id);
         return R.ok(true);
     }
 
     @GetMapping("/list")
-    @PreAuthorize("@ss.hasPermission('system:menu:query')")
+    @SaCheckPermission("system:menu:query")
     public R<List<MenuRespVO>> getMenus(MenuListQuery query) {
         List<Menu> list = menuService.getMenus(query);
         list.sort(Comparator.comparing(Menu::getSort));
@@ -68,7 +68,7 @@ public class MenuController {
     }
 
     @GetMapping("/get")
-    @PreAuthorize("@ss.hasPermission('system:menu:query')")
+    @SaCheckPermission("system:menu:query")
     public R<MenuRespVO> getMenu(Long id) {
         Menu menu = menuService.getMenu(id);
         return R.ok(MenuConvert.INSTANCE.convert(menu));

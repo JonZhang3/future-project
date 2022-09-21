@@ -7,10 +7,6 @@ import com.future.framework.common.constant.enums.LoginResult;
 import com.future.framework.common.exception.ServiceException;
 import com.future.framework.common.utils.ServletUtils;
 import com.future.framework.common.utils.ValidationUtils;
-import com.future.framework.security.domain.TokenResult;
-import com.future.framework.security.service.TokenService;
-import com.future.framework.security.util.SecurityUtils;
-import com.future.module.system.constants.enums.SystemErrorCode;
 import com.future.module.system.domain.entity.LoginLog;
 import com.future.module.system.domain.entity.User;
 import com.future.module.system.domain.query.auth.AuthLoginQuery;
@@ -19,6 +15,7 @@ import com.future.module.system.service.AdminAuthService;
 import com.future.module.system.service.CaptchaService;
 import com.future.module.system.service.LoginLogService;
 import com.future.module.system.service.UserService;
+import com.future.security.sa.util.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,8 +33,6 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     private LoginLogService loginLogService;
     @Resource
     private CaptchaService captchaService;
-    @Resource
-    private TokenService tokenService;
 
     @Resource
     private Validator validator;
@@ -70,39 +65,29 @@ public class AdminAuthServiceImpl implements AdminAuthService {
 
         // 使用账号密码，进行登录
         User user = authenticate(query.getUsername(), query.getPassword());
-        // 创建 Token 令牌，记录登录日志
-        TokenResult tokens = tokenService.createAccessToken(user.getId(), user.getUserType(), null);
+        // 登录
+        SecurityUtils.login(user.getId());
+        String token = SecurityUtils.getToken();
         // 插入登陆日志
         createLoginLog(user.getId(), user.getUsername(), LoginLogType.LOGIN_USERNAME, LoginResult.SUCCESS);
         AuthLoginVO vo = new AuthLoginVO();
         vo.setUserId(user.getId());
-        vo.setAccessToken(tokens.getAccessToken());
-        vo.setRefreshToken(tokens.getRefreshToken());
+        vo.setAccessToken(token);
         return vo;
     }
 
     @Override
-    public void logout(String token, Integer logType) {
-        // 删除访问令牌
-        tokenService.removeAccessToken(token);
-        // 删除成功，则记录登出日志
-        Long userId = SecurityUtils.getLoginUserId();
-        if (userId != null) {
-            createLogoutLog(SecurityUtils.getLoginUserId(), logType);
-        }
+    public void logout(Integer logType) {
+        Long userId = SecurityUtils.getUserId();
+        SecurityUtils.logout();
+        // 记录登出日志
+        createLogoutLog(userId, logType);
     }
 
+    @Deprecated
     @Override
     public AuthLoginVO refreshToken(String refreshToken) {
-        TokenResult tokens = tokenService.refreshAccessToken(refreshToken);
-        if(tokens == null) {
-            throw new ServiceException(SystemErrorCode.AUTH_TOKEN_EXPIRED);
-        }
-        AuthLoginVO vo = new AuthLoginVO();
-        vo.setUserId(tokens.getUserId());
-        vo.setAccessToken(tokens.getAccessToken());
-        vo.setRefreshToken(tokens.getRefreshToken());
-        return vo;
+        return null;
     }
 
     void verifyCaptcha(AuthLoginQuery query) {

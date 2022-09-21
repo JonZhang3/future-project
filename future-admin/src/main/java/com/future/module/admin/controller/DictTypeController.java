@@ -1,5 +1,6 @@
 package com.future.module.admin.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.future.framework.common.annotations.OperateLog;
 import com.future.framework.common.domain.PageResult;
 import com.future.framework.common.domain.R;
@@ -14,7 +15,6 @@ import com.future.module.system.domain.vo.dict.DictTypeExcelVO;
 import com.future.module.system.domain.vo.dict.DictTypeRespVO;
 import com.future.module.system.domain.vo.dict.DictTypeSimpleRespVO;
 import com.future.module.system.service.DictTypeService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,14 +37,14 @@ public class DictTypeController {
 
     @PostMapping("/create")
 //    @ApiOperation("创建字典类型")
-    @PreAuthorize("@ss.hasPermission('system:dict:create')")
+    @SaCheckPermission("system:dict:create")
     public R<Long> createDictType(@Valid @RequestBody DictTypeCreateQuery query) {
         return R.ok(dictTypeService.createDictType(query));
     }
 
     @PutMapping("/update")
 //    @ApiOperation("修改字典类型")
-    @PreAuthorize("@ss.hasPermission('system:dict:update')")
+    @SaCheckPermission("system:dict:update")
     public R<Boolean> updateDictType(@Valid @RequestBody DictTypeUpdateQuery query) {
         dictTypeService.updateDictType(query);
         return R.ok(true);
@@ -53,7 +53,7 @@ public class DictTypeController {
     @DeleteMapping("/delete")
 //    @ApiOperation("删除字典类型")
 //    @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024", dataTypeClass = Long.class)
-    @PreAuthorize("@ss.hasPermission('system:dict:delete')")
+    @SaCheckPermission("system:dict:delete")
     public R<Boolean> deleteDictType(Long id) {
         dictTypeService.deleteDictType(id);
         return R.ok(true);
@@ -61,7 +61,7 @@ public class DictTypeController {
 
 //    @ApiOperation("获得字典类型的分页列表")
     @GetMapping("/page")
-    @PreAuthorize("@ss.hasPermission('system:dict:query')")
+    @SaCheckPermission("system:dict:query")
     public R<PageResult<DictTypeRespVO>> pageDictTypes(@Valid DictTypePageQuery query) {
         return R.ok(DictTypeConvert.INSTANCE.convertPage(dictTypeService.getDictTypePage(query)));
     }
@@ -69,7 +69,7 @@ public class DictTypeController {
 //    @ApiOperation("查询字典类型详细")
 //    @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024", dataTypeClass = Long.class)
     @GetMapping(value = "/get")
-    @PreAuthorize("@ss.hasPermission('system:dict:query')")
+    @SaCheckPermission("system:dict:query")
     public R<DictTypeRespVO> getDictType(@RequestParam("id") Long id) {
         return R.ok(DictTypeConvert.INSTANCE.convert(dictTypeService.getDictType(id)));
     }
@@ -84,7 +84,7 @@ public class DictTypeController {
 
 //    @ApiOperation("导出数据类型")
     @GetMapping("/export")
-    @PreAuthorize("@ss.hasPermission('system:dict:query')")
+    @SaCheckPermission("system:dict:query")
     @OperateLog(type = EXPORT)
     public void export(HttpServletResponse response, @Valid DictTypeExportQuery query) throws IOException {
         List<DictType> list = dictTypeService.getDictTypeList(query);

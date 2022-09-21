@@ -19,7 +19,7 @@ export const getRefreshToken = () => {
 
 // 设置token
 export const setToken = (token: TokenType) => {
-    wsCache.set(RefreshTokenKey, token.refreshToken, { exp: token.expiresTime })
+    // wsCache.set(RefreshTokenKey, token.refreshToken, { exp: token.expiresTime })
     wsCache.set(AccessTokenKey, token.accessToken)
 }
 

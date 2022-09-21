@@ -1,11 +1,11 @@
 package com.future.module.admin.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.future.framework.common.domain.R;
 import com.future.module.system.domain.vo.permission.PermissionAssignRoleDataScopeReqVO;
 import com.future.module.system.domain.vo.permission.PermissionAssignRoleMenuReqVO;
 import com.future.module.system.domain.vo.permission.PermissionAssignUserRoleReqVO;
 import com.future.module.system.service.PermissionService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +24,14 @@ public class PermissionController {
 //    @ApiOperation("获得角色拥有的菜单编号")
 //    @ApiImplicitParam(name = "roleId", value = "角色编号", required = true, dataTypeClass = Long.class)
     @GetMapping("/list-role-resources")
-    @PreAuthorize("@ss.hasPermission('system:permission:assign-role-menu')")
+    @SaCheckPermission("system:permission:assign-role-menu")
     public R<Set<Long>> listRoleMenus(Long roleId) {
         return R.ok(permissionService.getRoleMenuIds(roleId));
     }
 
     @PostMapping("/assign-role-menu")
 //    @ApiOperation("赋予角色菜单")
-    @PreAuthorize("@ss.hasPermission('system:permission:assign-role-menu')")
+    @SaCheckPermission("system:permission:assign-role-menu")
     public R<Boolean> assignRoleMenu(@Validated @RequestBody PermissionAssignRoleMenuReqVO reqVO) {
         // 执行菜单的分配
         permissionService.assignRoleMenu(reqVO.getRoleId(), reqVO.getMenuIds());
@@ -40,7 +40,7 @@ public class PermissionController {
 
     @PostMapping("/assign-role-data-scope")
 //    @ApiOperation("赋予角色数据权限")
-    @PreAuthorize("@ss.hasPermission('system:permission:assign-role-data-scope')")
+    @SaCheckPermission("system:permission:assign-role-data-scope")
     public R<Boolean> assignRoleDataScope(@Valid @RequestBody PermissionAssignRoleDataScopeReqVO reqVO) {
         permissionService.assignRoleDataScope(reqVO.getRoleId(), reqVO.getDataScope(), reqVO.getDataScopeDeptIds());
         return R.ok(true);
@@ -49,14 +49,14 @@ public class PermissionController {
 //    @ApiOperation("获得管理员拥有的角色编号列表")
 //    @ApiImplicitParam(name = "userId", value = "用户编号", required = true, dataTypeClass = Long.class)
     @GetMapping("/list-user-roles")
-    @PreAuthorize("@ss.hasPermission('system:permission:assign-user-role')")
+    @SaCheckPermission("system:permission:assign-user-role")
     public R<Set<Long>> listAdminRoles(@RequestParam("userId") Long userId) {
         return R.ok(permissionService.getUserRoleIdListByUserId(userId));
     }
 
 //    @ApiOperation("赋予用户角色")
     @PostMapping("/assign-user-role")
-    @PreAuthorize("@ss.hasPermission('system:permission:assign-user-role')")
+    @SaCheckPermission("system:permission:assign-user-role")
     public R<Boolean> assignUserRole(@Validated @RequestBody PermissionAssignUserRoleReqVO reqVO) {
         permissionService.assignUserRole(reqVO.getUserId(), reqVO.getRoleIds());
         return R.ok(true);
