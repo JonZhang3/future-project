@@ -1,10 +1,4 @@
 ## 自定义配置
-### future.security
-`com.future.framework.security.config.SecurityProperties`
-- accessTokenDuration 访问Token持续时间
-- refreshTokenDuration 刷新Token 持续时间
-- tokenHeader 存放Token的 header 名称
-- permitUrls 不经过权限验证的 path
 ### future.captcha
 `com.future.module.system.framework.config.CaptchaProperties`
 - enable 是否启用，默认 false
