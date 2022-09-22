@@ -82,7 +82,7 @@ public interface RoleService {
      * @param ids 角色编号数组
      * @return 角色数组
      */
-    List<Role> getRolesFromCache(Collection<Long> ids);
+    List<Role> getRolesByIds(Collection<Long> ids);
 
     /**
      * 判断角色数组中，是否有超级管理员
@@ -99,7 +99,7 @@ public interface RoleService {
      * @return 是否有管理员
      */
     default boolean hasAnySuperAdmin(Set<Long> ids) {
-        return hasAnySuperAdmin(getRolesFromCache(ids));
+        return hasAnySuperAdmin(getRolesByIds(ids));
     }
 
     /**

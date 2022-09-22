@@ -1,6 +1,7 @@
 package com.future.module.system.dao;
 
 import com.future.framework.mybatis.mapper.BaseMapper;
+import com.future.framework.mybatis.query.LambdaQueryWrapper;
 import com.future.framework.mybatis.query.QueryWrapper;
 import com.future.module.system.domain.entity.RoleMenu;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,6 +18,10 @@ public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
         return selectList(new QueryWrapper<RoleMenu>().eq("role_id", roleId));
     }
 
+    default List<RoleMenu> selectListByRoleIds(Collection<Long> roleIds) {
+        return selectList(new LambdaQueryWrapper<RoleMenu>().in(RoleMenu::getRoleId, roleIds));
+    }
+    
     default void deleteListByRoleIdAndMenuIds(Long roleId, Collection<Long> menuIds) {
         delete(new QueryWrapper<RoleMenu>().eq("role_id", roleId)
             .in("menu_id", menuIds));

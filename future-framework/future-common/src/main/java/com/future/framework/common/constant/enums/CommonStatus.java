@@ -8,8 +8,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum CommonStatus {
 
-    VALID(1),// 有效的
-    INVALID(0),// 无效的/停用
+    VALID(0),// 有效的
+    INVALID(1),// 无效的/停用
     ;
     
     @JsonValue

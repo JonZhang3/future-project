@@ -80,10 +80,10 @@ public class AuthController {
             return null;
         }
         // 获得角色列表
-        Set<Long> roleIds = permissionService.getUserRoleIdsFromCache(getLoginUserId(), singleton(CommonStatus.VALID.getValue()));
-        List<Role> roleList = roleService.getRolesFromCache(roleIds);
+        Set<Long> roleIds = permissionService.getUserRoleIds(SecurityUtils.getUserId(), singleton(CommonStatus.VALID.getValue()));
+        List<Role> roleList = roleService.getRolesByIds(roleIds);
         // 获得菜单列表
-        List<Menu> menuList = permissionService.getRoleMenuListFromCache(roleIds,
+        List<Menu> menuList = permissionService.getRoleMenuList(roleIds,
             Arrays.asList(MenuType.DIR.getType(), MenuType.MENU.getType(), MenuType.BUTTON.getType()),
             singleton(CommonStatus.VALID.getValue())); // 只要开启的
         // 拼接结果返回
@@ -94,9 +94,9 @@ public class AuthController {
 //    @ApiOperation("获得登录用户的菜单列表")
     public R<List<AuthMenuVO>> getMenus() {
         // 获得角色列表
-        Set<Long> roleIds = permissionService.getUserRoleIdsFromCache(getLoginUserId(), singleton(CommonStatus.VALID.getValue()));
+        Set<Long> roleIds = permissionService.getUserRoleIds(SecurityUtils.getUserId(), singleton(CommonStatus.VALID.getValue()));
         // 获得用户拥有的菜单列表
-        List<Menu> menuList = permissionService.getRoleMenuListFromCache(roleIds,
+        List<Menu> menuList = permissionService.getRoleMenuList(roleIds,
             Arrays.asList(MenuType.DIR.getType(), MenuType.MENU.getType()), // 只要目录和菜单类型
             singleton(CommonStatus.VALID.getValue())); // 只要开启的
         // 转换成 Tree 结构返回

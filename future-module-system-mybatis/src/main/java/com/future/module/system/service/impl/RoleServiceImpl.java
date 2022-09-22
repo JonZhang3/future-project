@@ -77,7 +77,7 @@ public class RoleServiceImpl implements RoleService {
         log.info("[initLocalCache][初始化 Role 数量为 {}]", roleList.size());
     }
 
-    @Scheduled(fixedDelay = SCHEDULER_PERIOD, initialDelay = SCHEDULER_PERIOD)
+    @Scheduled(fixedDelay = SCHEDULER_PERIOD, initialDelay = 5 * 1000)
     public void schedulePeriodicRefresh() {
         self.initLocalCache();
     }
@@ -156,12 +156,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<Role> getRolesFromCache(Collection<Long> ids) {
+    public List<Role> getRolesByIds(Collection<Long> ids) {
         if (CollUtils.isEmpty(ids)) {
             return Collections.emptyList();
         }
-        return roleCache.values().stream().filter(roleDO -> ids.contains(roleDO.getId()))
-            .collect(Collectors.toList());
+        return roleMapper.selectBatchIds(ids);
     }
 
     @Override

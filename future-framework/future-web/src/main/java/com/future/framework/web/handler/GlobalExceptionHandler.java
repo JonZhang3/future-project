@@ -1,5 +1,6 @@
 package com.future.framework.web.handler;
 
+import cn.dev33.satoken.exception.NotPermissionException;
 import com.future.framework.common.domain.R;
 import com.future.framework.common.exception.ServiceException;
 import com.future.framework.web.util.WebUtils;
@@ -201,6 +202,11 @@ public class GlobalExceptionHandler {
         return R.fail(ex.getCode(), ex.getMessage());
     }
 
+    @ExceptionHandler(NotPermissionException.class)
+    public R<?> notPermissionExceptionHandler(NotPermissionException ex) {
+        return R.fail(ex.getMessage());
+    }
+    
     /**
      * 处理系统异常，兜底处理所有的一切
      */

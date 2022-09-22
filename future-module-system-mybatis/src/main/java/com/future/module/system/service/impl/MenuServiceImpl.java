@@ -86,7 +86,7 @@ public class MenuServiceImpl implements MenuService {
         log.info("[initLocalCache][缓存菜单，数量为:{}]", menuList.size());
     }
 
-    @Scheduled(fixedDelay = SCHEDULER_PERIOD, initialDelay = SCHEDULER_PERIOD)
+    @Scheduled(fixedDelay = SCHEDULER_PERIOD, initialDelay = 5 * 1000)
     public void schedulePeriodicRefresh() {
         initLocalCache();
     }
