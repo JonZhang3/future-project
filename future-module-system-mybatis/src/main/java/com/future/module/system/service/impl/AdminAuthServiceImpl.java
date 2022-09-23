@@ -39,20 +39,20 @@ public class AdminAuthServiceImpl implements AdminAuthService {
 
     @Override
     public User authenticate(String username, String password) {
-        final LoginLogType logTypeEnum = LoginLogType.LOGIN_USERNAME;
+        final LoginLogType loginLogType = LoginLogType.LOGIN_USERNAME;
         // 如果需要同时支持邮箱、手机号登录，可在此修改
         User user = userService.getUserByUsername(username);
         if (user == null) {
-            createLoginLog(null, username, logTypeEnum, LoginResult.BAD_CREDENTIALS);
+            createLoginLog(null, username, loginLogType, LoginResult.BAD_CREDENTIALS);
             throw new ServiceException(AUTH_LOGIN_BAD_CREDENTIALS);
         }
         if (!userService.isPasswordMatch(password, user.getPassword())) {
-            createLoginLog(user.getId(), username, logTypeEnum, LoginResult.BAD_CREDENTIALS);
+            createLoginLog(user.getId(), username, loginLogType, LoginResult.BAD_CREDENTIALS);
             throw new ServiceException(AUTH_LOGIN_BAD_CREDENTIALS);
         }
         // 校验是否禁用
         if (ObjectUtil.notEqual(user.getStatus(), CommonStatus.VALID.getValue())) {
-            createLoginLog(user.getId(), username, logTypeEnum, LoginResult.USER_DISABLED);
+            createLoginLog(user.getId(), username, loginLogType, LoginResult.USER_DISABLED);
             throw new ServiceException(AUTH_LOGIN_USER_DISABLED);
         }
         return user;
@@ -98,17 +98,17 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         // 校验验证码
         ValidationUtils.validate(validator, query, AuthLoginQuery.CodeEnableGroup.class);
         // 验证码不存在
-        final LoginLogType logType = LoginLogType.LOGIN_USERNAME;
+        final LoginLogType loginLogType = LoginLogType.LOGIN_USERNAME;
         String code = captchaService.getCaptchaCode(query.getUuid());
         if (code == null) {
             // 创建登录失败日志（验证码不存在）
-            createLoginLog(null, query.getUsername(), logType, LoginResult.CAPTCHA_NOT_FOUND);
+            createLoginLog(null, query.getUsername(), loginLogType, LoginResult.CAPTCHA_NOT_FOUND);
             throw new ServiceException(AUTH_LOGIN_CAPTCHA_NOT_FOUND);
         }
         // 验证码不正确
         if (!code.equals(query.getCode())) {
             // 创建登录失败日志（验证码不正确)
-            createLoginLog(null, query.getUsername(), logType, LoginResult.CAPTCHA_CODE_ERROR);
+            createLoginLog(null, query.getUsername(), loginLogType, LoginResult.CAPTCHA_CODE_ERROR);
             throw new ServiceException(AUTH_LOGIN_CAPTCHA_CODE_ERROR);
         }
         // 正确，所以要删除下验证码

@@ -9,12 +9,14 @@ import com.future.module.system.service.CaptchaService;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+@Slf4j
 @Service
 public class CaptchaServiceImpl implements CaptchaService {
 
@@ -37,7 +39,11 @@ public class CaptchaServiceImpl implements CaptchaService {
                 captchaProperties.getHeight());
         captcha.createCode();
         String uuid = IdUtils.fastSimpleUUID();
-        cacheManager.getCache(CACHE_NAME).put(uuid, captcha.getCode());
+        if(cacheManager != null) {
+            cacheManager.getCache(CACHE_NAME).put(uuid, captcha.getCode());
+        } else {
+            log.warn("the captcha is enable, but the cache not configured.");
+        }
         return CaptchaConvert.INSTANCE.convert(uuid, captcha).setEnable(enable);
     }
 
@@ -48,11 +54,17 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     @Override
     public String getCaptchaCode(String uuid) {
-        return cacheManager.getCache(CACHE_NAME).get(uuid, String.class);
+        if(cacheManager != null) {
+            return cacheManager.getCache(CACHE_NAME).get(uuid, String.class);
+        }
+        log.warn("the captcha is enable, but the cache not configured.");
+        return "";
     }
 
     @Override
     public void deleteCaptchaCode(String uuid) {
-        cacheManager.getCache(CACHE_NAME).evict(uuid);
+        if(cacheManager != null) {
+            cacheManager.getCache(CACHE_NAME).evict(uuid);
+        }
     }
 }

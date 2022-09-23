@@ -55,6 +55,22 @@
                     <target>1.8</target> <!-- depending on your project -->
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.github.shalousun</groupId>
+                <artifactId>smart-doc-maven-plugin</artifactId>
+                <configuration>
+                    <configFile>${parent.basedir}/docs/smart-doc.json</configFile>
+                    <projectName>application</projectName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>html</goal>
+                            <goal>openapi</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

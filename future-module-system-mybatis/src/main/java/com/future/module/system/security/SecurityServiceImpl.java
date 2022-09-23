@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
-@Service("ss")
+@Service
 public class SecurityServiceImpl implements SecurityService {
 
     @Resource
@@ -15,6 +15,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public List<String> getPermissionList(Object userId, String userType) {
+        
         return null;
     }
 
